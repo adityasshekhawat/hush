@@ -248,3 +248,9 @@ deployment target stays macOS 15 (`Package.swift`); macOS 26 features go behind 
 **Revisit** when Xcode is installed (MailKit needs it anyway, ADR-001): build against the 27 SDK and drop the override.
 Supersedes ADR-001's "macOS 15, CLT only" for this Mac; the unblocks it lists (Foundation Models, glassEffect) are now
 possible without Xcode.
+
+**Update (same day): Xcode 27.0 installed and selected.** With Xcode, the macOS 27 SDK builds and plain `swift test`
+passes (it ships `SwiftUIMacros`), so `sdk.sh` and the testing plugin path switch themselves off. The linker problem
+is SwiftPM's build system, not CLT: with Xcode the binaries still recorded `sdk 15.0`, so `swift.sh` now passes
+`-platform_version` in both setups (`xcrun --show-sdk-version`); Hush records `sdk 27.0`. Always build the app through
+`bundle.sh` / `swift.sh`.
