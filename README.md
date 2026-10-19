@@ -82,6 +82,7 @@ Ignored too long, with Moods on (off by default): taps a foot (10 min) → cross
 | When | Hush |
 | --- | --- |
 | You copy | Cheeks puff like a hamster and stay full; paste blows the air out (copy again: gulp, refill) |
+| Click it with full cheeks | **Hand it to Hush:** Simpler, Shorter or Bullets. It chews, hands the result back on your clipboard, and your ⌘V blows the cheeks out. On this Mac with Apple Intelligence; asks once before reading what you copied; **Original** puts your text back |
 | Screenshot | Caught in the flash, squints |
 | Shake the cursor | Woozy |
 | Rest the cursor on it 20 s | Falls asleep under your hand |

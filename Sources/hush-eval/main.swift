@@ -10,6 +10,7 @@ import HushMac
 //   swift run hush-eval --limit 5 --filter git
 //   swift run hush-eval --lane repo --repo ~/Developer/hush    code questions (reports finish + cost, no grading)
 //   swift run hush-eval --lane mail            mail triage on Apple's on-device model (free; MailEval.swift)
+//   swift run hush-eval --lane pouch           "hand it to Hush" reworks on the on-device model (free; PouchEval.swift)
 
 let args = Array(CommandLine.arguments.dropFirst())
 @MainActor func option(_ name: String) -> String? {
@@ -21,6 +22,11 @@ let laneArg = option("--lane") ?? "quick"
 if laneArg == "mail" {
     let here = URL(fileURLWithPath: #filePath).deletingLastPathComponent().appendingPathComponent("../..").standardized
     try await runMailEval(root: here, filter: option("--filter")?.lowercased())
+    exit(0)
+}
+if laneArg == "pouch" {
+    let here = URL(fileURLWithPath: #filePath).deletingLastPathComponent().appendingPathComponent("../..").standardized
+    try await runPouchEval(root: here, filter: option("--filter")?.lowercased())
     exit(0)
 }
 guard let lane = LaneID(rawValue: laneArg), lane == .quick || lane == .repo || lane == .route else {

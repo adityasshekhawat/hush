@@ -56,6 +56,7 @@ final class SettingsModel: ObservableObject {
 
     // MARK: Ask Hush
 
+    var pouch: Binding<Bool> { binding({ self.app.pouch.enabled }, { self.app.pouch.enabled = $0 }) }
     var smartRouting: Binding<Bool> { binding({ self.app.ask.smartRouting }, { self.app.ask.smartRouting = $0 }) }
     var learnedCount: Int { app.ask.learnedRoutes.entries.count }
     func forgetLearnedRoutes() { set { app.ask.learnedRoutes = LearnedRoutes() } }

@@ -98,6 +98,9 @@ extension AppController {
             if !commandPanel.isOpen { toggleCommandBox(); commandPanel.keepOpenForPreview = true }
             commandPanel.model.text = text == "-" ? "" : text
         case ("boxtab", _): commandPanel.model.tab()
+        case ("pouch", let v):
+            // pouch:simpler|shorter|bullets: pick a verb as if from the chips (needs full cheeks and consent).
+            if let verb = PouchVerb(rawValue: v) { pouch.debugPick(verb) }
         case ("handoffpreview", let q):
             // Shows the hand-off receipt without opening anything.
             ask.card.model.question = q

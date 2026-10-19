@@ -40,6 +40,8 @@ final class AnticsController {
     private var late = false
     /// Called on each tuck-in (the app shows the first-week tip once).
     var firstTuckIn: (() -> Void)?
+    /// The cheeks emptied (a paste, or popped): "hand it to Hush" forgets its last rework.
+    var onCheeksEmptied: (() -> Void)?
 
     /// Cheeks stay full until a paste (or a click on Hush). No timer: "puffed till you paste".
     private(set) var cheeksFull = false
@@ -115,6 +117,7 @@ final class AnticsController {
         cheeksFull = false
         sensors.watchForPaste = false
         host.react(.blow)
+        onCheeksEmptied?()
     }
 
     // MARK: clock-driven antics

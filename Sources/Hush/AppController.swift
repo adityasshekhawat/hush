@@ -60,6 +60,8 @@ final class AppController {
     var rare: RareFindsController!
     var panelHidden = false
     var antics: AnticsController!
+    /// Hand it to Hush: rework what you copied (ADR-019).
+    var pouch: PouchController!
     var wanderer: Wanderer!
     /// Your Claude Code sessions (Phase 1, docs/agent-plan.md).
     var agentSessions = AgentSessionTracker()
@@ -152,6 +154,16 @@ final class AppController {
             showHeldBack: { [weak self] week in self?.showHeldBack(week ? .week : .day) },
             isWandering: { [weak self] in self?.wanderer?.isAway ?? false }))
         antics.start()
+        pouch = PouchController(host: .init(
+            anchor: { [weak self] in self?.cardAvoidRect() ?? .zero },
+            react: { [weak self] r in self?.renderer.react(r) },
+            bubble: { [weak self] text in
+                guard let self else { return }
+                self.bubble.show(text, above: self.cardAvoidRect())
+            },
+            emptyCheeks: { [weak self] in self?.antics.emptyCheeks() },
+            handoff: { [weak self] in self?.ask?.preferredHandoff ?? .chatgpt }))
+        antics.onCheeksEmptied = { [weak self] in self?.pouch.cheeksEmptied() }
         antics.firstTuckIn = { [weak self] in
             guard let self, let text = self.onboarding?.tip(.tuckIn) else { return }
             DispatchQueue.main.asyncAfter(deadline: .now() + 10) { self.tipBubble.show(text, above: self.cardAvoidRect(), for: 8) }

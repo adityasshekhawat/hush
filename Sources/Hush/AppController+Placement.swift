@@ -49,6 +49,7 @@ extension AppController {
         if commandPanel.isOpen { commandPanel.relayout(avoiding: r) }
         tipBubble.relayout(avoiding: r)
         bubble.relayout(avoiding: r)
+        pouch?.relayout()
     }
 
     func characterRectScreen() -> NSRect {

@@ -20,6 +20,8 @@ enum Reaction {
     // Antics (see AnticsController)
     case cheeks             // copied something: cheeks fill (or gulp and refill)
     case blow               // let the air out
+    /// Hand it to Hush: chewing what you copied while the on-device model reworks it (ADR-019).
+    case chew(Bool)
     case askPat(PatAsk)
     case flash              // screenshot
     case woozy              // cursor shaken

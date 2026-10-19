@@ -18,7 +18,8 @@ extension AppController {
         case .click:
             antics.touched()
             if antics.cheeksFull && active == nil {
-                // Clicking a full-cheeked Hush pops them.
+                // Hand it to Hush: offer to rework what you copied (ADR-019); otherwise the click pops the cheeks.
+                if pouch.clicked() { return }
                 antics.emptyCheeks()
                 return
             }

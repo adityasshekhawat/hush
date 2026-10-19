@@ -166,6 +166,11 @@ struct SettingsView: View {
             }
         } footer: { Text("Press ⌘⇧H anywhere. Quick answers here, longer ones in your assistant.") }
         Section {
+            Toggle("Rework what I copy", isOn: model.pouch)
+        } footer: {
+            Text("Copy some text and my cheeks fill up. Click me to make it simpler, shorter or into bullets, then paste. I read what you copied only when you click, on this Mac.")
+        }
+        Section {
             Toggle("Smart routing", isOn: model.smartRouting)
             if model.learnedCount > 0 {
                 HStack {

@@ -284,3 +284,35 @@ isn't flattered. Add a case whenever a real mail is judged wrong. Idle cost unch
 
 **Next.** Mail itself (MailKit, now possible with Xcode) feeds real mail into this. Later: the same model for the
 quick lane, route check and digest summaries, which today use the user's Claude Code login (not shippable, ADR-012).
+
+## ADR-019 · Hand it to Hush: rework what you copy, through the cheeks (2026-10-19)
+
+**Context.** People rework copied text many times a day (simpler, shorter, bullets, fix, translate), usually by
+switching to a chat app: copy, switch, paste, type the ask, wait, copy, switch back, paste. Hush already reacts to
+copies (cheeks fill, ADR-007) and pastes (they blow out, ADR-008). Apple's on-device model can now do the rework
+(ADR-018). Research pass (secondary, mostly Reddit snippets): proofread and tone rewrites are the most-used Writing
+Tools, people dislike swapped text with no way back, and on-device clipboard transformers exist, so Hush's edge is
+the character and the fewer steps, not the transform itself.
+
+**Decision.** With full cheeks, a click on Hush opens a small card: **Simpler · Shorter · Bullets** (plus
+**Original** after a rework, and Never mind, which pops the cheeks as before). Picking one: Hush **chews** (puff
+pose, a squash loop on the HTML wrapper, capped at 25 s, ADR-011), hands over, and the result is on the clipboard
+with a "Press ⌘V" bubble; the paste blows the cheeks out. Four steps, no app switch.
+- **Reads more of your data, so it asks:** the clipboard's *text* is read only at that click (sensors still see only
+  the change count). The first click shows a consent card; "Not now" turns it off. Settings ▸ Ask Hush ▸ Rework what
+  I copy. Text is never logged, only lengths.
+- **On this Mac:** `OnDeviceRewriter` (HushMac), `SystemLanguageModel(guardrails: .permissiveContentTransformations)`,
+  greedy, a session prewarmed while you pick, 20 s cap. Verbs, limits, prompt and cleanup are pure in
+  `HushCore/Pouch` (tested).
+- **Never makes things worse:** code is recognised and left alone (a "shorter" function came back on one line);
+  over 6,000 characters or with Apple Intelligence off, the card offers your assistant instead (the text is already
+  on the clipboard, so only the instruction goes in the link); if you copy something else while Hush chews, the
+  result is dropped; a rework always starts from the original, and **Original** puts it back.
+- Delight only: nothing here is a decision, an appearance or part of the cap.
+
+**Measured** (`swift run hush-eval --lane pouch`, evals/pouch.json, 12 snippets we wrote): 12/12 after two fixes
+(a firmer "shorter"; code detection), every number and date kept, Spanish stayed Spanish, p50 ~2.2 s. End to end in
+the app via the `pouch:<verb>` debug hook: 207 → 102 characters in 3.4 s, no self-triggered gulp.
+
+**Next** (from the research): a **Fix** verb that shows what it changed before handing back; text from a copied
+screenshot (image on the clipboard → OCR, permission-free); content-aware chips (Translate, To-dos).

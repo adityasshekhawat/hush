@@ -93,6 +93,23 @@ function cheeks() {
   el.classList.add("full");
   refresh(); hop(4, 380);
 }
+// Hand it to Hush (ADR-019): chew, cheeks full, while the on-device model works. A squash loop on the HTML wrapper
+// (no SVG repaint, ADR-011), only while chewing, and never longer than 25 s.
+let chewAnim = null, chewStop = null;
+function chew(on) {
+  chewAnim?.cancel(); chewAnim = null; clearTimeout(chewStop);
+  if (!on) { if (live.chewing) { live.chewing = false; cancelSeq(); refresh({ settle: true }); } return; }
+  live.chewing = true;
+  markActive("chew");
+  const frames = [];
+  for (let i = 0; i < 70; i++) frames.push(F("puff", "puff", 170), F("stand", "puff", 170));
+  play(frames);
+  if (!reduced) {
+    chewAnim = anim(life, [{ transform: "scale(1, 1)" }, { transform: "scale(1.05, .93) translateY(3px)", offset: .5 },
+                           { transform: "scale(1, 1)" }], { duration: 340, iterations: Infinity, easing: "ease-in-out" });
+  }
+  chewStop = setTimeout(() => chew(false), 25000);
+}
 // Paste: cheeks deflate through the small "o" while puffs stream out, then a little recoil.
 function blow() {
   if (!live.full) return;
@@ -239,7 +256,7 @@ window.hush = {
     gazeTarget();
   },
   hover: setHover, press, pat, poke, lift, swing, land,
-  cheeks, blow, askPat, flash, woozy, flinch, perk, morning, dance, tuckIn, setMode, setMood,
+  cheeks, blow, chew, askPat, flash, woozy, flinch, perk, morning, dance, tuckIn, setMode, setMood,
   inboxZero, commandWindow, jump, perchLand, waveOff, handOver, sorry,
   proud: () => play([F("cheer", "happy", 500), F("proud", "happy", 1600)]),
   // First rare find: the bird gets a surprised look up, then bliss; birthday a cheer; halo pride; lei a wave.
