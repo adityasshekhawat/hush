@@ -18,6 +18,9 @@ final class RulesModel: ObservableObject {
     @Published var adding = false
     @Published var newText = ""
     @Published var newUnclear = false
+    /// "Tell Hush what matters": rules the on-device model proposed from your words, waiting for Add (ADR-026).
+    @Published var proposals: [UserRule] = []
+    @Published var thinking = false
 }
 
 struct RulesActions {
@@ -25,6 +28,8 @@ struct RulesActions {
     var forget: (UserRule) -> Void
     var undoForget: (UserRule) -> Void
     var close: () -> Void
+    /// Plain words → proposed rules (empty when Apple Intelligence is off or nothing fit).
+    var suggest: ((String) async -> [UserRule])? = nil
 }
 
 struct RulesView: View {
@@ -83,10 +88,36 @@ struct RulesView: View {
                     if let rule = RuleText.parse(model.newText, base: base) {
                         actions.save(rule)
                         model.newText = ""; model.adding = false; model.newUnclear = false
+                    } else if let suggest = actions.suggest {
+                        // Plain words: let the on-device model propose rules, which you add one by one (ADR-026).
+                        let text = model.newText
+                        model.thinking = true; model.newUnclear = false; model.proposals = []
+                        Task { @MainActor in
+                            let found = await suggest(text)
+                            model.thinking = false
+                            model.proposals = found
+                            model.newUnclear = found.isEmpty
+                        }
                     } else { model.newUnclear = true }
                 }
+            if model.thinking {
+                Text("Thinking it over, on this Mac…").font(HushFont.footer).foregroundStyle(.secondary)
+            }
+            ForEach(model.proposals, id: \.id) { rule in
+                HStack(spacing: 6) {
+                    Text(RuleText.sentence(rule)).font(HushFont.body).fixedSize(horizontal: false, vertical: true)
+                    Spacer(minLength: 4)
+                    Button("Add") {
+                        actions.save(rule)
+                        model.proposals.removeAll { $0.id == rule.id }
+                        if model.proposals.isEmpty { model.newText = ""; model.adding = false }
+                    }.buttonStyle(HushPill(kind: .primary, height: 24))
+                    Button("Skip") { model.proposals.removeAll { $0.id == rule.id } }.buttonStyle(HushPill(kind: .quiet, height: 24))
+                }
+            }
             if model.newUnclear {
-                Text("I didn't follow that one.").font(HushFont.footer).foregroundStyle(Tone.orange.text)
+                Text("I couldn't make a rule from that. Name an address or a domain, like “always show me mail from anyone at acme.com”.")
+                    .font(HushFont.footer).foregroundStyle(Tone.orange.text).fixedSize(horizontal: false, vertical: true)
             }
         }
     }
@@ -135,6 +166,8 @@ final class RulesPresenter {
     let model = RulesModel()
     private var card: CardWindow?
     var engine: DecisionEngine?
+    /// Apple's on-device model, for "tell Hush what matters" (ADR-026). nil when it isn't available.
+    var triage: OnDeviceTriage?
 
     func show(avoiding character: NSRect) {
         let c = card ?? CardWindow(width: 420, keyable: true) { [unowned self] in
@@ -142,7 +175,11 @@ final class RulesPresenter {
                 save: { [weak self] r in self?.save(r) },
                 forget: { [weak self] r in self?.forget(r) },
                 undoForget: { [weak self] r in self?.undoForget(r) },
-                close: { [weak self] in self?.card?.close() }))
+                close: { [weak self] in self?.card?.close() },
+                suggest: OnDeviceTriage.systemStatus == .on ? { [weak self] text in
+                    guard let triage = self?.triage else { return [] }
+                    return RuleSuggestions.rules(from: await triage.suggestRules(from: text), now: Date())
+                } : nil))
         }
         card = c
         Task {

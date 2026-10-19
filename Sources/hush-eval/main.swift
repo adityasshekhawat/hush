@@ -24,6 +24,10 @@ if laneArg == "mail" {
     try await runMailEval(root: here, filter: option("--filter")?.lowercased())
     exit(0)
 }
+if laneArg == "rules" {
+    await runRulesEval()
+    exit(0)
+}
 if laneArg == "pouch" {
     let here = URL(fileURLWithPath: #filePath).deletingLastPathComponent().appendingPathComponent("../..").standardized
     try await runPouchEval(root: here, filter: option("--filter")?.lowercased())

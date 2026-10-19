@@ -82,6 +82,22 @@ extension AppController {
         DiagnosticsLog.write("meeting: call started, cleared \(joined.count) reminder(s)")
     }
 
+    /// The spec's "useful in the first five minutes" (ADR-026): right after setup, if nothing real is waiting, show once
+    /// what an alert looks like. Nothing is logged or counted: it's a demo, and it says so.
+    func firstAlertDemo() {
+        guard waiting.isEmpty, !defaults.bool(forKey: "firstAlertDemoShown") else { return }
+        defaults.set(true, forKey: "firstAlertDemoShown")
+        DispatchQueue.main.asyncAfter(deadline: .now() + 4) { [weak self] in
+            guard let self, self.waiting.isEmpty, !self.panelHidden else { return }
+            self.previewOverride = .hold
+            self.tipBubble.show("This is how I show you something: I hold it up. Click me when I do. Your first real one is on its way.",
+                                above: self.cardAvoidRect(), for: 8)
+            DispatchQueue.main.asyncAfter(deadline: .now() + 8) { [weak self] in
+                if self?.previewOverride == .hold { self?.previewOverride = nil }
+            }
+        }
+    }
+
     func toggleCommandBox() {
         onboarding?.observedHotkey()
         if commandPanel.isOpen { commandPanel.close(); return }

@@ -98,6 +98,37 @@ public actor OnDeviceTriage: AttentionClassifier, GistWriter {
         #endif
     }
 
+    /// "Tell Hush what matters" (ADR-026): rule sentences from plain words, for you to review. Empty when the model
+    /// isn't available or had nothing to offer.
+    public func suggestRules(from text: String) async -> [String] {
+        #if canImport(FoundationModels)
+        guard #available(macOS 26.0, *), Self.systemStatus == .on else { return [] }
+        let input = String(text.prefix(800))
+        do {
+            let out = try await Self.withTimeout(.seconds(15)) { () -> [String] in
+                let schema = try GenerationSchema(root: DynamicGenerationSchema(name: "Rules", properties: [
+                    .init(name: "rules", description: "One rule sentence each, in the given forms",
+                          schema: DynamicGenerationSchema(arrayOf: DynamicGenerationSchema(type: String.self),
+                                                          maximumElements: RuleSuggestions.maxRules)),
+                ]), dependencies: [])
+                // Your own words, turned into rules: the guardrails meant for transforming your text (the default ones
+                // refused "hide the newsletters from shop.com").
+                let r = try await LanguageModelSession(model: SystemLanguageModel(guardrails: .permissiveContentTransformations),
+                                                       instructions: RuleSuggestions.instructions)
+                    .respond(to: input, schema: schema, options: GenerationOptions(samplingMode: .greedy))
+                return try r.content.value([String].self, forProperty: "rules")
+            }
+            Self.log("rules: suggested \(out?.count ?? 0) sentence(s)")
+            return out ?? []
+        } catch {
+            Self.log("rules: suggestion failed (\(error.localizedDescription))")
+            return []
+        }
+        #else
+        return []
+        #endif
+    }
+
     struct Answer: Sendable {
         var classification: Classification
         var gist: String?

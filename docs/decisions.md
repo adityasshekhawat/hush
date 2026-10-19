@@ -452,3 +452,23 @@ Milestone 3 of the v1 spec (ADR-021, feature 2).
   hide it (the spec's acceptance criterion holds by construction).
 
 **Not done:** the door and pocket watch art (`docs/v1-art-brief.md` priority 3; the clock and hurry poses stand in).
+
+## ADR-026 · First run and the "What Hush saw" journal (2026-10-19)
+
+Milestone 4 of the v1 spec (ADR-021, features 6 and 7). Most of first run already existed (ADR-015: character-led
+journey, persona presets, one-click hooks with the diff, Calendar with a preview, mail deferred).
+- **Journal:** the decision log gains a `title` column (added in place) so each entry reads as what it was. The menu
+  bar's *What I saw* window lists the last 7 days by day: what it was, where from, what Hush did ("Showed it", "Held
+  it back", "Waited until you were free", "Let it go") and why in plain words (`Journal`, tested: "On your VIP list,
+  today's interrupts were used up"). Entries older than 7 days are deleted at launch and whenever the journal opens;
+  Forget empties it (rules and shoo signals stay; they belong to What I've learned). Stored: the title (subject,
+  meeting title or agent card), category, outcome and reasons. Never snippets, notes or model inputs.
+- **Tell Hush what matters:** in What I've learned, text that isn't already a rule sentence goes to Apple's on-device
+  model, constrained to RuleText's forms and to addresses, domains and projects you wrote (`RuleSuggestions`). Each
+  sentence is parsed in code (with a tidy-up for "project folder" tails) and shown with Add and Skip. Measured with
+  `swift run hush-eval --lane rules`: 4/5; the miss is Apple's guardrails refusing "hide the newsletters from shop.com"
+  even with `permissiveContentTransformations`, which the card reports as "I couldn't make a rule from that".
+- **First alert:** if nothing is waiting when setup ends, Hush holds up an envelope once, with a bubble saying it's how
+  it shows things. Not logged, not counted.
+
+**Not done:** the sniff and journal-cover art (`docs/v1-art-brief.md` priority 4).

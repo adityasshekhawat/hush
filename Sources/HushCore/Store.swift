@@ -60,7 +60,31 @@ public final class HushStore: @unchecked Sendable {
               duration_ms INTEGER NOT NULL, context_tokens INTEGER NOT NULL, model TEXT NOT NULL
             );
             """)
+        // The journal's readable title (ADR-026): mail subject, meeting title, agent card subject. Added in place.
+        var hasTitle = false
+        try query("PRAGMA table_info(decisions)", []) { s in if Self.text(s, 1) == "title" { hasTitle = true } }
+        if !hasTitle { try exec("ALTER TABLE decisions ADD COLUMN title TEXT;") }
     }
+
+    // MARK: journal (ADR-026)
+
+    /// What Hush looked at since `start`, newest first: the "What Hush saw" journal.
+    public func journal(since start: Date) throws -> [LoggedDecision] {
+        var out: [LoggedDecision] = []
+        try query(
+            "SELECT id, at, category, final_level, outcome, confidence, model_version, reasons, response, kind, title FROM decisions WHERE at >= ? ORDER BY at DESC",
+            [start.timeIntervalSince1970]
+        ) { s in out.append(Self.logged(s)) }
+        return out
+    }
+
+    /// The journal keeps 7 days; older entries go (they also stop counting toward "this week").
+    public func prune(before cutoff: Date) throws {
+        try run("DELETE FROM decisions WHERE at < ?", [cutoff.timeIntervalSince1970])
+    }
+
+    /// "Forget": the whole log. Rules and what Hush learned from shoos stay (they live in What I've learned).
+    public func deleteDecisions() throws { try exec("DELETE FROM decisions;") }
 
     // MARK: decisions
 
@@ -68,12 +92,12 @@ public final class HushStore: @unchecked Sendable {
         try run(
             """
             INSERT INTO decisions (id, at, item_id, kind, category, proposed_level, final_level, outcome,
-                                   confidence, model_version, reasons)
-            VALUES (?,?,?,?,?,?,?,?,?,?,?)
+                                   confidence, model_version, reasons, title)
+            VALUES (?,?,?,?,?,?,?,?,?,?,?,?)
             """,
             [d.id, d.at.timeIntervalSince1970, d.item.id, d.item.kind.rawValue, d.item.category,
              d.proposedLevel?.rawValue, d.finalLevel?.rawValue, d.outcome.rawValue,
-             d.confidence, d.modelVersion, d.reasons.joined(separator: " | ")])
+             d.confidence, d.modelVersion, d.reasons.joined(separator: " | "), String(d.item.subject.prefix(120))])
     }
 
     public func recordResponse(decisionID: String, _ response: UserResponse, at: Date) throws {
@@ -101,21 +125,25 @@ public final class HushStore: @unchecked Sendable {
     public func recentDecisions(limit: Int) throws -> [LoggedDecision] {
         var out: [LoggedDecision] = []
         try query(
-            "SELECT id, at, category, final_level, outcome, confidence, model_version, reasons, response FROM decisions ORDER BY at DESC LIMIT ?",
+            "SELECT id, at, category, final_level, outcome, confidence, model_version, reasons, response, kind, title FROM decisions ORDER BY at DESC LIMIT ?",
             [limit]
-        ) { s in
-            out.append(LoggedDecision(
-                id: Self.text(s, 0) ?? "",
-                at: Date(timeIntervalSince1970: sqlite3_column_double(s, 1)),
-                category: Self.text(s, 2) ?? "",
-                finalLevel: sqlite3_column_type(s, 3) == SQLITE_NULL ? nil : AttentionLevel(rawValue: Int(sqlite3_column_int(s, 3))),
-                outcome: Decision.Outcome(rawValue: Self.text(s, 4) ?? "") ?? .dropped,
-                confidence: sqlite3_column_type(s, 5) == SQLITE_NULL ? nil : sqlite3_column_double(s, 5),
-                modelVersion: Self.text(s, 6),
-                reasons: Self.text(s, 7) ?? "",
-                response: Self.text(s, 8).flatMap(UserResponse.init(rawValue:))))
-        }
+        ) { s in out.append(Self.logged(s)) }
         return out
+    }
+
+    private static func logged(_ s: OpaquePointer?) -> LoggedDecision {
+        LoggedDecision(
+            id: text(s, 0) ?? "",
+            at: Date(timeIntervalSince1970: sqlite3_column_double(s, 1)),
+            category: text(s, 2) ?? "",
+            finalLevel: sqlite3_column_type(s, 3) == SQLITE_NULL ? nil : AttentionLevel(rawValue: Int(sqlite3_column_int(s, 3))),
+            outcome: Decision.Outcome(rawValue: text(s, 4) ?? "") ?? .dropped,
+            confidence: sqlite3_column_type(s, 5) == SQLITE_NULL ? nil : sqlite3_column_double(s, 5),
+            modelVersion: text(s, 6),
+            reasons: text(s, 7) ?? "",
+            response: text(s, 8).flatMap(UserResponse.init(rawValue:)),
+            kind: text(s, 9).flatMap(ItemKind.init(rawValue:)),
+            title: text(s, 10))
     }
 
     // MARK: rules
@@ -297,4 +325,7 @@ public struct LoggedDecision: Sendable, Equatable {
     public var modelVersion: String?
     public var reasons: String
     public var response: UserResponse?
+    public var kind: ItemKind? = nil
+    /// Mail subject, meeting title or agent card subject (empty for entries logged before the journal existed).
+    public var title: String? = nil
 }

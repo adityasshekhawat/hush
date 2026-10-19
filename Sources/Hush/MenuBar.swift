@@ -44,6 +44,7 @@ final class MenuBar: NSObject {
                 if app.digest.enabled { app.digest.showNow() } else { app.digest.toggleWithConsent() }
             },
             history: { [weak app] in app?.ask.showHistory() },
+            journal: { [weak app] in app?.journal.show() },
             sessions: { [weak app] in app?.ask.showSessions() },
             settings: { [weak self] s in self?.settingsWindow.show(s) },
             pause: { [weak app] l in app?.pause(l) },

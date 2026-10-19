@@ -125,6 +125,7 @@ extension AppController {
         case ("calendar", "request"):
             Task { let ok = await requestCalendarAccess(); DiagnosticsLog.write("calendar: request returned \(ok)") }
         case ("history", _): ask.showHistory()
+        case ("journal", _): journal.show()
         case ("wardrobe", _): openWardrobe?()
         case ("settings", let s): openSettings?(SettingsSection.allCases.first { $0.rawValue.lowercased().hasPrefix(s) } ?? .general)
         case ("rare", let id): rare.debugFind(id)

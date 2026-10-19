@@ -79,3 +79,46 @@ public enum RuleText {
         s.range(of: #"^[A-Za-z0-9-]+(\.[A-Za-z0-9-]+)*\.[A-Za-z]{2,}$"#, options: .regularExpression) != nil
     }
 }
+
+/// "Tell Hush what matters" (ADR-026): Apple's on-device model turns plain words into rule sentences in RuleText's own
+/// grammar; each is parsed in code and only becomes a rule when you add it. The model never decides anything itself.
+public enum RuleSuggestions {
+    public static let instructions = """
+        Turn what the reader says matters into rules for a quiet desktop companion. Write each rule as one sentence, \
+        using exactly one of these forms:
+        Always show me mail from <email address>
+        Always show me mail from anyone at <domain>
+        Always tap the glass for mail from <email address>
+        Always tap the glass for mail from anyone at <domain>
+        Hold back mail from <email address>
+        Hold back mail from anyone at <domain>
+        Always tap the glass for meeting reminders
+        Hold back agent updates in <project folder name>
+        Use only addresses, domains and project names the reader actually wrote. If they mention a person or a kind of \
+        mail without an address or a domain, skip it. Write at most 5 rules.
+        """
+
+    public static let maxRules = 5
+
+    /// The model's sentences as rules, in order, without ones that don't parse or repeat.
+    public static func rules(from sentences: [String], now: Date) -> [UserRule] {
+        var out: [UserRule] = []
+        for s in sentences.prefix(maxRules * 2) {
+            let base = UserRule(match: .category("meeting"), action: .never, createdAt: now)
+            guard let r = RuleText.parse(tidy(s), base: base),
+                  !out.contains(where: { $0.match == r.match && $0.action == r.action }) else { continue }
+            out.append(r)
+            if out.count == maxRules { break }
+        }
+        return out
+    }
+
+    /// The model sometimes keeps the form's wording: "agent updates in scratch project folder" → "in scratch".
+    static func tidy(_ s: String) -> String {
+        var t = s.trimmingCharacters(in: .whitespaces.union(CharacterSet(charactersIn: ".")))
+        for tail in [" project folder", " project", " folder", " repo", " repository"] where t.lowercased().hasSuffix(tail) {
+            t = String(t.dropLast(tail.count))
+        }
+        return t
+    }
+}

@@ -80,6 +80,8 @@ final class AppController {
     var hushKey: GlobalHotKey?
     var agentAppObserver: Any?
     var meetingSnoozes = 0
+    /// "What Hush saw" (ADR-026).
+    let journal = JournalWindowController()
     var energyObserver: Any?
     /// Low Power Mode or low battery (ADR-022).
     var energySaver = false
@@ -256,7 +258,10 @@ final class AppController {
             cap: { [weak self] in self?.settings.maxInterruptsPerDay ?? 5 },
             setQuietHours: { [weak self] on in self?.setSettings { $0.quietHours = on ? QuietHours(start: (22, 0), end: (7, 0)) : nil } },
             quietHoursOn: { [weak self] in self?.settings.quietHours != nil },
-            walkHome: { [weak self] in self?.wanderer.walkHome() }))
+            walkHome: { [weak self] in
+                self?.wanderer.walkHome()
+                self?.firstAlertDemo()
+            }))
         // First run: let Hush settle in, then begin.
         DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) { [weak self] in self?.onboarding.startIfNeeded() }
         HookInstaller.migratePath()
@@ -292,6 +297,8 @@ final class AppController {
 
         focus.onChange = { [weak self] f in self?.focusChanged(f) }
         restorePause()
+        journal.engine = engine
+        Task { try? await engine.pruneJournal() }   // the journal keeps 7 days (ADR-026)
         applyFullScreenPreference()
         focus.start()
 

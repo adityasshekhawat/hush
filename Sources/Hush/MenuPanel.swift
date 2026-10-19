@@ -22,6 +22,7 @@ struct MenuPanelActions {
     var openCard: () -> Void
     var digest: () -> Void
     var history: () -> Void
+    var journal: () -> Void
     var sessions: () -> Void
     var settings: (SettingsSection) -> Void
     var pause: (PauseLength) -> Void
@@ -116,13 +117,20 @@ struct MenuPanelView: View {
     }
 
     private var quickButtons: some View {
-        HStack(spacing: 6) {
-            Button { actions.digest() } label: { Label("While you were away", systemImage: "moon.fill") }
-                .buttonStyle(HushPill(kind: .secondary))
-            Button { actions.sessions() } label: { Label("Sessions", systemImage: "terminal") }.buttonStyle(HushPill(kind: .secondary))
-            Button("History", action: actions.history).buttonStyle(HushPill(kind: .secondary))
-            if !settings.setupLeft.isEmpty {
-                Button("Setup: \(settings.setupLeft.count) left") { actions.settings(.setup) }.buttonStyle(HushPill(kind: .secondary))
+        VStack(alignment: .leading, spacing: 6) {
+            HStack(spacing: 6) {
+                Button { actions.digest() } label: { Label("While you were away", systemImage: "moon.fill") }
+                    .buttonStyle(HushPill(kind: .secondary))
+                Button { actions.sessions() } label: { Label("Sessions", systemImage: "terminal") }.buttonStyle(HushPill(kind: .secondary))
+            }
+            HStack(spacing: 6) {
+                Button { actions.journal() } label: { Label("What I saw", systemImage: "book.closed") }
+                    .buttonStyle(HushPill(kind: .secondary))
+                    .help("Everything Hush looked at this week, what it did and why. Stays on this Mac")
+                Button("History", action: actions.history).buttonStyle(HushPill(kind: .secondary))
+                if !settings.setupLeft.isEmpty {
+                    Button("Setup: \(settings.setupLeft.count) left") { actions.settings(.setup) }.buttonStyle(HushPill(kind: .secondary))
+                }
             }
         }
     }
@@ -223,12 +231,13 @@ final class MenuPanel {
         p.level = .popUpMenu
         p.collectionBehavior = [.canJoinAllSpaces, .fullScreenAuxiliary, .ignoresCycle]
         p.hidesOnDeactivate = false
-        let a = actions ?? .init(showHeld: {}, openCard: {}, digest: {}, history: {}, sessions: {}, settings: { _ in }, pause: { _ in }, resume: {}, quit: {})
+        let a = actions ?? .init(showHeld: {}, openCard: {}, digest: {}, history: {}, journal: {}, sessions: {}, settings: { _ in }, pause: { _ in }, resume: {}, quit: {})
         let wrapped = MenuPanelActions(
             showHeld: { [weak self] in self?.close(); a.showHeld() },
             openCard: { [weak self] in self?.close(); a.openCard() },
             digest: { [weak self] in self?.close(); a.digest() },
             history: { [weak self] in self?.close(); a.history() },
+            journal: { [weak self] in self?.close(); a.journal() },
             sessions: { [weak self] in self?.close(); a.sessions() },
             settings: { [weak self] s in self?.close(); a.settings(s) },
             pause: { [weak self] l in self?.close(); a.pause(l) },

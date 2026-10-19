@@ -90,6 +90,7 @@ extension AppController {
     /// What I've learned (design guide §5.3).
     func showRules() {
         rulesCard.engine = engine
+        rulesCard.triage = triage
         rulesCard.show(avoiding: cardAvoidRect())
     }
 

@@ -89,7 +89,8 @@ Developer). When it arrives, Apple's on-device model judges each mail on your Ma
 ## What leaves your Mac
 
 No Hush server, no account, no analytics, no crash reporting. Everything Hush learns and logs stays in
-`~/Library/Application Support/Hush/`. These are the only times anything leaves the Mac, and each one starts with
+`~/Library/Application Support/Hush/`. **See for yourself:** menu bar ▸ *What I saw* lists every item Hush looked at
+this week, what it did and why, kept for 7 days, with Forget. These are the only times anything leaves the Mac, and each one starts with
 something you do:
 
 | When you… | What's sent | Where |
@@ -139,6 +140,8 @@ Its data stays in `~/Library/Application Support/Hush/`.
 - **Drag it** onto the top edge of a window and let go.
 - Start a long Claude Code run in another window and go do something else.
 - Settings ▸ Developer ▸ **Meeting in 2 min**, then click Hush when it comes out.
+- Menu bar ▸ **What I saw**: everything Hush looked at this week, and why it showed or held each one.
+- Settings ▸ What I've learned ▸ Add a rule, and just say it: "tap the glass when boss@acme.com writes".
 - Look at the menu bar panel at the end of the day: "63 held back today".
 
 ## How it works

@@ -28,3 +28,23 @@ import Testing
         #expect(RuleText.parse("", base: base) == nil)
     }
 }
+
+@Suite struct RuleSuggesting {
+    @Test func onlyParsedSentencesBecomeRules() {
+        let rules = RuleSuggestions.rules(from: [
+            "Always show me mail from anyone at acme.com",
+            "Always tap the glass for mail from boss@acme.com.",
+            "Hold back mail from anyone at shop.com",
+            "Always show me mail from my manager",          // no address: dropped
+            "Always show me mail from anyone at acme.com",  // repeat: dropped
+            "Sure, here are your rules:",                   // chatter: dropped
+            "Hold back agent updates in scratch project folder",
+        ], now: tenAM)
+        #expect(rules.map(RuleText.sentence) == [
+            "I'll always show you mail from anyone at acme.com.",
+            "I'll always tap the glass for mail from boss@acme.com.",
+            "I'll hold back mail from anyone at shop.com.",
+            "I'll hold back agent updates in scratch.",
+        ])
+    }
+}

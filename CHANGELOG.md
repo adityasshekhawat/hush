@@ -5,6 +5,12 @@ Hush is pre-alpha and built from source. Notable changes, newest first. Decision
 
 ## Unreleased
 
+- **What Hush saw:** a journal of everything Hush looked at this week, what it did and why, in plain words. On this
+  Mac, kept 7 days, with Forget (menu bar ▸ What I saw).
+- **Tell Hush what matters:** in What I've learned, type it your way ("tap the glass when boss@acme.com writes") and
+  Apple's on-device model proposes rules for you to add one by one. Rules still run in code.
+- **First run:** if nothing real is waiting when setup ends, Hush shows once what an alert looks like.
+
 - **Meetings:** a heads-up 5 minutes before with one line about what it's for (written on your Mac), then Hush comes
   out a minute before and waits. One click on Hush joins the call (Zoom, Meet, Teams and more). "1 more min" snoozes;
   joining (your mic turning on) puts it away. Events marked "free" are skipped. Lead times in Settings.

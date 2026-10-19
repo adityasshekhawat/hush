@@ -243,6 +243,19 @@ public actor DecisionEngine {
     public func agentTasks(limit: Int = 50) throws -> [AgentTask] { try store.agentTasks(limit: limit) }
     public func deleteAgentTasks() throws { try store.deleteAgentTasks() }
 
+    /// "What Hush saw" (ADR-026): the last `days` days, after dropping anything older than the journal keeps.
+    public func journal(days: Int = Journal.keepDays, now: Date = Date()) throws -> [LoggedDecision] {
+        let cutoff = calendar.date(byAdding: .day, value: -days, to: now)!
+        try store.prune(before: calendar.date(byAdding: .day, value: -Journal.keepDays, to: now)!)
+        return try store.journal(since: cutoff)
+    }
+
+    public func pruneJournal(now: Date = Date()) throws {
+        try store.prune(before: calendar.date(byAdding: .day, value: -Journal.keepDays, to: now)!)
+    }
+
+    public func forgetJournal() throws { try store.deleteDecisions() }
+
     public func recentDecisions(limit: Int = 50) throws -> [LoggedDecision] {
         try store.recentDecisions(limit: limit)
     }
