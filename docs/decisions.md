@@ -316,3 +316,49 @@ the app via the `pouch:<verb>` debug hook: 207 → 102 characters in 3.4 s, no s
 
 **Next** (from the research): a **Fix** verb that shows what it changed before handing back; text from a copied
 screenshot (image on the clipboard → OCR, permission-free); content-aware chips (Translate, To-dos).
+
+## ADR-020 · Paste guessing knows ⌘Tab; hand it to Hush doesn't depend on the guess (2026-10-19)
+
+**Context.** The user reported that Hush "doesn't capture" copies. The log showed every copy detected (the pasteboard
+change count, buttons included), but the cheeks were emptied about a second later by a guessed paste: ADR-008's
+fallback counts any ⌘ shortcut that doesn't change the clipboard within 0.3 s as a paste, and ⌘Tab right after a
+copy is the common case. With hand it to Hush (ADR-019) a wrong guess hides the verb card.
+
+**Decision.**
+- `PasteGuess` (HushCore, tested) decides: clipboard changed → copy; another app came forward
+  (`NSWorkspace.didActivateApplicationNotification`, no permission) since the shortcut → ⌘Tab, not a paste; ⌘ still
+  held → wait (⌘Tab switches on release), giving up after 4 s; otherwise a paste 0.35 s after ⌘ comes up.
+- For 2 minutes after a copy, a click on Hush offers the verb card even if a guess emptied the cheeks (they puff back).
+- Each verb-card click logs the macOS pasteboard access behaviour (15.4+ privacy) and whether text could be read
+  (lengths only). If macOS denies the read, the card says so instead of failing quietly.
+
+**Limits.** ⌘W, ⌘S, ⌘F and other in-app shortcuts can still read as a paste; the 2-minute window covers them for the
+verb card. Real-world accuracy not yet measured (a scripted check needs the user's keystrokes).
+
+## ADR-021 · v1 scope: the feature spec, reconciled with Hush's principles (2026-10-19)
+
+The v1 feature spec (agent watcher, meetings, mail, never-in-the-way, performance, first run, journal) is adopted
+with these decisions, made for the user and for open source. Each was weighed against its strongest objection.
+- **Kept:** agent watcher first (risk is judged by rules in code; the model only writes the one-liner), meetings at
+  T-5/T-1 with one-click join links (the T-1 visit leaves once the mic turns on or 5 min after start), mail last and
+  metadata-only by default (snippet opt-in), pause / dismiss / click-through, battery mode and stopping when locked,
+  published CPU and memory numbers, "tell Hush what matters" (the model proposes rule sentences you edit; rules run
+  in code), a 7-day local journal of what Hush saw (metadata, never snippets or model inputs, with Forget), hand it
+  to Hush, perching (can be turned off).
+- **Changed:** the mail digest comes at natural breaks (back from away, a call ending), at most hourly, gentle, not
+  on a clock. The model may bring mail forward gently with a reason but never interrupts; VIPs and rules still do,
+  and "Always show this sender" is one tap. Agent hooks forward the tool name and the first ~200 characters of the
+  command over a local Unix socket, in memory only, never stored (replaces the spoofable distributed notification).
+- **Off by default:** the Claude-backed lanes (Ask Hush quick and repo questions, Summarise, browser tasks), behind
+  one opt-in that says it sends the question to Anthropic through your Claude Code. Quick answers and Summarise move
+  on-device; hand-offs to your own assistant stay.
+- **Dropped:** process-scraping fallback (no polling where an event source exists), paid cosmetics (every piece is
+  free and in the repo), chat paper airplanes (no source).
+- **Not v1:** Deep Work mode.
+- **Defaults:** quiet hours stay 22:00–07:00. No Accessibility permission: "avoid the focused field" is approximated
+  by ducking while typing and avoiding the cursor. Hush is "it".
+- **Open source:** code Apache-2.0, character art CC BY-SA 4.0, the name
+  and logo reserved so forks rename. From-source Homebrew formula now; a notarised cask once there's an Apple
+  Developer account.
+- **Art:** the spec's props (flags, door, pocket watch, satchel, bin, journal, blind) come from `docs/v1-art-brief.md`;
+  behaviour ships first with existing props as placeholders.

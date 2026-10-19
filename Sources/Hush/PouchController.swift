@@ -55,7 +55,15 @@ final class PouchController {
             open()
             return true
         }
-        guard let text = source() else { return false }
+        guard let text = source() else {
+            // macOS can refuse clipboard reads that aren't a paste (pasteboard privacy). Say so instead of failing quietly.
+            if Self.accessDenied {
+                model.stage = .blocked
+                open()
+                return true
+            }
+            return false
+        }
         if case .tooLong(let n) = Pouch.check(text) {
             model.stage = .tooLong(n)
         } else if Pouch.check(text) == .code {
@@ -69,6 +77,27 @@ final class PouchController {
     }
 
     func relayout() { card.relayout(avoiding: host.anchor()) }
+
+    /// The system's pasteboard privacy setting for Hush (macOS 15.4+).
+    private static var accessDenied: Bool {
+        if #available(macOS 15.4, *) { return NSPasteboard.general.accessBehavior == .alwaysDeny }
+        return false
+    }
+
+    /// What each click could read, for diagnosing (lengths only, never the text).
+    private func logRead(_ clip: String?) {
+        var access = "n/a"
+        if #available(macOS 15.4, *) {
+            switch NSPasteboard.general.accessBehavior {
+            case .default: access = "default"
+            case .ask: access = "ask"
+            case .alwaysAllow: access = "allow"
+            case .alwaysDeny: access = "deny"
+            @unknown default: access = "unknown"
+            }
+        }
+        DiagnosticsLog.write("pouch: click · clipboard access \(access) · text \(clip.map { "\($0.count) chars" } ?? "none")")
+    }
 
     /// Debug hook: open the chips, then pick a verb (the same path as a click on Hush, then on a chip).
     func debugPick(_ verb: PouchVerb) {
@@ -88,6 +117,7 @@ final class PouchController {
     /// The text to rework: what's on the clipboard, or the original if the clipboard still holds our last rework.
     private func source() -> String? {
         let clip = NSPasteboard.general.string(forType: .string)
+        logRead(clip)
         if let lastResult, clip == lastResult, let original { return original }
         guard case .ok = Pouch.check(clip) else { return Pouch.check(clip) == .empty ? nil : clip }
         original = nil
@@ -125,7 +155,7 @@ final class PouchController {
     private func rework(_ verb: PouchVerb) {
         switch model.stage {
         case .tooLong, .unavailable: handOff(verb); return
-        case .consent, .verbs, .code: break
+        case .consent, .verbs, .code, .blocked: break
         }
         guard let text = source(), case .ok(let clean) = Pouch.check(text) else { close(); return }
         close()
@@ -208,6 +238,8 @@ final class PouchCardModel: ObservableObject {
         case tooLong(Int)
         case code
         case unavailable(PouchVerb)
+        /// macOS didn't let Hush read the clipboard.
+        case blocked
     }
     @Published var stage: Stage = .verbs(canRestore: false)
     var pick: (PouchVerb) -> Void = { _ in }
@@ -260,6 +292,14 @@ private struct PouchCard: View {
             case .code:
                 Text("That looks like code").font(HushFont.cardTitle)
                 Text("Simpler, shorter or bullets would break it, so I'll leave it as it is. Try me with some writing.")
+                    .font(HushFont.body).fixedSize(horizontal: false, vertical: true)
+                HStack {
+                    Spacer()
+                    Button("Got it", action: model.dismiss).buttonStyle(.pill(.secondary))
+                }
+            case .blocked:
+                Text("macOS didn't let me see what you copied").font(HushFont.cardTitle)
+                Text("You can allow Hush to read the clipboard in System Settings ▸ Privacy & Security. I only look when you click me.")
                     .font(HushFont.body).fixedSize(horizontal: false, vertical: true)
                 HStack {
                     Spacer()

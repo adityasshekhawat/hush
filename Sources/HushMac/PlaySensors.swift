@@ -1,5 +1,6 @@
 import AppKit
 import CoreAudio
+import HushCore
 import IOKit.ps
 import os
 
@@ -43,6 +44,9 @@ public final class PlaySensors {
     private var cmdHeldSince: TimeInterval?
     private var cmdLastSeen: TimeInterval = 0
     private var lastCopyAt: TimeInterval = 0
+    /// When another app last came forward (⌘Tab and clicks): a ⌘ shortcut followed by this wasn't a paste.
+    private var lastAppSwitch: TimeInterval?
+    private var appObserver: Any?
 
     /// Turn on while the cheeks are full; off otherwise, so key state is only ever checked when it matters.
     public var watchForPaste = false {
@@ -81,6 +85,10 @@ public final class PlaySensors {
         timer?.tolerance = 0.05
         startScreenshotQuery()
         checkPower()
+        appObserver = NSWorkspace.shared.notificationCenter.addObserver(
+            forName: NSWorkspace.didActivateApplicationNotification, object: nil, queue: .main) { [weak self] _ in
+            MainActor.assumeIsolated { self?.lastAppSwitch = ProcessInfo.processInfo.systemUptime }
+        }
     }
 
     public func stop() {
@@ -171,16 +179,29 @@ public final class PlaySensors {
         if keyDownAt - lastShortcutKeyDown > 0.05, keyDownAt >= cmdWindowStart, keyDownAt <= cmdWindowEnd,
            now - keyDownAt < 0.5, now - lastCopyAt > 0.6 {
             lastShortcutKeyDown = keyDownAt
-            pendingShortcut = (now, changeCount)
+            pendingShortcut = (keyDownAt, changeCount)
             note("paste: ⌘ shortcut seen (⌘ held \(String(format: "%.2f", cmdWindowEnd - cmdWindowStart))s, key \(String(format: "%.0f", (now - keyDownAt) * 1000))ms ago)")
         }
-        if let p = pendingShortcut, now - p.at > 0.3 {
-            pendingShortcut = nil
-            if NSPasteboard.general.changeCount == p.changeCount {
-                note("paste: no clipboard change → paste")
+        // 3. Decide once it's clear (PasteGuess, tested): a copy, ⌘Tab to another app, or a paste.
+        if let p = pendingShortcut {
+            let verdict = PasteGuess.verdict(
+                shortcutAt: p.at, now: now, commandDown: cmd, commandUpAt: cmd ? nil : cmdLastSeen,
+                clipboardChanged: NSPasteboard.general.changeCount != p.changeCount, lastAppSwitch: lastAppSwitch)
+            switch verdict {
+            case .wait: break
+            case .paste:
+                pendingShortcut = nil
+                note("paste: no clipboard change, no app switch → paste")
                 onEvent?(.pasted)
-            } else {
+            case .copy:
+                pendingShortcut = nil
                 note("paste: clipboard changed → copy, not paste")
+            case .appSwitch:
+                pendingShortcut = nil
+                note("paste: another app came forward (⌘Tab) → not a paste")
+            case .unclear:
+                pendingShortcut = nil
+                note("paste: ⌘ held too long → not counted")
             }
         }
     }

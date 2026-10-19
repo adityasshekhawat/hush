@@ -17,11 +17,11 @@ extension AppController {
             renderer.react(.press(false))
         case .click:
             antics.touched()
-            if antics.cheeksFull && active == nil {
-                // Hand it to Hush: offer to rework what you copied (ADR-019); otherwise the click pops the cheeks.
-                if pouch.clicked() { return }
-                antics.emptyCheeks()
-                return
+            if active == nil && (antics.cheeksFull || antics.copiedRecently) {
+                // Hand it to Hush: offer to rework what you copied (ADR-019). Also right after a copy whose cheeks a
+                // wrong paste guess emptied (ADR-020). Otherwise a click on full cheeks pops them.
+                if pouch.clicked() { antics.refillCheeks(); return }
+                if antics.cheeksFull { antics.emptyCheeks(); return }
             }
             if active != nil {
                 showCard()

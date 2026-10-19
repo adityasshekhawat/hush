@@ -45,6 +45,10 @@ final class AnticsController {
 
     /// Cheeks stay full until a paste (or a click on Hush). No timer: "puffed till you paste".
     private(set) var cheeksFull = false
+    /// When you last copied (seen even while Hush is hidden). Paste is only ever a guess, so "hand it to Hush"
+    /// stays a click away for a couple of minutes after a copy even if a wrong guess emptied the cheeks (ADR-020).
+    private var lastCopy: Date?
+    var copiedRecently: Bool { lastCopy.map { Date().timeIntervalSince($0) < 120 } ?? false }
     static let patAskDuration: TimeInterval = 15
 
     init(host: Host) { self.host = host }
@@ -91,6 +95,7 @@ final class AnticsController {
     private func handle(_ e: PlaySensors.Event) {
         switch e {
         case .copied:
+            lastCopy = Date()
             guard may(.cheeks) else { return }
             host.react(.cheeks)
             cheeksFull = true
@@ -109,6 +114,14 @@ final class AnticsController {
         case .windowPassing(let dx):
             if may(.flinch), !host.isWandering() { host.react(.flinch(dx: dx)) }
         }
+    }
+
+    /// Puff back up for "hand it to Hush" when a wrong paste guess had emptied them.
+    func refillCheeks() {
+        guard !cheeksFull else { return }
+        host.react(.cheeks)
+        cheeksFull = true
+        sensors.watchForPaste = true
     }
 
     /// Blow the air out (on paste, or when you click it) and stop watching for ⌘V.
