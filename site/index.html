@@ -4,305 +4,304 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Hush · The companion that knows when not to</title>
-<meta name="description" content="Hush is a silent companion for your Mac. It decides what deserves your attention, holds back the rest, and lets you know when Claude needs you.">
-<link rel="icon" href="assets/hush-mark.svg">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700;12..96,800&family=Figtree:wght@400;500;600;700&display=swap" rel="stylesheet">
+<meta name="description" content="Hush is a small, silent companion for your Mac. It keeps quiet about what can wait and tells you when Claude Code or Codex needs you. Free and open source.">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Hush · The companion that knows when not to">
+<meta property="og:description" content="A small, silent friend for your Mac. Free and open source.">
+<meta name="twitter:card" content="summary">
+<meta name="theme-color" content="#F4D9A6">
+<link rel="icon" href="assets/hush-mark.svg" type="image/svg+xml">
+<link rel="icon" href="assets/favicon-64.png" type="image/png" sizes="64x64">
+<link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
+<link rel="preload" href="fonts/bricolage-grotesque-latin.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
-<div class="page">
+<div class="page" id="page">
 
-<header class="nav">
-  <a href="#top" class="logo">hush</a>
-  <nav aria-label="Main">
-    <a href="#meet">Meet Hush</a>
-    <a href="#ask">Ask Hush</a>
-    <a href="#yours">Make it yours</a>
-    <a data-link="github" class="outline-btn small">GitHub</a>
-  </nav>
-</header>
-
-<!-- HERO -->
-<section id="top" class="hero">
-  <div class="hero-copy">
-    <div class="kick" style="color: #F2B79F">A silent companion for your Mac</div>
-    <h1>The companion that knows when not to.</h1>
-    <p class="hero-sub">Hush lives at the bottom of your screen and decides what deserves your attention. Everything else waits. When Claude finishes a job or needs you, Hush lets you know without making a sound.</p>
-    <div class="row">
-      <a data-link="github" class="solid-btn">Get it on GitHub</a>
-      <a href="#meet" class="outline-btn">Try it here first</a>
-    </div>
-    <div class="fine-print">Free and open source · macOS 15 or later · Ask Hush and agent alerts use your Claude Code login</div>
-  </div>
-  <div class="hero-art">
-    <div class="desk" id="hero-desk">
-      <div class="lights"><i></i><i></i><i></i></div>
-      <div class="desk-lines"><i style="width: 90%"></i><i style="width: 70%"></i><i style="width: 82%"></i></div>
-      <div class="card held-mini">
-        <span class="big" style="font-size: 28px; color: #5B47A8">63</span>
-        <span style="font-size: 12px; line-height: 1.3; color: #3D3846">held back today<br><span style="color: #8A8492">4 shown</span></span>
+<!-- 1 HERO -->
+<section id="top" class="sec hero" data-sec="hero">
+  <header class="nav">
+    <a href="#top" class="logo"><img src="assets/hush-lockup-horizontal-color.svg" alt="Hush" width="141" height="40"></a>
+    <nav aria-label="Main">
+      <a class="nl" href="#try">Try it</a>
+      <a class="nl" href="#build">For builders</a>
+      <a class="nl" href="#yours">Make it yours</a>
+      <a class="btn ink small" data-link="github">GitHub</a>
+    </nav>
+  </header>
+  <div class="hero-inner">
+    <h1 class="giant hero-h1" aria-label="The companion that knows when not to." id="hero-h1"></h1>
+    <div class="stamp" aria-hidden="true">Never makes a sound.</div>
+    <div class="hero-copy">
+      <p class="hero-sub">Hush sits at the bottom of your Mac, keeps quiet about what can wait and tells you when Claude Code or Codex needs you.</p>
+      <div class="row">
+        <a class="btn ink" data-link="github">Get it on GitHub</a>
+        <a class="btn out" href="#try">Try it here first</a>
       </div>
-      <div class="floor"><button type="button" id="hero-hush" class="hush-btn" aria-label="Poke Hush"><span id="hero-char"></span></button></div>
-      <div class="badge-dark" style="left: 18px; bottom: 18px">Move your cursor. Poke it.</div>
+      <div class="inst"><span aria-hidden="true">$</span><code data-install></code><button type="button" data-copy-install>Copy</button></div>
+      <div class="fine">Free and open source · macOS 15 or later · built from source for now · Ask Hush uses your Claude Code login</div>
+    </div>
+    <div class="card eve-card" id="eve-card" hidden>
+      <div class="ch"><span class="icon" style="background: #F1ECFB; color: #5B47A8">☾</span><span>Good evening</span><span class="ml">18:30</span></div>
+      <div class="nums"><span class="big" style="font-size: 34px">4</span><span class="nlab">shown</span><span class="big" style="font-size: 34px; margin-left: 12px; color: #8A79C9">63</span><span class="nlab">held back</span></div>
+      <div class="cb">You got 4 things from me today. I held back 63.</div>
+      <div class="ca"><span class="pl">See what I held</span><span class="pl q ml">Goodnight</span></div>
+    </div>
+    <div class="hwrap" data-actor="hero">
+      <div class="breathe"><button type="button" class="hbtn pan" aria-label="Poke Hush"><span class="hchar"></span></button></div>
     </div>
   </div>
 </section>
 
-<!-- HELD BACK -->
-<section class="dark">
-  <div class="wrap split" style="padding-top: 8px">
-    <div class="split-copy">
+<!-- 2 THE FLOOD -->
+<section id="flood" class="flood" data-sec="flood" aria-label="The flood: Hush holds back what can wait">
+  <div class="flood-scene" id="flood-scene">
+    <div class="menubar" aria-hidden="true"><span id="now-label"></span></div>
+    <div class="f-intro fade" id="f-intro">
       <div class="kick" style="color: #C9BBEC">Its best work is invisible</div>
-      <h2 class="h2">You got 4 things today. It held back 63.</h2>
-      <p class="sub">Most of what pings you can wait. Hush quietly holds it, brings you only what matters, and at 18:30 tucks the day in with the numbers. On Fridays you get the week.</p>
+      <div class="giant f-intro-h">Your screen, on a normal day.</div>
     </div>
-    <div class="split-art">
-      <div class="scene">
-        <div class="card" style="width: 300px">
-          <div class="ch"><span class="icon" style="background: #F1ECFB; color: #5B47A8">☾</span><span>Good evening</span><span class="ml">18:30</span></div>
-          <div class="nums"><span class="big" style="font-size: 34px">4</span><span class="nl">shown</span><span class="big" style="font-size: 34px; margin-left: 12px; color: #8A79C9">63</span><span class="nl">held back</span></div>
-          <div class="cb">Mostly newsletters and threads you weren't in. Nothing from your VIPs waited.</div>
-          <div class="ca"><span class="pl">See what I held</span><span class="pl q ml">Goodnight</span></div>
-        </div>
-        <span data-hush="pose:yawn;expr:sleepy;size:110"></span>
+    <div class="f-tune fade" id="f-tune">
+      <div class="f-tune-h">First, how loud is your day?</div>
+      <div id="tune-rows"></div>
+      <div class="row" style="align-items: center; padding-top: 4px">
+        <button type="button" class="btn cream" data-play style="min-height: 48px; font-size: 16px">Run my day</button>
+        <span style="font-size: 14px; color: #A9A1B4">or just keep scrolling</span>
       </div>
-      <div class="scene">
-        <div class="card" style="width: 280px">
-          <div class="ch"><span class="icon" style="background: #F1ECFB; color: #5B47A8">▤</span><span>Your week with Hush</span><span class="ml">Fri</span></div>
-          <div class="ct">I kept 284 things off your screen.</div>
-          <div class="bars">
-            <div style="height: 70%"><i style="height: 9%"></i></div>
-            <div style="height: 100%"><i style="height: 6%"></i></div>
-            <div style="height: 62%"><i style="height: 11%"></i></div>
-            <div style="height: 84%"><i style="height: 7%"></i></div>
-            <div style="height: 46%"><i style="height: 13%"></i></div>
-          </div>
-          <div class="bar-labels"><span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span>Fri</span></div>
-          <div class="ca"><span class="pl">What I learned</span></div>
-        </div>
-        <span data-hush="pose:proud;expr:happy;size:110"></span>
+      <div class="f-note">An illustration of a loud day.</div>
+    </div>
+    <div class="f-counter fade" id="f-counter" aria-live="polite">
+      <div class="counter" id="counter">0</div>
+      <div class="counter-lab">held back</div>
+    </div>
+    <div class="f-line fade" id="f-line">
+      <div class="giant f-line-h">You got <span data-shown>4</span> things today. It held back <span data-held>63</span>.</div>
+      <p class="f-truth">An illustration. Today Hush looks after your meetings and your Claude Code and Codex sessions. Mail is coming.</p>
+      <button type="button" class="retune" id="retune">Not your day? Tune it</button>
+    </div>
+    <div id="f-cards"></div>
+    <div class="env-row" id="env-row"></div>
+    <div class="f-end fade" id="f-end">
+      <div class="card" style="width: 290px">
+        <div class="ch"><span class="icon" style="background: #F1ECFB; color: #5B47A8">☾</span><span>Good evening</span><span class="ml">18:30</span></div>
+        <div class="nums"><span class="big" style="font-size: 30px" data-shown>4</span><span class="nlab">shown</span><span class="big" style="font-size: 30px; margin-left: 12px; color: #8A79C9" data-held>63</span><span class="nlab">held back</span></div>
+        <div class="ca"><span class="pl">See what I held</span><span class="pl q ml">Goodnight</span></div>
+      </div>
+      <div class="card" style="width: 270px">
+        <div class="ch"><span class="icon" style="background: #F1ECFB; color: #5B47A8">▤</span><span>Your week with Hush</span><span class="ml">Fri</span></div>
+        <div class="ct">This week you got 18 things from me. I held back 240.</div>
+        <div class="bars"><i style="height: 70%"></i><i style="height: 100%"></i><i style="height: 62%"></i><i style="height: 84%"></i><i style="height: 46%"></i></div>
       </div>
     </div>
+    <div class="hwrap" data-actor="flood">
+      <div class="breathe"><span class="hchar"></span></div>
+    </div>
+    <button type="button" class="btn f-play" data-play id="f-play">Play it for me</button>
+    <div class="tick" aria-label="Held back today"><div class="tk" id="ticker"></div></div>
   </div>
 </section>
 
-<!-- MEET HUSH: TUTORIAL -->
-<section id="meet" class="light">
+<!-- 3 TRY IT -->
+<section id="try" class="sec try" data-sec="try">
   <div class="wrap">
-    <div class="intro" style="max-width: 46rem">
-      <div class="kick" style="color: #A64B30">Meet Hush · about a minute</div>
-      <h2 class="h2">Say hello. It'll take notes.</h2>
-      <p class="sub">Six small things to try, right here. Everything Hush picks up about you lands in its notebook, and you can cross out anything.</p>
+    <div class="stack">
+      <div class="kick" style="color: #A64B30">Try it here · about a minute</div>
+      <h2 class="giant h2">Say hello. It'll take notes.</h2>
     </div>
-    <div class="row" role="tablist" aria-label="Tutorial steps" id="tut-chips"></div>
-    <div class="tut">
-      <div class="tut-stage">
-        <div class="tut-screen" id="tut-screen">
+    <div class="row chips" role="tablist" aria-label="Tutorial steps" id="tut-chips"></div>
+    <div class="step-row">
+      <div class="step-copy">
+        <div class="step-n" id="tut-n">Step 1 of 6</div>
+        <div class="step-title" id="tut-title"></div>
+        <div class="step-body" id="tut-body"></div>
+      </div>
+      <div class="row" style="gap: 8px">
+        <button type="button" class="pill" id="tut-fling" hidden>Fling it for me</button>
+        <button type="button" class="pill" id="tut-back">Back</button>
+        <button type="button" class="pill on" id="tut-next">Next</button>
+      </div>
+    </div>
+    <div class="stage-wrap">
+      <div class="stage" id="stage">
+        <div class="stage-in">
           <div id="tut-overlay"></div>
-          <div class="floor"><button type="button" id="tut-hush" class="hush-btn" style="touch-action: none"><span id="tut-char"></span></button></div>
-          <div class="badge-dark" id="tut-status" style="right: 18px; bottom: 18px" aria-live="polite" hidden></div>
+          <div class="hwrap" data-actor="tut">
+            <div class="breathe"><button type="button" class="hbtn" aria-label="Poke Hush" id="tut-btn"><span class="hchar"></span></button></div>
+          </div>
+          <div class="status" id="tut-status" aria-live="polite" hidden></div>
         </div>
       </div>
-      <div class="tut-side">
-        <div class="step-card">
-          <div class="step-n" id="tut-n"></div>
-          <div class="step-title" id="tut-title"></div>
-          <div class="step-body" id="tut-body"></div>
-          <button type="button" id="tut-fling" class="ghost-btn dark-ink" hidden>Fling it for me</button>
-          <div class="row" style="gap: 8px; padding-top: 4px">
-            <button type="button" id="tut-back" class="ghost-btn">Back</button>
-            <button type="button" id="tut-next" class="ink-btn">Next</button>
+      <div class="notebook">
+        <div class="nb-title">What I've learned</div>
+        <div id="nb-list"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 4 FOR BUILDERS -->
+<section id="build" class="sec build" data-sec="build">
+  <div class="wrap">
+    <div class="stack">
+      <div class="kick" style="color: #3E2F7A">For people building with AI</div>
+      <h2 class="giant h2">It watches your agents so you don't have to.</h2>
+      <p class="lead">Leave Claude Code or Codex running and switch to something else. Hush holds an envelope when a long run finishes and perks up when it needs your OK. The alerts come from the agents' own hooks, with no model calls. By default it's left out of screenshots and screen recordings, so it stays out of your screen shares.</p>
+    </div>
+    <div class="build-grid">
+      <div class="stack" style="gap: 12px">
+        <div class="frame">
+          <div class="frame-bar" aria-hidden="true"><i></i><i></i><i></i><span>Hush on a Mac desktop</span></div>
+          <div class="frame-screen" id="frame-screen">
+            <div class="term" aria-hidden="true">
+              <div><b>~/hush</b> $ claude</div>
+              <div class="dim">› tidy up the card placement</div>
+              <div class="dim">● Reading CardPlacement.swift</div>
+              <div class="dim">● Editing 2 files</div>
+            </div>
+            <div class="card frame-card" id="frame-card"></div>
+            <div class="hwrap" data-actor="frame"><span class="hchar"></span></div>
           </div>
         </div>
-        <div class="notebook">
-          <div class="nb-title">What I've learned</div>
-          <div id="nb-list"><div class="nb-empty">Nothing yet. Say hello.</div></div>
+        <div class="moments" role="tablist" aria-label="A day on the desktop" id="moments"></div>
+      </div>
+      <div class="stack" style="gap: 12px">
+        <div class="lane"><span class="lchip" style="background: #F1ECFB; color: #5B47A8">⚡ answer here</span><span>Formulas, commands and facts, shaped for the app you're in.</span></div>
+        <div class="lane"><span class="lchip" style="background: #ECEAF0; color: #2D2A35">‹/› ask about your repo</span><span>A read-only Claude Code run in a repo you allow.</span></div>
+        <div class="lane"><span class="lchip" style="background: #FBE1D8; color: #9A3E22">↗ open in Claude</span><span>Long writing opens in ChatGPT, Claude or Perplexity with your question filled in.</span></div>
+        <div class="lane"><span class="lchip" style="background: #E1ECFD; color: #1F5FBF">🧭 plan it · beta</span><span>Browser tasks, off until you turn them on, show a plan first. It's told to ask before sending, buying or deleting.</span></div>
+      </div>
+    </div>
+    <div class="agent-row">
+      <div class="card agent-card">
+        <div class="ch"><span class="icon" style="background: #FFEBD1; color: #A35A00">!</span><span>Claude Code · site</span><span class="ml">16:10</span></div>
+        <div class="ct">Claude needs you in site</div>
+        <div class="cs">Waiting for a permission prompt</div>
+        <div class="ca"><span class="pl">Open</span><span class="pl q ml">Later</span></div>
+      </div>
+      <div class="hwrap static" data-actor="build">
+        <div class="breathe"><span class="hchar"></span></div>
+      </div>
+      <div class="card agent-card">
+        <div class="ch"><span class="icon" style="background: #F1ECFB; color: #5B47A8">☾</span><span>While you were away · 42 min</span></div>
+        <div class="ct">3 Claude sessions ran</div>
+        <div class="cs">2 finished · 1 stopped · 1 PR opened</div>
+        <div class="ca"><span class="pl">Show me</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 5 MAKE IT YOURS -->
+<section id="yours" class="sec yours" data-sec="yours">
+  <div class="wrap">
+    <div class="stack center">
+      <div class="kick">31 pieces · 9 colours · all included</div>
+      <h2 class="giant h2">Make it yours.</h2>
+    </div>
+    <div class="yours-main">
+      <div class="pet-name" data-pet>Hush</div>
+      <div class="yours-stage">
+        <div class="spot" aria-hidden="true"></div>
+        <div class="hwrap static" data-actor="yours">
+          <div class="breathe"><span class="hchar"></span></div>
+        </div>
+      </div>
+      <div class="tray">
+        <div role="tablist" aria-label="Wardrobe" class="tabs" id="w-tabs"></div>
+        <div role="tabpanel" class="panel" id="w-panel"></div>
+        <div class="tray-foot">
+          <label for="hush-name" class="sr-only">Name your Hush</label>
+          <input id="hush-name" type="text" maxlength="18" placeholder="Name it" autocomplete="off">
+          <button type="button" class="btn out" id="surprise" style="min-height: 50px">🎲 Surprise me</button>
+          <button type="button" class="btn ink" id="adopt" style="min-height: 50px">Adopt Hush</button>
         </div>
       </div>
     </div>
-  </div>
-</section>
-
-<!-- A DAY -->
-<section class="day-section">
-  <div class="intro" style="max-width: 46rem">
-    <h2 class="h2">From first coffee to goodnight.</h2>
-    <p class="sub" style="color: #CFC8D8">A day with Hush is mostly quiet. That's the point.</p>
-  </div>
-  <div class="day-strip" id="day-strip"></div>
-</section>
-
-<!-- ASK + AGENTS -->
-<section id="ask" class="light">
-  <div class="wrap">
-    <div class="intro" style="max-width: 50rem">
-      <div class="kick" style="color: #5B47A8">⌘⇧H, from any app</div>
-      <h2 class="h2">Ask without leaving what you're doing.</h2>
-      <p class="sub">One small box above Hush. It picks the right route as you type, and the answer comes back shaped for the app you're in: a formula for Excel, a command for your terminal, steps for your notes. Nothing is pasted or run for you.</p>
-    </div>
-    <div class="lanes">
-      <div class="lane"><span class="lane-chip" style="background: #F1ECFB; color: #5B47A8">⚡ answer here</span><b>Quick answers</b><span>One fast call. Formulas, commands, facts and steps, with Paste in Excel, Send to Warp or Save to Notion.</span></div>
-      <div class="lane"><span class="lane-chip" style="background: #ECEAF0; color: #2D2A35">‹/› ask about your repo</span><b>Code questions</b><span>A read-only Claude Code run in a repo you allow. Streams what it reads, then hands off to Cursor.</span></div>
-      <div class="lane"><span class="lane-chip" style="background: #FBE1D8; color: #9A3E22">↗ open in Claude</span><b>Hand-offs</b><span>Long writing goes straight to ChatGPT, Claude or Perplexity with your question filled in.</span></div>
-      <div class="lane"><span class="lane-chip" style="background: #E1ECFD; color: #1F5FBF">🧭 plan it · beta</span><b>Browser tasks</b><span>A plan first, then it works in your browser. It's told to ask before sending, buying or deleting.</span></div>
-    </div>
-    <div class="split" style="padding-top: 24px; gap: 40px">
-      <div class="split-copy" style="gap: 12px">
-        <div class="kick" style="color: #2F7664">Building with AI?</div>
-        <h3 class="h3">It watches your agents so you don't have to.</h3>
-        <p class="sub">Leave Claude Code running and switch to something else. Hush holds an envelope when it finishes, perks up when it needs your permission, and if you were away, it shows what every session did while you were gone.</p>
-      </div>
-      <div class="split-art" style="gap: 18px">
-        <div class="scene" style="gap: 10px">
-          <div class="card" style="width: 280px">
-            <div class="ch"><span class="icon" style="background: #FFEBD1; color: #A35A00">!</span><span>Claude Code · site</span><span class="ml">16:10</span></div>
-            <div class="ct">Claude needs you in site</div>
-            <div class="cs">Waiting for a permission prompt</div>
-            <div class="ca"><span class="pl">Open</span><span class="pl q ml">Later</span></div>
-          </div>
-          <span data-hush="pose:perk;expr:alert;size:100"></span>
+    <div class="adopt-wrap" id="adopt-card" hidden>
+      <div class="adopt-card" id="adopt-card-inner">
+        <div class="badge"><span class="hchar" id="card-char"></span></div>
+        <div class="stack" style="gap: 6px; min-width: 0">
+          <div class="card-kick">Adoption card · No. <span id="adopt-no">0000</span></div>
+          <div class="card-name" data-pet>Hush</div>
+          <div style="font-size: 15px; font-weight: 600">Adopted <span id="adopt-date"></span></div>
+          <div class="outfit" id="outfit-line"></div>
+          <div class="card-brand">hush <span>· quiet company for your Mac</span></div>
         </div>
-        <div class="scene" style="gap: 10px">
-          <div class="card" style="width: 280px">
-            <div class="ch"><span class="icon" style="background: #F1ECFB; color: #5B47A8">☾</span><span>While you were away · 42 min</span></div>
-            <div class="ct">3 Claude sessions ran</div>
-            <div class="cs">2 finished · 1 stopped · 1 PR opened</div>
-            <div class="ca"><span class="pl">Show me</span></div>
-          </div>
-          <span data-hush="pose:hold;expr:happy;size:100"></span>
+        <div class="mini-stamp" aria-hidden="true">Never makes a sound.</div>
+      </div>
+      <div class="stack adopt-side">
+        <div class="adopt-h"><span data-pet>Hush</span> is yours. Keep the card.</div>
+        <div class="row" style="align-items: center">
+          <button type="button" class="btn ink" id="download" style="min-height: 50px">Download the card</button>
+          <span class="dl-status" id="dl-status" aria-live="polite"></span>
         </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- GROWS ON YOU -->
-<section id="grows" class="dark">
-  <div class="wrap">
-    <div class="intro" style="max-width: 46rem">
-      <div class="kick" style="color: #8FD3BE">It grows on you</div>
-      <h2 class="h2">Day one, it's charming. By month one, it's yours.</h2>
-      <p class="sub">Tell it "not this kind again" and it becomes a rule. Every rule is a plain sentence you can read and cross out.</p>
-    </div>
-    <div class="stages">
-      <div class="stage-card">
-        <div class="stage-when">Day 1</div>
-        <div class="stage-art"><span data-hush="pose:peek;grow:1;size:150"></span></div>
-        <div class="stage-body">Peeks in shyly. Follows your cursor. Giggles when poked.</div>
-        <div class="stage-note">“Likes to say hi.”</div>
-      </div>
-      <div class="stage-card">
-        <div class="stage-when">Week 1</div>
-        <div class="stage-art"><span data-hush="pose:hold;grow:1.3;size:150"></span></div>
-        <div class="stage-body">Ducks out when you type. Brings only what matters. Knows your quiet hours.</div>
-        <div class="stage-note">“Newsletters can wait until the evening.”</div>
-      </div>
-      <div class="stage-card">
-        <div class="stage-when">Month 1</div>
-        <div class="stage-art"><span data-hush="pose:proud;grow:1.7;neck:scarf;size:150"></span></div>
-        <div class="stage-body">Knows which agents to watch and who always gets through. Hard to picture your Mac without it.</div>
-        <div class="stage-note">“Priya is always worth a tap.”</div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- MAKE IT YOURS -->
-<section id="yours" class="light">
-  <div class="wrap split" style="align-items: flex-start; gap: 40px">
-    <div class="yours-preview">
-      <div class="yours-card">
-        <div class="pet-name" id="pet-name">Hush</div>
-        <span id="yours-char"></span>
-      </div>
-    </div>
-    <div class="split-copy" style="flex: 1 1 460px; gap: 16px">
-      <div class="kick" style="color: #A64B30">31 pieces · 9 colours · all included</div>
-      <h2 class="h2">Make it yours. Name it, too.</h2>
-      <p class="sub">Every outfit is free. Builder, Cozy, Studio and Dress-up packs are already in the wardrobe.</p>
-      <div class="row" style="gap: 10px; align-items: flex-end">
-        <div class="field">
-          <label for="hush-name">Name</label>
-          <input id="hush-name" type="text" maxlength="18" placeholder="Hush">
+        <div style="font-size: 15px; font-weight: 600">Post your card with <span class="tag">#MyHush</span>.</div>
+        <div class="row" style="gap: 8px; align-items: center">
+          <label for="hush-link" class="sr-only">Link to your Hush</label>
+          <input id="hush-link" type="text" readonly class="link-field">
+          <button type="button" class="btn out" id="copy-link" style="min-height: 48px; font-size: 16px">Copy link</button>
         </div>
-        <button type="button" id="surprise" class="ink-btn">🎲 Surprise me</button>
+        <div class="small-note">The link opens this page with your Hush already dressed.</div>
+        <form class="join" id="join" novalidate>
+          <label for="hush-join" class="sr-only">Email</label>
+          <input id="hush-join" type="email" placeholder="you@example.com" autocomplete="email">
+          <button type="submit" class="btn ink" id="join-btn" style="min-height: 48px; font-size: 16px">Save Hush a spot</button>
+          <div class="join-note">Hushverse is coming. <span data-pet>Hush</span> gets in first.</div>
+        </form>
+        <div class="join-done" id="join-done" aria-live="polite" hidden></div>
       </div>
-      <div id="yours-groups" class="groups"></div>
     </div>
   </div>
 </section>
 
-<!-- RARE FINDS -->
-<section class="dark">
-  <div class="wrap">
-    <div class="intro" style="max-width: 48rem">
-      <div class="kick" style="color: #F5D36A">Rare finds</div>
-      <h2 class="h2">Some days it shows up wearing something new.</h2>
-      <p class="sub">Fourteen pieces you can't pick. Hush finds them on its own, at most one a day and never while you're busy. No badge, no sound. You just notice.</p>
+<!-- 6 CLOSE -->
+<section id="close" class="sec close" data-sec="close">
+  <div class="close-inner">
+    <div class="hwrap static" data-actor="close">
+      <div class="breathe"><span class="hchar"></span></div>
     </div>
-    <div class="rare-grid" id="rare-grid"></div>
-  </div>
-</section>
-
-<!-- TRUST -->
-<section class="light">
-  <div class="wrap">
-    <h2 class="h2" style="max-width: 46rem">Quiet, and on your side.</h2>
-    <div class="feat">
-      <div class="fc"><b>Read on your Mac</b><span>Calendar, your focus and your Claude Code sessions are read on this Mac. Agent hooks send four fields, nothing more.</span></div>
-      <div class="fc"><b>Your own Claude login</b><span>Ask Hush runs on the Claude Code login you already have. Every question is kept in History on your Mac, with what it cost.</span></div>
-      <div class="fc"><b>Nothing without you</b><span>Nothing is pasted, sent or run in another app on its own. Browser tasks are told to ask before sending, buying or deleting.</span></div>
-      <div class="fc"><b>Open source</b><span>Read every line. Suggest a feature. Design an outfit for everyone.</span></div>
+    <h2 class="giant close-h">Never says a word. Always gets it.</h2>
+    <p style="margin: 0; font-size: 20px; color: #CFC8D8"><span data-pet>Hush</span> is ready when you are.</p>
+    <p class="tuned" id="tuned" hidden>On a day like yours, that's <span data-held>63</span> things you'd never have to see.</p>
+    <div class="row" style="justify-content: center">
+      <a class="btn cream" data-link="github">Get it on GitHub</a>
+      <a class="btn out" href="#try" style="color: #F7F3EC">Try it here first</a>
+    </div>
+    <div class="inst dark"><span aria-hidden="true">$</span><code data-install></code><button type="button" data-copy-install>Copy</button></div>
+    <div style="font-size: 14.5px; color: #A9A1B4">Free and open source · macOS 15 or later · built from source for now · Ask Hush uses your Claude Code login</div>
+    <div class="verse">Hushverse is coming: a small world where Hushies visit each other.</div>
+    <div class="faq">
+      <details><summary>Do I need Claude to use it?</summary><p>No. The character, meeting nudges, the wardrobe and rare finds work on their own. Agent alerts need Claude Code or Codex installed and use their hooks, with no model calls. Ask Hush answers and Summarise use your Claude Code login.</p></details>
+      <details><summary>What does it read?</summary><p>Your calendar, whether you're typing or on a call, and your Claude Code and Codex sessions, all on your Mac. The agent hooks send Hush only the event, session id, folder, host app and terminal device. <a data-link="privacy">What leaves your Mac</a></p></details>
+      <details><summary>Does it cost anything?</summary><p>Hush is free and open source. Ask Hush runs on your own Claude Code login, so answers count toward your Claude usage. History on your Mac shows what each one cost.</p></details>
+      <details><summary>Will it show up when I share my screen?</summary><p>Not by default. Hush's windows are left out of screen shares, recordings and screenshots. It's a setting, and it starts on.</p></details>
+      <details><summary>Will it do things without asking?</summary><p>No. Nothing is pasted, sent or run in another app on its own. Browser tasks are a beta you turn on, and they're told to ask before sending, buying or deleting.</p></details>
+      <details><summary>How do I install it?</summary><p>There's no signed download yet, so you build it from source: clone the repo and run <code>./scripts/bundle.sh</code>. You need macOS 15 or later and Xcode or the Command Line Tools.</p></details>
     </div>
   </div>
-</section>
-
-<!-- HUSHVERSE -->
-<section id="verse" class="verse">
-  <div class="wrap dark">
-    <span class="soon">✦ Coming soon</span>
-    <h2 class="h2" style="max-width: 48rem">Hushverse. A small world where Hushies visit each other.</h2>
-    <p class="sub" style="max-width: 46rem">Your Hush already knows how to be quiet with you. Soon it can carry that to the people you care about. No feed, no likes, nothing that pings, and every visit waits for a quiet moment.</p>
-    <div class="verse-grid">
-      <div class="vrit"><div class="vst"><span data-hush="pose:notice;expr:surprised;lookx:2;size:100"></span><span data-hush="shape:bean;palette:lilac;topper:ears;head:beanie;pose:walk3;size:100"></span></div><b>Visits</b><span>A friend's Hush walks in from the edge of your screen, says hi in its own outfit and walks home.</span></div>
-      <div class="vrit"><div class="vst"><span data-hush="pose:hold;expr:happy;size:110"></span></div><b>Notes</b><span>One line and a sticker, carried in an envelope. It arrives when they're free. No reply expected.</span></div>
-      <div class="vrit"><div class="vst"><span data-hush="pose:sitThink;expr:thinking;size:96"></span><span data-hush="shape:square;palette:sky;topper:antenna;head:headphones;pose:sit;size:92"></span></div><b>Side by side</b><span>Focus with a friend from another city. Their Hush sits next to yours and stretches when they take a break.</span></div>
-      <div class="vrit"><div class="vst park"><span data-hush="palette:matcha;topper:none;head:frogHat;pose:dance;expr:happy;size:80"></span><span data-hush="shape:bean;palette:rose;buddy:bird;pose:hop;expr:happy;size:84"></span><span data-hush="palette:peach;topper:ears;pose:doze;size:70"></span></div><b>The Park</b><span>When you step away, your Hush goes to the Park where your friends' Hushes hang out. Peek in any time.</span></div>
+  <footer>
+    <div class="foot-row">
+      <img src="assets/hush-lockup-horizontal-on-dark.svg" alt="Hush" width="113" height="32">
+      <a data-link="github">GitHub</a>
+      <a data-link="changelog">Changelog</a>
+      <a data-link="privacy">Privacy</a>
+      <span class="ml foot-note">Hush, its name and logo are reserved. Code under Apache-2.0.</span>
     </div>
-    <form class="row waitlist" id="waitlist" novalidate>
-      <label for="verse-email" class="sr-only">Email</label>
-      <input id="verse-email" type="email" placeholder="you@example.com" autocomplete="email" required>
-      <button type="submit" class="lilac-btn">Save my Hush a spot</button>
-    </form>
-    <div class="wait-done" id="wait-done" aria-live="polite" hidden></div>
-    <div class="fine-print">Circles of up to 12 people · private by default · only your Hush's mood and outfit are shared</div>
-  </div>
+  </footer>
 </section>
 
-<!-- CLOSE -->
-<section class="close">
-  <span id="close-char"></span>
-  <h2>Never says a word. Always gets it.</h2>
-  <p><span class="pet-name-inline">Hush</span> is ready when you are.</p>
-  <div class="row" style="justify-content: center">
-    <a data-link="github" class="solid-btn big-btn">Get it on GitHub</a>
-    <a href="#meet" class="outline-btn big-btn">Try it here first</a>
-  </div>
-  <div class="fine-print"><span data-text="requires"></span> · Claude Code for Ask Hush and agent alerts</div>
-</section>
-
-<footer>
-  <div class="footer-row">
-    <div class="logo" style="font-size: 20px">hush</div>
-    <a data-link="github">GitHub</a>
-    <a data-link="changelog">Changelog</a>
-    <a href="#verse">Hushverse</a>
-    <a data-link="privacy">Privacy</a>
-    <div class="ml" data-text="madeBy"></div>
-  </div>
-</footer>
+<!-- PINNED HUSH -->
+<div class="pin-outer" id="pin-outer">
+  <button type="button" class="card away" id="away" hidden>
+    <span class="ch"><span class="icon" style="background: #F1ECFB; color: #5B47A8">☾</span><span>While you were away · <span id="away-min">1</span> min</span></span>
+    <span class="ct" style="display: block"><span id="away-held">5</span> more held back.</span>
+    <span class="cs" style="display: block; padding-bottom: 12px">Nothing needed you. Click to close.</span>
+  </button>
+  <button type="button" class="hbtn" id="pin-btn" aria-label="Hush. Go to the tutorial">
+    <span class="hwrap pinwrap" data-actor="pin"><span class="hchar"></span></span>
+  </button>
+</div>
 
 </div>
 <script src="hush-data.js"></script>
