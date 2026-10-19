@@ -27,6 +27,33 @@ extension AppController {
         refresh()
     }
 
+    /// "Also waiting: api (needs you), web (finished)": the other agent sessions in line behind this card (ADR-024).
+    func alsoWaiting(besides a: Decision) -> String {
+        let others = waiting.filter { $0.id != a.id && AgentSessionTracker.sessionID(ofItem: $0.item.id) != nil }
+        guard !others.isEmpty else { return "" }
+        let parts = others.prefix(3).map { d -> String in
+            let what = d.item.id.contains(":approval:") ? "needs you" : d.item.id.contains(":error:") ? "stopped" : "finished"
+            return "\(d.item.project ?? "a session") (\(what))"
+        }
+        return "Also waiting: " + parts.joined(separator: ", ") + (others.count > 3 ? ", and \(others.count - 3) more" : "")
+    }
+
+    /// You switched to the app a session runs in: its cards have done their job. Only when that app hosts one waiting
+    /// session, because with several tabs Hush can't tell which one you're looking at (ADR-024).
+    func agentAppCameForward(_ bundleID: String) {
+        let here = waiting.filter { $0.item.kind == .agent && $0.item.sourceApp == bundleID
+            && AgentSessionTracker.sessionID(ofItem: $0.item.id) != nil }
+        let sessions = Set(here.compactMap { AgentSessionTracker.sessionID(ofItem: $0.item.id) })
+        guard sessions.count == 1 else { return }
+        // A risky approval stays: it asks for a careful look, not a glance at the window.
+        let clear = here.filter { !$0.item.id.hasSuffix(":risky") }
+        guard !clear.isEmpty else { return }
+        if let a = active, clear.contains(where: { $0.id == a.id }) { envelope.close(); resolveActive(.opened) }
+        waiting.removeAll { d in clear.contains { $0.id == d.id } }
+        DiagnosticsLog.write("agent: cleared \(clear.count) card(s), you went to \(bundleID)")
+        refresh()
+    }
+
     func toggleCommandBox() {
         onboarding?.observedHotkey()
         if commandPanel.isOpen { commandPanel.close(); return }

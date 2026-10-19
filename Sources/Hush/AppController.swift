@@ -78,6 +78,7 @@ final class AppController {
     var hotKey: GlobalHotKey?
     /// ⌥⇧⌘H: put away / pause / resume (ADR-022).
     var hushKey: GlobalHotKey?
+    var agentAppObserver: Any?
     var energyObserver: Any?
     /// Low Power Mode or low battery (ADR-022).
     var energySaver = false
@@ -255,8 +256,22 @@ final class AppController {
         // First run: let Hush settle in, then begin.
         DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) { [weak self] in self?.onboarding.startIfNeeded() }
         HookInstaller.migratePath()
+        // Hooks from before ADR-024: say once that an update is available. Never change them without the diff.
+        if HookInstaller.needsUpdate(.claude), !defaults.bool(forKey: "hooksUpdateTipShown") {
+            defaults.set(true, forKey: "hooksUpdateTipShown")
+            DispatchQueue.main.asyncAfter(deadline: .now() + 8) { [weak self] in
+                guard let self else { return }
+                self.tipBubble.show("I can now tell you what your agents ask for. Update my hooks in Settings ▸ Connections.",
+                                    above: self.cardAvoidRect(), for: 10)
+            }
+        }
         DiagnosticsLog.write("launch: running from \(Bundle.main.bundlePath); login item status \(SMAppService.mainApp.status.rawValue)")
         agentStatus.onEvent = { [weak self] e in self?.agentEvent(e) }
+        agentAppObserver = NSWorkspace.shared.notificationCenter.addObserver(
+            forName: NSWorkspace.didActivateApplicationNotification, object: nil, queue: .main) { [weak self] n in
+            let id = (n.userInfo?[NSWorkspace.applicationUserInfoKey] as? NSRunningApplication)?.bundleIdentifier
+            MainActor.assumeIsolated { if let id { self?.agentAppCameForward(id) } }
+        }
         agentStatus.start()
         // Re-check "working in the background" as runs age past the threshold or you switch apps.
         agentTimer = Timer.scheduledTimer(withTimeInterval: 5, repeats: true) { [weak self] _ in

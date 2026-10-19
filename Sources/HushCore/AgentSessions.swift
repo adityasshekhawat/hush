@@ -16,8 +16,9 @@ public struct AgentSessionEvent: Sendable, Equatable {
         case start      // SessionStart
         case prompt     // UserPromptSubmit: you asked for something; it's working
         case tool       // PostToolUse: still working (and any approval it was waiting on was answered)
-        case needsYou   // Notification about a permission prompt
+        case needsYou   // PermissionRequest (with what it asks for), or a Notification about a permission prompt
         case stop       // Stop: the turn finished
+        case error      // StopFailure: the turn ended on an error (ADR-024)
         case end        // SessionEnd
     }
 
@@ -30,8 +31,13 @@ public struct AgentSessionEvent: Sendable, Equatable {
     public var agent: AgentKind
     /// The terminal device ("/dev/ttys003"), so a message can reach the right tab.
     public var tty: String?
+    /// needsYou: what it asked permission for, when the hook said (ADR-024). Memory only.
+    public var request: AgentRequest?
+    /// error: StopFailure's error type.
+    public var failure: String?
 
-    public init(sessionID: String, cwd: String, kind: Kind, app: String? = nil, at: Date, agent: AgentKind = .claude, tty: String? = nil) {
+    public init(sessionID: String, cwd: String, kind: Kind, app: String? = nil, at: Date, agent: AgentKind = .claude, tty: String? = nil,
+                request: AgentRequest? = nil, failure: String? = nil) {
         self.sessionID = sessionID
         self.cwd = cwd
         self.kind = kind
@@ -39,6 +45,8 @@ public struct AgentSessionEvent: Sendable, Equatable {
         self.at = at
         self.agent = agent
         self.tty = tty
+        self.request = request
+        self.failure = failure
     }
 
     /// The repo / folder name shown on the card.
@@ -98,12 +106,18 @@ public struct AgentSessionTracker: Sendable {
             s.workingSince = s.workingSince ?? e.at
             s.waitingForYou = false
         case .needsYou:
+            // PermissionRequest and the permission Notification both mean this; the first (usually the one with the
+            // request) wins.
             guard !s.waitingForYou else { break }
             s.waitingForYou = true
             s.approvalsAsked += 1
             if !watching {
-                out.append(item(e, s, id: "agent:\(e.sessionID):approval:\(s.approvalsAsked)",
-                                subject: "\(e.agent.shortName) needs you in \(e.project)", snippet: "Waiting for a permission prompt"))
+                let risk = e.request.flatMap(AgentRisk.reason)
+                let line = e.request.map { "\(e.agent.shortName) \($0.line)" } ?? "Waiting for a permission prompt"
+                out.append(item(e, s, id: "agent:\(e.sessionID):approval:\(s.approvalsAsked)\(risk != nil ? ":risky" : "")",
+                                subject: risk != nil ? "Look carefully: \(e.agent.shortName) needs you in \(e.project)"
+                                                     : "\(e.agent.shortName) needs you in \(e.project)",
+                                snippet: risk.map { "\(line) · \($0)" } ?? line))
             }
         case .stop where watched.contains(e.sessionID):
             // You asked to be told: always, even for a short run or one you're looking at.
@@ -126,6 +140,14 @@ public struct AgentSessionTracker: Sendable {
             }
             s.workingSince = nil
             s.waitingForYou = false
+        case .error:
+            s.runs += 1
+            if !watching {
+                out.append(item(e, s, id: "agent:\(e.sessionID):error:\(s.runs)",
+                                subject: "\(e.agent.shortName) stopped in \(e.project)", snippet: AgentFailure.text(e.failure)))
+            }
+            s.workingSince = nil
+            s.waitingForYou = false
         case .end:
             sessions[e.sessionID] = nil
             watched.remove(e.sessionID)
@@ -134,6 +156,24 @@ public struct AgentSessionTracker: Sendable {
         sessions[e.sessionID] = s
         return out
     }
+
+    /// The session an agent card is about ("agent:<session>:<what>:<n>").
+    public static func sessionID(ofItem id: String) -> String? {
+        let parts = id.split(separator: ":")
+        guard parts.count >= 3, parts[0] == "agent" else { return nil }
+        return String(parts[1])
+    }
+
+    /// Which agent card to show first among equals: a risky approval, then needs you, then finished, then an error.
+    public static func rank(_ item: InboxItem) -> Int {
+        guard item.kind == .agent else { return 2 }
+        if item.id.contains(":approval:") { return item.id.hasSuffix(":risky") ? 4 : 3 }
+        if item.id.contains(":error:") { return 1 }
+        return 2
+    }
+
+    /// Approvals stay until they're answered (they clear on the next tool call); everything else may time out.
+    public static func waitsForAnswer(_ item: InboxItem) -> Bool { item.kind == .agent && item.id.contains(":approval:") }
 
     /// Folder of the session that was active most recently (the default repo for "Ask Hush").
     public var mostRecentCwd: String? { sessions.values.max(by: { $0.lastEvent < $1.lastEvent })?.cwd }

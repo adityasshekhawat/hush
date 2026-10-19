@@ -399,3 +399,35 @@ reserved (`LICENSE-ASSETS.md`), so a fork can't ship Hush under another name. **
 shape**, wardrobe pieces, props, effects, edge pieces (`assets/character/swag/`, `edge/`), is CC BY-SA 4.0 and open
 for contributions, drawn to fit Hush's bodies without changing them. `TRADEMARKS.md` is folded into
 `LICENSE-ASSETS.md`.
+
+## ADR-024 · The agent watcher says what it's asking, flags risk by rules, and moves to a private socket (2026-10-19)
+
+Milestone 2 of the v1 spec (ADR-021, feature 1).
+- **What it asks:** Claude Code 2.1.303 has `PermissionRequest` (tool_name, tool_input) and `StopFailure` (error).
+  hushctl forwards the tool and up to 200 characters of the relevant input (command, file path, URL, query;
+  `AgentRequest.detail`, one cleaned line) for permission requests, and the error type for failures. Never the
+  prompt, replies or other tool input. Hush keeps it in memory; it isn't logged or stored. hushctl still prints
+  nothing: for PermissionRequest, silence means "no decision", so Hush can't approve anything.
+- **One-liner by rules, not the model** (a deviation from the spec): "Claude wants to run rm -rf build" shows the
+  exact command, instantly, and can't paraphrase a dangerous request into a harmless one.
+- **Risk by rules in code** (`AgentRisk`, tested with positives and near-misses): deletes files, force-pushes,
+  throws away changes, runs as admin, drops data, deletes every row, runs a downloaded script, changes
+  infrastructure, publishes, erases a disk, opens up permissions, touches production, touches secrets. File tools
+  only check production and secrets. Risky approvals: red "Look carefully" card, no "Not this kind again", and
+  switching to the terminal doesn't clear them.
+- **Errors:** `StopFailure` becomes a quiet card ("Claude stopped in hush · Hit a usage limit") unless you're watching.
+- **Order and staying:** among equal levels, risky > needs you > finished > stopped. Approvals don't time out; they
+  clear on the next tool call. The envelope adds "Also waiting: api (needs you), web (finished)". Going to the app a
+  session runs in clears its cards only when it's the only waiting session in that app (Hush can't see which tab
+  you're on). Open selects the exact Terminal or iTerm tab by tty (macOS asks once to allow the automation),
+  otherwise brings the app forward (Ghostty, Warp, Cursor, VS Code).
+- **Transport:** a Unix socket (`AgentChannel`, 0600 in Application Support) replaces the distributed notification,
+  which any app could observe; the command detail must not be broadcast. Validation moved into HushCore and is
+  tested; the receiver's dispatch handler is built outside the main actor (the first build trapped on Swift 6.4's
+  isolation check on the first event).
+- **Hooks update:** new events are added only through the existing diff-and-confirm installer: Settings ▸
+  Connections shows Update for an older install, and a one-time tip says so. The install text now names the detail.
+
+**Not done (spec feature 1):** the flag rail and its art (`docs/v1-art-brief.md` priority 2; the envelope's "Also
+waiting" line stands in), a model one-liner, Codex error events (Codex has no StopFailure here), and verifying exact-
+tab focus in a real Terminal and iTerm.

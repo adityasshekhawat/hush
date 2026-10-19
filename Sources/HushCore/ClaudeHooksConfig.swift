@@ -6,7 +6,9 @@ import Foundation
 public enum ClaudeHooksConfig {
     /// Every command Hush adds contains this marker, so uninstall only removes Hush's own entries.
     public static let marker = "hushctl"
-    public static let events = ["SessionStart", "UserPromptSubmit", "PostToolUse", "Notification", "Stop", "SessionEnd"]
+    /// PermissionRequest says what it asks for; StopFailure is a run ending on an error (ADR-024).
+    public static let events = ["SessionStart", "UserPromptSubmit", "PostToolUse", "PermissionRequest", "Notification",
+                                "Stop", "StopFailure", "SessionEnd"]
     /// Codex has no Notification event; PermissionRequest is its "needs you".
     public static let codexEvents = ["SessionStart", "UserPromptSubmit", "PostToolUse", "PermissionRequest", "Stop", "SessionEnd"]
 
@@ -75,6 +77,17 @@ public enum ClaudeHooksConfig {
         var s = settings
         s["hooks"] = hooks
         return s
+    }
+
+    /// Installed, but from an older Hush that didn't hook every event this one listens to: offer an update (with the
+    /// diff, never silently).
+    public static func needsUpdate(_ settings: [String: Any], agent: AgentKind = .claude) -> Bool {
+        guard isInstalled(in: settings), let hooks = settings["hooks"] as? [String: Any] else { return false }
+        return events(for: agent).contains { event in
+            !(hooks[event] as? [[String: Any]] ?? []).contains { group in
+                (group["hooks"] as? [[String: Any]] ?? []).contains { (($0["command"] as? String) ?? "").contains(marker) }
+            }
+        }
     }
 
     public static func isInstalled(in settings: [String: Any]) -> Bool {

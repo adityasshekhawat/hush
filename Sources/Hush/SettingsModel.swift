@@ -140,6 +140,15 @@ final class SettingsModel: ObservableObject {
         }
     }
 
+    /// Hooks from an older Hush (ADR-024).
+    func needsUpdate(_ c: Connection) -> Bool {
+        switch c {
+        case .claude: HookInstaller.needsUpdate(.claude)
+        case .codex: HookInstaller.needsUpdate(.codex)
+        default: false
+        }
+    }
+
     func connectTitle(_ c: Connection) -> String { c == .appleIntelligence ? "Turn on" : "Connect" }
 
     func connect(_ c: Connection) {

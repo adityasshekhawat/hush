@@ -106,9 +106,10 @@ extension AppController {
                 self?.envelope.close()
                 if a.item.id.hasPrefix("ask:") || a.item.id.hasPrefix("browser:") {
                     self?.ask.reopen()
-                } else if a.item.kind == .agent, let id = a.item.sourceApp,
-                   let app = NSRunningApplication.runningApplications(withBundleIdentifier: id).first {
-                    app.activate()
+                } else if a.item.kind == .agent, let id = a.item.sourceApp {
+                    // The exact Terminal or iTerm tab when Hush knows it, otherwise the app (ADR-024).
+                    let tty = AgentSessionTracker.sessionID(ofItem: a.item.id).flatMap { self?.agentSessions.sessions[$0]?.tty }
+                    SessionInput.focus(bundleID: id, tty: tty)
                 } else if let url = a.item.openURL { NSWorkspace.shared.open(url) }
                 else if a.item.kind == .meeting { NSWorkspace.shared.open(URL(fileURLWithPath: "/System/Applications/Calendar.app")) }
                 else if a.item.kind == .mail { NSWorkspace.shared.open(URL(fileURLWithPath: "/System/Applications/Mail.app")) }
@@ -140,7 +141,7 @@ extension AppController {
                 self?.envelope.close()
                 self?.showRules()
             })
-        envelope.show(a, gist: gistByDecision[a.id] ?? a.item.subject, avoiding: cardAvoidRect())
+        envelope.show(a, gist: gistByDecision[a.id] ?? a.item.subject, also: alsoWaiting(besides: a), avoiding: cardAvoidRect())
     }
 
     // MARK: presence

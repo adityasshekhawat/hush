@@ -5,6 +5,13 @@ Hush is pre-alpha and built from source. Notable changes, newest first. Decision
 
 ## Unreleased
 
+- **The agent watcher says what your agent wants.** "Claude wants to run npm test", with risky requests (deleting
+  files, force-pushing, production, secrets) flagged for a careful look by rules in code. Runs that stop on an error
+  ("Hit a usage limit") get a quiet card. Open lands on the exact Terminal or iTerm tab. Approvals wait until you
+  answer them, cards line up by priority with an "Also waiting" line, and switching to the session's terminal clears
+  its card. Hook events now travel over a private socket instead of a system-wide broadcast. Existing installs get an
+  Update button (Settings ▸ Connections) that shows the change first.
+
 - **Never in the way:** pause for 15 minutes, an hour or until tomorrow from the menu bar; ⌥⇧⌘H puts away what Hush
   is showing, pauses it, or brings it back. Off screen means off: nothing runs while paused, locked or in a call.
   Energy saver in Low Power Mode or on low battery. Measured costs in `docs/performance.md`.

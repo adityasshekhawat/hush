@@ -282,6 +282,10 @@ struct ConnectionRow: View {
                     Text(s).font(HushFont.footer).foregroundStyle(.secondary)
                 } else {
                     Label(s, systemImage: "checkmark").font(HushFont.footer.weight(.medium)).foregroundStyle(Tone.green.text)
+                    if model.needsUpdate(c) {
+                        Button("Update") { model.connect(c) }.buttonStyle(.borderless).font(HushFont.footer)
+                            .help("Lets Hush say what your agent is asking for, and notice runs that stop on an error")
+                    }
                     if c == .claude || c == .codex || c == .appleIntelligence {
                         Button(c == .appleIntelligence ? "Turn off" : "Remove") { model.disconnect(c) }
                             .buttonStyle(.borderless).font(HushFont.footer)

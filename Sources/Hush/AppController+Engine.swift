@@ -49,7 +49,11 @@ extension AppController {
             gistByDecision[d.id] = await gists.gist(for: d.item)
             waiting.append(d)
             if wanderer?.place == .perched || wanderer?.place == .jumping { wanderer.leavePerch() }
-            waiting.sort { ($0.finalLevel ?? .ambient, $1.at) > ($1.finalLevel ?? .ambient, $0.at) }
+            // Louder first; among equals, a risky approval, then needs you, then finished, then an error (ADR-024).
+            waiting.sort {
+                ($0.finalLevel ?? .ambient, AgentSessionTracker.rank($0.item), $1.at)
+                    > ($1.finalLevel ?? .ambient, AgentSessionTracker.rank($1.item), $0.at)
+            }
             if waiting.first?.id == d.id { armIgnoreTimer() }
         case .ambient:
             if d.item.kind == .mail { ambientPile += 1 }
@@ -88,6 +92,8 @@ extension AppController {
         ignoreTimer?.invalidate()
         guard let a = active else { return }
         resetMood()
+        // An agent waiting on your OK stays until you answer; the card clears itself when you do (ADR-024).
+        if AgentSessionTracker.waitsForAnswer(a.item) { return }
         let timeout = a.finalLevel == .interrupt ? Self.interruptTimeout
             : (moodsEnabled && a.item.kind == .mail ? Self.moodsTimeout : Self.gentleTimeout)
         ignoreTimer = Timer.scheduledTimer(withTimeInterval: timeout, repeats: false) { [weak self] _ in

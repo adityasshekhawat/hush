@@ -10,6 +10,25 @@ public enum SessionInput {
         case failed(String)
     }
 
+    /// "Open" on an agent card: the exact Terminal or iTerm tab when the session's tty is known (macOS asks once to let
+    /// Hush control that app), otherwise just bring the app forward (Ghostty, Warp, Cursor, VS Code…). ADR-024.
+    @MainActor
+    @discardableResult
+    public static func focus(bundleID: String?, tty: String?) -> Bool {
+        if let src = TerminalScript.focusSource(bundleID: bundleID, tty: tty) {
+            var error: NSDictionary?
+            let out = NSAppleScript(source: src)?.executeAndReturnError(&error)
+            if error == nil, out?.stringValue == "focused" {
+                DiagnosticsLog.write("session focus: tab in \(bundleID ?? "?")")
+                return true
+            }
+            DiagnosticsLog.write("session focus: \(error.map { "script failed (\($0[NSAppleScript.errorNumber] as? Int ?? 0))" } ?? "tab not found"); app instead")
+        }
+        guard let id = bundleID, let app = NSRunningApplication.runningApplications(withBundleIdentifier: id).first else { return false }
+        app.activate()
+        return true
+    }
+
     @MainActor
     public static func send(_ text: String, bundleID: String?, tty: String?) -> Result {
         if let src = TerminalScript.source(bundleID: bundleID, tty: tty, text: text) {

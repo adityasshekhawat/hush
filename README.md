@@ -39,8 +39,10 @@ its own, and a daily cap (5 by default) keeps even those rare.
 <td width="180"><img src="docs/media/holds-envelope.png" alt="Hush holding an envelope" width="170"></td>
 <td><strong>Watches your AI agents.</strong> Claude Code and Codex sessions, through hooks you approve. Hush thinks
 while an agent works where you aren't looking, holds up an envelope when a long run finishes ("Claude finished in
-hush · ran for 4m"), and perks up when one needs your OK. One click takes you back to its terminal. Quick runs you're
-watching stay quiet.</td>
+hush · ran for 4m"), and perks up when one needs your OK, saying what it wants ("Claude wants to run npm test").
+Risky requests, like deleting files, force-pushing or touching production, ask you to look carefully, and those
+are judged by rules, not a model. Open takes you to the exact Terminal or iTerm tab (other terminals: the app). Quick
+runs you're watching stay quiet.</td>
 </tr>
 <tr>
 <td><img src="docs/media/holds-clock.png" alt="Hush holding a clock" width="170"></td>
@@ -97,7 +99,9 @@ something you do:
 | Hand a question off ("open in ChatGPT / Claude / Perplexity") | The question, in the link that opens (from "hand it to Hush", only the instruction: you paste the text yourself) | The assistant you picked |
 
 **Stays on the Mac:** your calendar (read through macOS); the Claude Code and Codex hooks, which send Hush only the
-event, session id, folder, host app and terminal device; mail judging and "hand it to Hush", which use Apple's
+event, session id, folder, host app and terminal device, plus, when an agent asks your permission, the tool and up to
+200 characters of what it wants to run, and when a run fails, the error type (over a private socket only Hush can
+read, kept in memory, never written down); mail judging and "hand it to Hush", which use Apple's
 on-device model when Apple Intelligence is on; transcripts for the digest (only if you turn it on); the clipboard,
 which Hush reads only when you click it to rework what you copied.
 

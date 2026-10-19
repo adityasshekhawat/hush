@@ -1,12 +1,13 @@
 // hushctl: run by Claude Code hooks (`hushctl hook`, hook JSON on stdin), and as the browser-task gate (`hushctl gate`).
 //
 // Forwards a deliberately thin status event to Hush: session id, folder, event kind, the app hosting the
-// session and its terminal device. Hooks also carry your prompt, Claude's replies and tool inputs; none of that is read past parsing or
-// ever forwarded. It never prints (some hook output reaches the model), always exits 0, and returns fast.
+// session and its terminal device; for a permission request, the tool and up to 200 characters of what it wants to
+// run or touch; for a failed run, the error type (ADR-024). Your prompt and Claude's replies are never read past parsing
+// or forwarded. It sends over Hush's private socket (0600, this user only), never a broadcast. It never prints (a
+// PermissionRequest hook's output could become a decision; silence means "no decision"), always exits 0, returns fast.
 import AppKit
 import Foundation
-
-let channel = Notification.Name("dev.hush.agent-status")   // must match AgentStatusReceiver
+import HushCore
 
 func finish() -> Never { exit(0) }
 
@@ -28,7 +29,8 @@ let agent = CommandLine.arguments.firstIndex(of: "--agent").flatMap { i in
 
 let kind: String
 switch event {
-case "PermissionRequest" where agent == "codex": kind = "needsYou"
+case "PermissionRequest": kind = "needsYou"
+case "StopFailure": kind = "error"
 case "SessionStart": kind = "start"
 case "UserPromptSubmit": kind = "prompt"
 case "PostToolUse": kind = "tool"
@@ -75,8 +77,38 @@ func sessionTTY() -> String? {
 }
 
 var info: [String: String] = ["v": "1", "event": kind, "session": session, "cwd": cwd]
+if kind == "needsYou", let tool = json["tool_name"] as? String {
+    info["tool"] = String(tool.prefix(64))
+    if let input = json["tool_input"] as? [String: Any], let d = AgentRequest.detail(tool: tool, input: input) { info["detail"] = d }
+}
+if kind == "error", let e = json["error"] as? String { info["error"] = String(e.prefix(32)) }
 if let tty = sessionTTY() { info["tty"] = tty }
 if agent != "claude" { info["agent"] = agent }
 if let app = hostApp() { info["app"] = app }
-DistributedNotificationCenter.default().postNotificationName(channel, object: nil, userInfo: info, deliverImmediately: true)
+sendToHush(info)
 finish()
+
+/// One JSON line to Hush's agent socket; if Hush isn't running there's nobody to tell, so give up quietly.
+func sendToHush(_ info: [String: String]) {
+    guard var line = try? JSONSerialization.data(withJSONObject: info) else { return }
+    line.append(0x0A)
+    let path = AgentChannel.socketPath
+    let s = socket(AF_UNIX, SOCK_STREAM, 0)
+    guard s >= 0 else { return }
+    defer { close(s) }
+    var tv = timeval(tv_sec: 1, tv_usec: 0)
+    setsockopt(s, SOL_SOCKET, SO_SNDTIMEO, &tv, socklen_t(MemoryLayout<timeval>.size))
+    var addr = sockaddr_un()
+    addr.sun_family = sa_family_t(AF_UNIX)
+    let bytes = Array(path.utf8)
+    guard bytes.count < MemoryLayout.size(ofValue: addr.sun_path) else { return }
+    withUnsafeMutableBytes(of: &addr.sun_path) { buf in
+        for (i, b) in bytes.enumerated() { buf[i] = b }
+        buf[bytes.count] = 0
+    }
+    let ok = withUnsafePointer(to: &addr) {
+        $0.withMemoryRebound(to: sockaddr.self, capacity: 1) { connect(s, $0, socklen_t(MemoryLayout<sockaddr_un>.size)) }
+    }
+    guard ok == 0 else { return }
+    _ = line.withUnsafeBytes { write(s, $0.baseAddress, line.count) }
+}

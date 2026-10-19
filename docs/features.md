@@ -241,7 +241,7 @@ it to Chrome, Arc, Brave and Edge itself; for Comet, Hush adds the missing conne
 | Source | Status | How |
 | --- | --- | --- |
 | Calendar | ✅ | macOS Calendar: gentle 10 min before a meeting, interrupt 2 min before |
-| Claude Code and Codex sessions | ✅ | Hooks send Hush the event, session id, folder, host app and terminal device, nothing else: working, needs you, finished (with run time). Cards say which agent: "Codex finished in hush". Codex needs its hooks trusted once with `/hooks` |
+| Claude Code and Codex sessions | ✅ | Hooks send Hush the event, session id, folder, host app and terminal device; on a permission request also the tool and up to 200 characters of its input; on a failed run the error type (private socket, memory only, ADR-024): working, needs you ("Claude wants to run npm test"), finished (with run time), stopped ("Hit a usage limit"). Risky requests (deleting, force-pushing, production, secrets, admin, publishing) read "Look carefully", by rules in code, and stay until answered. Cards line up risky > needs you > finished > stopped, with "Also waiting: …". Open goes to the exact Terminal or iTerm tab; other terminals come forward. Going to the session's terminal clears its card when it's the only waiting session there. Cards say which agent: "Codex finished in hush". Codex needs its hooks trusted once with `/hooks` |
 | Claude Code transcripts | ✅ opt-in | Read on the Mac for the digest |
 | Your focus | ✅ | Mic in use (calls), full-screen, typing, away |
 | Copy/paste, screenshots, power, audio | ✅ | For antics only; no permissions needed |

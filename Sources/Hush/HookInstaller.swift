@@ -33,6 +33,10 @@ enum HookInstaller {
     }
 
     static var isInstalled: Bool { isInstalled(.claude) }
+    /// Installed by an older Hush without every event this one listens to (ADR-024): offer Update, with the diff.
+    static func needsUpdate(_ agent: AgentKind = .claude) -> Bool {
+        (try? load(agent)).map { ClaudeHooksConfig.needsUpdate($0, agent: agent) } ?? false
+    }
     static func isInstalled(_ agent: AgentKind) -> Bool { (try? load(agent)).map(ClaudeHooksConfig.isInstalled(in:)) ?? false }
 
     static func pretty(_ obj: Any) -> String {
@@ -126,7 +130,7 @@ enum HookInstaller {
         let file = agent == .claude ? "~/.claude/settings.json" : "~/.codex/hooks.json"
         alert.messageText = installing ? "Let Hush watch your \(name) sessions?" : "Remove Hush's \(name) hooks?"
         alert.informativeText = installing
-            ? "This adds small hooks to \(file), next to any already there. They only tell Hush that a session started, is working, needs you, or finished: never your prompts, the agent's replies or your code. A backup of the current file is kept beside it."
+            ? "This adds small hooks to \(file), next to any already there. They tell Hush that a session started, is working, needs you, finished, or stopped on an error. When it asks your permission, they also pass the tool and the first 200 characters of what it wants to run or touch, so Hush can say what it's asking and flag risky requests. That stays on this Mac, in memory only. Never your prompts, the agent's replies or your code. A backup of the current file is kept beside it."
                 + (agent == .codex ? " Codex runs new hooks only after you trust them: open Codex and run /hooks once." : "")
                 + "\n\nThe change:"
             : "Only Hush's own entries are removed; everything else stays. A backup is kept beside the file.\n\nThe change:"

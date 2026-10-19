@@ -11,6 +11,8 @@ final class EnvelopeModel: ObservableObject {
     @Published var gist = ""
     /// Set after "Not this kind again": the rule just saved.
     @Published var savedRule: UserRule?
+    /// "Also waiting: api (needs you), web (finished)": other agent sessions in line (ADR-024).
+    @Published var also = ""
 }
 
 struct EnvelopeActions {
@@ -52,8 +54,14 @@ struct EnvelopeView: View {
                     if !v.subtitle.isEmpty {
                         Text(v.subtitle).font(HushFont.subtitle).foregroundStyle(.secondary).lineLimit(1)
                     }
+                    if let detail = v.detail {
+                        Text(detail).font(HushFont.body).lineLimit(3).fixedSize(horizontal: false, vertical: true)
+                    }
                     if !model.gist.isEmpty, model.gist != v.title, model.gist != d.item.snippet {
                         Text(model.gist).font(HushFont.body).lineLimit(3).fixedSize(horizontal: false, vertical: true)
+                    }
+                    if !model.also.isEmpty {
+                        Text(model.also).font(HushFont.footer).foregroundStyle(.secondary).lineLimit(2)
                     }
                     HStack(spacing: 6) {
                         Button(v.openTitle, action: actions.open).buttonStyle(HushPill(kind: .primary))
@@ -85,6 +93,8 @@ struct EnvelopeVariant {
     let openTitle: String
     let offersNotThisKind: Bool
     let offersCopy: Bool
+    /// A body line under the subtitle: what an agent asks for (up to 3 lines).
+    var detail: String?
 
     init(_ d: Decision) {
         let item = d.item
@@ -128,11 +138,23 @@ struct EnvelopeVariant {
                 offersNotThisKind = false
                 offersCopy = false
             } else if item.id.contains(":approval:") {
-                symbol = "exclamationmark.circle.fill"; tone = .orange
+                // What it asks for gets the body, so a long command isn't cut to one line (ADR-024).
+                let risky = item.id.hasSuffix(":risky")
+                symbol = risky ? "exclamationmark.triangle.fill" : "exclamationmark.circle.fill"
+                tone = risky ? .red : .orange
+                source = "\(item.senderName ?? "Agent") · \(ago)"
+                title = item.subject
+                subtitle = app.map { "In \($0)" } ?? ""
+                detail = item.snippet
+                openTitle = app.map { "Open \($0)" } ?? "Open"
+                offersNotThisKind = !risky
+                offersCopy = false
+            } else if item.id.contains(":error:") {
+                symbol = "xmark.octagon.fill"; tone = .grey
                 source = "\(item.senderName ?? "Agent") · \(ago)"
                 title = item.subject
                 subtitle = [item.snippet, app].compactMap { $0 }.joined(separator: " · ")
-                openTitle = "Open"
+                openTitle = app.map { "Open \($0)" } ?? "Open"
                 offersNotThisKind = true
                 offersCopy = false
             } else {
@@ -180,9 +202,10 @@ final class EnvelopePresenter {
 
     var isOpen: Bool { card?.isOpen ?? false }
 
-    func show(_ d: Decision, gist: String, avoiding character: NSRect) {
+    func show(_ d: Decision, gist: String, also: String = "", avoiding character: NSRect) {
         model.decision = d
         model.gist = gist
+        model.also = also
         model.savedRule = nil
         autoClose?.cancel()
         let c = card ?? CardWindow(width: 320, keyable: true) { [unowned self] in
