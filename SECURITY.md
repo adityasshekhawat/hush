@@ -1,13 +1,16 @@
 # Security
 
-Hush runs on your Mac with your user's permissions. It has no server and no telemetry.
+Hush runs on your Mac with your user's permissions. It has no server and no telemetry. The README's
+"What leaves your Mac" table lists every time anything is sent anywhere.
 
 ## What it reads and sends
 - **Calendar:** read through macOS (EventKit) after you allow it.
-- **Claude Code / Codex sessions:** hooks you approve send Hush four fields per event (event, session id, folder,
-  host app) plus the terminal device. Transcripts in `~/.claude/projects` are read only if you turn on the digest.
-- **Model calls** (Ask Hush, summaries, routing checks, browser tasks) run through your own Claude Code login. A
-  question leaves your Mac only when you ask one.
+- **Claude Code / Codex sessions:** hooks you approve send Hush the event, session id, folder, host app and terminal
+  device, nothing else. Transcripts in `~/.claude/projects` are read only if you turn on the digest.
+- **Model calls:** mail judging and "hand it to Hush" run on Apple's on-device model. Ask Hush answers, routing
+  checks, Summarise and browser tasks run through your own Claude Code login, and only when you ask.
+- **Clipboard:** read only when you click Hush to rework what you copied, after you've agreed once. Otherwise Hush
+  sees only that the clipboard changed, never what's on it.
 
 ## Local trust model (worth knowing)
 - **Agent status events** arrive over a macOS distributed notification. Any app on your Mac could post one. Hush
@@ -22,5 +25,6 @@ Hush runs on your Mac with your user's permissions. It has no server and no tele
   you to allow it once per app.
 
 ## Reporting a problem
-Please don't open a public issue for a security bug. Email the maintainer (address in the repository profile) or use
-GitHub's private vulnerability reporting, with steps to reproduce. You'll get a reply within a week.
+Please don't open a public issue for a security bug. Use **Report a vulnerability** on the repository's
+[Security tab](../../security/advisories/new) (GitHub's private vulnerability reporting): only you and the maintainers
+see it. Include steps to reproduce. You'll get a reply within a week.

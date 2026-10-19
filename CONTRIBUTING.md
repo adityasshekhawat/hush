@@ -23,3 +23,8 @@ kinder or more useful, never louder.
 ## Character art
 The character pack lives in `assets/character` (don't hand-edit SVGs; see `docs/character-inventory.md`). New pieces
 should work on all three bodies and every pose.
+
+## Licence of contributions
+Code you contribute is under the [Apache License 2.0](LICENSE), and character art under
+[CC BY-SA 4.0](assets/character/LICENSE), the same as the rest of the project. You keep your copyright. The Hush name
+and logo stay reserved ([`TRADEMARKS.md`](TRADEMARKS.md)).

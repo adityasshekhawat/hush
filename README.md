@@ -21,10 +21,33 @@ This README lists everything **shipped** in the app today, organised by the surf
    and follows or hides in full-screen apps.
 4. **Delight never interrupts.** Play happens only when you're idle and nothing real is waiting, and never counts
    toward the cap.
-5. **Scrutable and local.** Every decision is logged on your Mac; anything sent to a model is opt-in and named.
+5. **Scrutable and local.** Every decision is logged on your Mac. Nothing is sent anywhere on its own: only things
+   you ask for leave the Mac, and the table below says exactly which.
 6. **A doorway, not a destination.** One question, one answer card (plus up to 3 follow-ups), then act in your app
    or continue in ChatGPT/Claude.
-7. **Light on the Mac.** Idle CPU ~2–3 %.
+7. **Light on the Mac.** Measured, not promised: see [`docs/performance.md`](docs/performance.md).
+
+### What leaves your Mac
+
+No Hush server, no account, no analytics, no crash reporting. Everything Hush learns and logs stays in
+`~/Library/Application Support/Hush/`. These are the only times anything leaves the Mac, and each one starts with
+something you do:
+
+| When you… | What's sent | Where |
+| --- | --- | --- |
+| Press Return in Ask Hush (quick or code question) | Your question and the name of the app you were in. For a code question, Claude Code reads files in that repo, which you allowed first | Anthropic, through **your own** Claude Code login and usage |
+| Press Return when Hush isn't sure where a question should go (Smart routing, on by default, Settings ▸ Ask Hush) | Your question, your allowed repos' names, how many sessions are running, the app you're in | Anthropic, through your Claude Code login |
+| Click **Summarise** on a "While you were away" card | A short excerpt of that one session | Anthropic, through your Claude Code login |
+| Run a browser task (beta, off by default) | The task, and what Claude does in your browser | Anthropic, through Claude Code and the Claude browser extension |
+| Hand a question off ("open in ChatGPT / Claude / Perplexity") | The question, in the link that opens (from "hand it to Hush", only the instruction: you paste the text yourself) | The assistant you picked |
+
+**Stays on the Mac:** your calendar (read through macOS); the Claude Code and Codex hooks, which send Hush only the
+event, session id, folder, host app and terminal device; mail judging and its gist, and "hand it to Hush", which use
+Apple's on-device model when Apple Intelligence is on; transcripts for the digest (only if you turn it on); the
+clipboard, which Hush reads only when you click it to rework what you copied.
+
+Planned (ADR-021): quick answers and Summarise move to Apple's on-device model, and the remaining Claude features
+sit behind one switch that's off until you turn it on.
 
 ---
 
@@ -227,11 +250,11 @@ it to Chrome, Arc, Brave and Edge itself; for Comet, Hush adds the missing conne
 | Source | Status | How |
 | --- | --- | --- |
 | Calendar | ✅ | macOS Calendar: gentle 10 min before a meeting, interrupt 2 min before |
-| Claude Code and Codex sessions | ✅ | Hooks send 4 fields only (event, session, folder, app): working, needs you, finished (with run time). Cards say which agent: "Codex finished in hush". Codex needs its hooks trusted once with `/hooks` |
+| Claude Code and Codex sessions | ✅ | Hooks send Hush the event, session id, folder, host app and terminal device, nothing else: working, needs you, finished (with run time). Cards say which agent: "Codex finished in hush". Codex needs its hooks trusted once with `/hooks` |
 | Claude Code transcripts | ✅ opt-in | Read on the Mac for the digest |
 | Your focus | ✅ | Mic in use (calls), full-screen, typing, away |
 | Copy/paste, screenshots, power, audio | ✅ | For antics only; no permissions needed |
-| Mail | ⏳ | MailKit extension (next, now that Xcode is in place); simulated from the Developer menu meanwhile. Judged on this Mac by Apple Intelligence when it's on, otherwise by rules |
+| Mail | ⏳ not connected yet | MailKit extension is next; until then mail is only simulated from the Developer menu. When it lands, it's judged on this Mac by Apple Intelligence when that's on, otherwise by rules |
 | Screen sharing | ✅ | Hush's windows are left out of screen shares, recordings and screenshots (a setting, on by default), so viewers never see it. Presenting without a call isn't detected, so Hush may still appear on your own screen |
 
 ## 5. Models (they're settings)
@@ -244,16 +267,18 @@ it to Chrome, Arc, Brave and Edge itself; for Comet, Hush adds the missing conne
 | Browser tasks | Sonnet | Plan + run (hidden from the Models menu for now) |
 | Mail triage + gist | Apple's on-device model | Whether a mail is worth showing, and its one-line gist. On this Mac only, free; rules when Apple Intelligence is off (Settings ▸ Connections) |
 
-Aliases always point at the newest model of each tier, so upgrades arrive for free. They currently run on the user's
-own Claude Code login. A small test set of real asks (`swift run hush-eval`) decides when a default changes: on the
+Aliases always point at the newest model of each tier, so upgrades arrive for free. The Claude lanes run on your
+own Claude Code login and use your own Claude usage. A small test set of real asks (`swift run hush-eval`) decides when a default changes: on the
 first run Haiku and Sonnet both got every quick ask right, and Haiku cost about 20× less, so Haiku stays.
 Plan: [`docs/lanes-plan.md`](docs/lanes-plan.md).
 
 ## 6. Coming next ⏳
 
-- Mail cards (MailKit, macOS 26 + Xcode), Antigravity sessions, signed release.
-- Payments for packs (free for now), `glassEffect` on macOS 26.
-- Shortcuts / Apple Events / MCP actions in the app router, desktop control (opt-in).
+- The v1 plan ([`docs/decisions.md`](docs/decisions.md) ADR-021): agent watcher with a flag rail and one-click jump
+  to the right terminal, meetings with one-click join, first run, the "What Hush saw" journal, then mail.
+- Quick answers and Summarise on Apple's on-device model; the other Claude features behind one opt-in switch.
+- A signed, notarised download. Until then, Hush is built from source.
+- Every wardrobe piece stays free and in this repo.
 
 The design guide's surfaces are all built: see [`docs/design-guide-plan.md`](docs/design-guide-plan.md) for what differs.
 
@@ -269,13 +294,15 @@ exclamation spam.
 **Requirements**
 - macOS 15 (Sequoia) or later, Apple silicon or Intel
 - Xcode Command Line Tools with Swift 6.1 or later (`xcode-select --install`); full Xcode isn't needed
-- Optional: [Claude Code](https://claude.com/claude-code), signed in with your own account. Ask Hush, agent
-  alerts, digests and browser tasks run on your Claude Code login and use your own Claude usage. Without it, Hush
-  still does everything else.
+- Optional: Apple Intelligence turned on (macOS 26 or later, Apple silicon) for mail judging and "hand it to Hush".
+  Without it, Hush uses rules and offers your assistant instead.
+- Optional: [Claude Code](https://claude.com/claude-code), signed in with your own account. Agent alerts need it
+  installed (they use its hooks, no model calls). Ask Hush answers, Summarise and browser tasks run on your Claude
+  Code login and use your own Claude usage. Without it, Hush still does everything else.
 
 ```sh
 git clone <this repo> && cd hush
-./scripts/swift.sh test    # core logic (129 tests); picks a usable SDK on CLT-only Macs
+./scripts/swift.sh test    # core logic (146 tests); picks a usable SDK on CLT-only Macs
 ./scripts/bundle.sh        # build, install to /Applications/Hush.app, launch
 ```
 
@@ -286,4 +313,10 @@ The build is signed ad hoc, so it runs on the Mac that built it. If it quits, op
 login). The code map is [`CLAUDE.md`](CLAUDE.md); decisions are in [`docs/decisions.md`](docs/decisions.md). See
 [`CONTRIBUTING.md`](CONTRIBUTING.md) and [`SECURITY.md`](SECURITY.md).
 
-Licence: to be chosen before the first public release.
+## Licence
+
+- **Code:** [Apache License 2.0](LICENSE).
+- **Character art** (`assets/character`): [CC BY-SA 4.0](assets/character/LICENSE). Reuse and remix it; share what you
+  make under the same licence.
+- **The Hush name, logo and app icon** (`assets/brand`) aren't covered by either. Forks are welcome under their own
+  name: see [`TRADEMARKS.md`](TRADEMARKS.md) and [`NOTICE`](NOTICE).
