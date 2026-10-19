@@ -254,3 +254,33 @@ passes (it ships `SwiftUIMacros`), so `sdk.sh` and the testing plugin path switc
 is SwiftPM's build system, not CLT: with Xcode the binaries still recorded `sdk 15.0`, so `swift.sh` now passes
 `-platform_version` in both setups (`xcrun --show-sdk-version`); Hush records `sdk 27.0`. Always build the app through
 `bundle.sh` / `swift.sh`.
+
+## ADR-018 · Apple's on-device model judges mail and writes its gist (2026-10-19)
+
+**Context.** ADR-001 deferred FR-4 (classify on-device) and FR-9 (gist on arrival) until macOS 26. This Mac now runs
+macOS 27 with Apple Intelligence on, and the SDK has Foundation Models.
+
+**Decision.** `OnDeviceTriage` (HushMac) is both the `AttentionClassifier` and the `GistWriter`: one call per mail
+returns ambient or gentle, whether it's sure, and a one-line gist (the card shows the gist under the subject and
+sender, so it names neither). Prompt, schema guidance and parsing are pure in `HushCore/MailTriage` (tested).
+- **Only mail** reaches it; meetings and agents keep their levels in code. It can't ask for interrupt (the schema
+  offers ambient or gentle only, and the engine caps models at gentle anyway, FR-5). "Sure" maps above the 0.7
+  threshold, "unsure" below, so ADR-003 still reads the same.
+- **On this Mac only:** `SystemLanguageModel.default`, never Private Cloud Compute. Sender, subject and a 400-character
+  snippet. Greedy sampling, so the same mail gets the same answer.
+- **Never waits:** a session is prewarmed at launch and after each call (cold ~5 s, warm ~1.3 s); over 4 s, a
+  refusal, an unsupported language or the model going away → the rules answer and it's logged. The decision log
+  records `on-device-1` or `rules-1`.
+- **No macros:** the schema is a `DynamicGenerationSchema`, because `@Generable` needs Xcode's macro plugin and
+  CLT-only Macs should still build (ADR-017).
+- **Scrutable:** Settings ▸ Connections ▸ Apple Intelligence shows "On this Mac" with Turn off, or why it can't run
+  (off in System Settings, getting ready, not available). Default on.
+
+**Measured** (`swift run hush-eval --lane mail`, evals/mail.json, 24 mails written by us, so treat it as a smoke test):
+23/24, 0 shown that could wait, p50 ~1.4 s. Tuning got the two real asks the first prompt missed ("are you joining
+the 2pm? We're starting now", "call me when you can") and the calendar update; a casual "lunch?" now reads as an
+unsure ambient (rules-only also missed it). An example phrase that copied an eval case was replaced so the score
+isn't flattered. Add a case whenever a real mail is judged wrong. Idle cost unchanged: Hush 38 MB, <1 % CPU.
+
+**Next.** Mail itself (MailKit, now possible with Xcode) feeds real mail into this. Later: the same model for the
+quick lane, route check and digest summaries, which today use the user's Claude Code login (not shippable, ADR-012).

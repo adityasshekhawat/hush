@@ -83,7 +83,7 @@ final class SettingsModel: ObservableObject {
     // MARK: connections
 
     enum Connection: String, CaseIterable, Identifiable {
-        case calendar, claude, codex, mail
+        case calendar, claude, codex, mail, appleIntelligence
         var id: String { rawValue }
     }
 
@@ -95,6 +95,7 @@ final class SettingsModel: ObservableObject {
         case .claude: "Claude Code"
         case .codex: "Codex"
         case .mail: "Mail"
+        case .appleIntelligence: "Apple Intelligence"
         }
     }
 
@@ -103,6 +104,7 @@ final class SettingsModel: ObservableObject {
         case .calendar: "calendar"
         case .claude, .codex: "terminal"
         case .mail: "envelope"
+        case .appleIntelligence: "sparkles"
         }
     }
 
@@ -113,8 +115,31 @@ final class SettingsModel: ObservableObject {
         case .claude: HookInstaller.isInstalled ? "Watching" : nil
         case .codex: HookInstaller.isInstalled(.codex) ? "Watching" : nil
         case .mail: "Waiting on MailKit"
+        case .appleIntelligence: onDeviceOn && OnDeviceTriage.systemStatus == .on ? "On this Mac" : nil
         }
     }
+
+    /// The on-device model judges mail (your switch; Apple Intelligence itself is a System Settings switch).
+    var onDeviceOn: Bool { UserDefaults.standard.object(forKey: "useOnDeviceModel") as? Bool ?? true }
+
+    func setOnDevice(_ on: Bool) {
+        UserDefaults.standard.set(on, forKey: "useOnDeviceModel")
+        Task { await app.triage.setEnabled(on); if on { await app.triage.prewarm() } }
+        reload()
+    }
+
+    /// Why a connection can't be turned on from here, in plain words (shown instead of a button).
+    func note(_ c: Connection) -> String? {
+        guard c == .appleIntelligence, onDeviceOn else { return nil }
+        switch OnDeviceTriage.systemStatus {
+        case .appleIntelligenceOff: return "Off in System Settings"
+        case .notReady: return "Getting ready"
+        case .unsupported: return "Not available on this Mac"
+        case .on, .turnedOff: return nil
+        }
+    }
+
+    func connectTitle(_ c: Connection) -> String { c == .appleIntelligence ? "Turn on" : "Connect" }
 
     func connect(_ c: Connection) {
         switch c {
@@ -125,6 +150,13 @@ final class SettingsModel: ObservableObject {
         case .claude: HookInstaller.install(); reload()
         case .codex: HookInstaller.install(.codex); reload()
         case .mail: break
+        case .appleIntelligence:
+            if OnDeviceTriage.systemStatus == .appleIntelligenceOff {
+                let pane = URL(string: "x-apple.systempreferences:com.apple.Siri-Settings.extension")!
+                if !NSWorkspace.shared.open(pane) {
+                    NSWorkspace.shared.open(URL(fileURLWithPath: "/System/Applications/System Settings.app"))
+                }
+            } else { setOnDevice(true) }
         }
     }
 
@@ -132,6 +164,7 @@ final class SettingsModel: ObservableObject {
         switch c {
         case .claude: HookInstaller.uninstall(); reload()
         case .codex: HookInstaller.uninstall(.codex); reload()
+        case .appleIntelligence: setOnDevice(false)
         default: break
         }
     }

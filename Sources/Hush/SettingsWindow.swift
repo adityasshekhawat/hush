@@ -220,7 +220,9 @@ struct SettingsView: View {
     @ViewBuilder private var connections: some View {
         Section {
             ForEach(model.connections) { c in ConnectionRow(model: model, c: c) }
-        } footer: { Text("Nothing leaves your Mac unless you ask.") }
+        } footer: {
+            Text("Nothing leaves your Mac unless you ask. Apple Intelligence reads a mail's sender, subject and first lines on this Mac to decide what's worth showing you.")
+        }
     }
 
     @ViewBuilder private var setup: some View {
@@ -275,12 +277,18 @@ struct ConnectionRow: View {
                     Text(s).font(HushFont.footer).foregroundStyle(.secondary)
                 } else {
                     Label(s, systemImage: "checkmark").font(HushFont.footer.weight(.medium)).foregroundStyle(Tone.green.text)
-                    if c == .claude || c == .codex {
-                        Button("Remove") { model.disconnect(c) }.buttonStyle(.borderless).font(HushFont.footer)
+                    if c == .claude || c == .codex || c == .appleIntelligence {
+                        Button(c == .appleIntelligence ? "Turn off" : "Remove") { model.disconnect(c) }
+                            .buttonStyle(.borderless).font(HushFont.footer)
                     }
                 }
+            } else if let note = model.note(c) {
+                Text(note).font(HushFont.footer).foregroundStyle(.secondary)
+                if note == "Off in System Settings" {
+                    Button("Open") { model.connect(c) }.buttonStyle(.borderless).font(HushFont.footer)
+                }
             } else {
-                Button("Connect") { model.connect(c) }
+                Button(model.connectTitle(c)) { model.connect(c) }
             }
         }
     }

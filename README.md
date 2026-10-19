@@ -228,7 +228,7 @@ it to Chrome, Arc, Brave and Edge itself; for Comet, Hush adds the missing conne
 | Claude Code transcripts | ✅ opt-in | Read on the Mac for the digest |
 | Your focus | ✅ | Mic in use (calls), full-screen, typing, away |
 | Copy/paste, screenshots, power, audio | ✅ | For antics only; no permissions needed |
-| Mail | ⏳ | MailKit extension (needs macOS 26 + Xcode); simulated from the Developer menu meanwhile |
+| Mail | ⏳ | MailKit extension (next, now that Xcode is in place); simulated from the Developer menu meanwhile. Judged on this Mac by Apple Intelligence when it's on, otherwise by rules |
 | Screen sharing | ✅ | Hush's windows are left out of screen shares, recordings and screenshots (a setting, on by default), so viewers never see it. Presenting without a call isn't detected, so Hush may still appear on your own screen |
 
 ## 5. Models (they're settings)
@@ -239,6 +239,7 @@ it to Chrome, Arc, Brave and Edge itself; for Comet, Hush adds the missing conne
 | Code questions | Sonnet | Ask Hush repo lane (read-only tools) |
 | Digest summaries | Haiku | Summarise button |
 | Browser tasks | Sonnet | Plan + run (hidden from the Models menu for now) |
+| Mail triage + gist | Apple's on-device model | Whether a mail is worth showing, and its one-line gist. On this Mac only, free; rules when Apple Intelligence is off (Settings ▸ Connections) |
 
 Aliases always point at the newest model of each tier, so upgrades arrive for free. They currently run on the user's
 own Claude Code login. A small test set of real asks (`swift run hush-eval`) decides when a default changes: on the

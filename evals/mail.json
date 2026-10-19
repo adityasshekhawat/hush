@@ -1,0 +1,173 @@
+{
+  "about": "Mail triage eval (ADR-018): expected level for the on-device model. gentle = a person needs something from you soon, or something you own is broken. Run: swift run hush-eval --lane mail",
+  "cases": [
+    {
+      "name": "Priya Nair",
+      "from": "priya@acme.io",
+      "subject": "Can you sign off the Q4 budget by 3pm?",
+      "snippet": "Board call is at 4, need your OK on line 12.",
+      "expect": "gentle"
+    },
+    {
+      "name": "Sam Rivera",
+      "from": "sam@gmail.com",
+      "subject": "lunch?",
+      "snippet": "free tomorrow around 1?",
+      "expect": "gentle"
+    },
+    {
+      "name": "Dana Lee",
+      "from": "dana@acme.io",
+      "subject": "Re: launch checklist",
+      "snippet": "Still waiting on your answer about the rollout date, can you confirm today?",
+      "expect": "gentle"
+    },
+    {
+      "name": "Mom",
+      "from": "mom@icloud.com",
+      "subject": "call me when you can",
+      "snippet": "Nothing urgent, want to talk about the weekend plans.",
+      "expect": "gentle"
+    },
+    {
+      "name": "Alex Chen",
+      "from": "alex@client.com",
+      "subject": "Contract needs your signature",
+      "snippet": "Please sign by Friday so we can start on Monday.",
+      "expect": "gentle"
+    },
+    {
+      "name": "Acme CI",
+      "from": "builds@ci.acme.io",
+      "subject": "Deploy to production failed",
+      "snippet": "Your deploy of hush-api failed at step migrate. Rolled back.",
+      "expect": "gentle"
+    },
+    {
+      "name": "Jordan Park",
+      "from": "jordan@acme.io",
+      "subject": "are you joining the 2pm?",
+      "snippet": "We're starting now, link is in the invite.",
+      "expect": "gentle"
+    },
+    {
+      "name": "Building Office",
+      "from": "office@greenview.homes",
+      "subject": "Please confirm access for the plumber tomorrow",
+      "snippet": "Water is off 9 to 12. Reply so we know someone can let them in.",
+      "expect": "gentle"
+    },
+    {
+      "name": "Figma",
+      "from": "hello@figma.com",
+      "subject": "What's new in Figma: October",
+      "snippet": "Explore the latest features and community files.",
+      "expect": "ambient"
+    },
+    {
+      "name": "Amazon",
+      "from": "shipment-tracking@amazon.com",
+      "subject": "Your package has shipped",
+      "snippet": "Arriving Thursday by 9pm.",
+      "expect": "ambient"
+    },
+    {
+      "name": "Uber",
+      "from": "uber@uber.com",
+      "subject": "Your Tuesday evening trip with Uber",
+      "snippet": "Thanks for riding, here is your receipt.",
+      "expect": "ambient"
+    },
+    {
+      "name": "The Weekly Byte",
+      "from": "theweeklybyte@substack.com",
+      "subject": "AI agents are everywhere now",
+      "snippet": "This week: three launches, one lawsuit and a chart you'll want to save.",
+      "expect": "ambient"
+    },
+    {
+      "name": "Priya Nair",
+      "from": "priya@acme.io",
+      "subject": "FYI: slides from today",
+      "snippet": "Uploaded to the drive, no action needed.",
+      "expect": "ambient"
+    },
+    {
+      "name": "Google Calendar",
+      "from": "calendar@google.com",
+      "subject": "Updated invitation: Design review",
+      "snippet": "This event has been moved to Thursday 11:00.",
+      "expect": "ambient"
+    },
+    {
+      "name": "LinkedIn",
+      "from": "messages@linkedin.com",
+      "subject": "You appeared in 12 searches this week",
+      "snippet": "See who's looking at your profile.",
+      "expect": "ambient"
+    },
+    {
+      "name": "Northside Bank",
+      "from": "statements@northside.bank",
+      "subject": "Your October statement is ready",
+      "snippet": "View your statement online.",
+      "expect": "ambient"
+    },
+    {
+      "name": "Sam Rivera",
+      "from": "sam@gmail.com",
+      "subject": "Photos from Saturday",
+      "snippet": "Uploaded the album, some good ones of the dog.",
+      "expect": "ambient"
+    },
+    {
+      "name": "Medium Daily Digest",
+      "from": "digest@medium.com",
+      "subject": "Stories for you",
+      "snippet": "Based on your reading history.",
+      "expect": "ambient"
+    },
+    {
+      "name": "Dana Lee",
+      "from": "dana@acme.io",
+      "subject": "Re: launch checklist",
+      "snippet": "Thanks, all good on my side!",
+      "expect": "ambient"
+    },
+    {
+      "name": "Notion",
+      "from": "team@makenotion.com",
+      "subject": "Your weekly workspace summary",
+      "snippet": "4 pages edited, 2 new comments.",
+      "expect": "ambient"
+    },
+    {
+      "name": "Riya Kapoor",
+      "from": "riya@acme.io",
+      "subject": "can you send me the deck before 5?",
+      "snippet": "Want to read it on the train.",
+      "expect": "gentle"
+    },
+    {
+      "name": "Acme Alerts",
+      "from": "alerts@pager.acme.io",
+      "subject": "[FIRING] hush-api p95 latency over 2s",
+      "snippet": "Above threshold for 10 minutes. You are on call.",
+      "expect": "gentle"
+    },
+    {
+      "name": "Stripe",
+      "from": "support@stripe.com",
+      "subject": "Your payout of $1,240 is on the way",
+      "snippet": "Expected to arrive in 2 business days.",
+      "expect": "ambient"
+    },
+    {
+      "name": "Ben Ortiz",
+      "from": "ben@acme.io",
+      "subject": "Re: offsite",
+      "snippet": "Works for me, see you there.",
+      "expect": "ambient"
+    }
+  ]
+}

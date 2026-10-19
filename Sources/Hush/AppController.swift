@@ -8,7 +8,9 @@ import SwiftUI
 @MainActor
 final class AppController {
     let engine: DecisionEngine
-    let gists: GistWriter = SubjectGistWriter()
+    /// Apple's on-device model judges mail and writes gists when it can; otherwise the rules do (FR-14, ADR-018).
+    let triage: OnDeviceTriage
+    var gists: GistWriter { triage }
     let calendar = CalendarSource()
     let focus = FocusMonitor()
     let renderer: CharacterRenderer
@@ -95,8 +97,9 @@ final class AppController {
         homeX = defaults.object(forKey: "homeX") as? CGFloat ?? 0.92
 
         let store = try HushStore(path: HushStore.defaultPath())
-        // FR-14: this Mac is on macOS 15, so rules-only is the only classifier for now (ADR-001).
-        engine = DecisionEngine(store: store, classifier: RulesOnlyClassifier(), settings: settings)
+        // FR-4 / FR-14: the on-device model when Apple Intelligence is on and you haven't turned it off; rules otherwise.
+        triage = OnDeviceTriage(enabled: defaults.object(forKey: "useOnDeviceModel") as? Bool ?? true)
+        engine = DecisionEngine(store: store, classifier: triage, settings: settings)
 
         renderer = try WebCharacterRenderer(characterHeight: 104)
         let h = renderer.characterHeight * 146 / 100
@@ -257,6 +260,7 @@ final class AppController {
             self?.planReminders()
         }
         if CalendarSource.access == .granted { calendar.start() }
+        Task { await triage.prewarm() }
 
         updateAppearance()
         DistributedNotificationCenter.default().addObserver(
