@@ -1,0 +1,78 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 146" width="320" height="292">
+<title>Hush — pile</title><g id="fx-back">
+</g>
+
+<g stroke="#2D2A35" stroke-width="2.2" stroke-linejoin="round" id="prop-envelope-stack">
+<rect x="116" y="127" width="34" height="10" rx="2.5" fill="#FFFDF7"/>
+<rect x="119" y="118" width="34" height="10" rx="2.5" fill="#FFFDF7"/>
+<rect x="114" y="109" width="34" height="10" rx="2.5" fill="#FFFDF7"/>
+<rect x="118" y="96" width="34" height="14" rx="2.5" fill="#FFFDF7"/>
+<path d="M119.5 97.5 L135 104.5 L150.5 97.5" fill="none" stroke-width="1.8"/>
+<circle cx="135" cy="104.5" r="2.4" fill="#E8876A" stroke="none"/>
+</g>
+
+<g>
+<g transform="translate(4 8)" id="character">
+<g transform="rotate(0 60 134)" id="pose-root">
+
+<g stroke="#2D2A35" stroke-linecap="round" stroke-linejoin="round" id="topper">
+<g transform="translate(60 52) scale(1)" id="topper-leaf">
+<path d="M0 3 Q-1 -5 1 -11" fill="none" stroke-width="2.6"/>
+<path d="M1 -10 C5 -19 15 -21 18 -15 C13 -8 6 -7 1 -10 Z" fill="#E8876A" stroke-width="2.2"/>
+<path d="M0 -7 C-4 -13 -11 -14 -13 -9 C-9 -5 -4 -5 0 -7 Z" fill="#E8876A" stroke-width="2.2"/>
+</g>
+</g>
+
+<g id="body">
+<path d="M40 52 L80 52 C96 52 102 58 102 74 L102 112 C102 124 96 128 84 128 L36 128 C24 128 18 124 18 112 L18 74 C18 58 24 52 40 52 Z" fill="#F4D9A6" stroke="#2D2A35" stroke-width="3.2" stroke-linejoin="round"/>
+<ellipse cx="60" cy="116" rx="25" ry="8" fill="#FFF5E1" id="belly"/>
+</g>
+
+<g fill="#F4D9A6" stroke="#2D2A35" stroke-width="2.8" id="legs-front-seated">
+<ellipse cx="45" cy="129" rx="9" ry="5.5"/>
+<ellipse cx="75" cy="129" rx="9" ry="5.5"/>
+</g>
+<g stroke="#2D2A35" stroke-linejoin="round" stroke-linecap="round" id="accessory">
+</g>
+
+<g transform="translate(60 84)" id="face">
+<g fill="#E8876A" opacity="0.5" id="blush">
+<ellipse cx="-22" cy="7" rx="4.2" ry="2.3"/>
+<ellipse cx="22" cy="7" rx="4.2" ry="2.3"/>
+</g>
+<g id="eyes">
+<g id="eyes-open">
+<ellipse cx="-13.8" cy="1" rx="5.2" ry="5.2" fill="#2D2A35"/>
+<ellipse cx="18.2" cy="1" rx="5.2" ry="5.2" fill="#2D2A35"/>
+<circle cx="-15.46" cy="-0.87" r="1.87" fill="#FFFFFF"/>
+<circle cx="16.54" cy="-0.87" r="1.87" fill="#FFFFFF"/>
+</g>
+</g>
+<g transform="translate(0 11)" stroke="#2D2A35" stroke-linecap="round" stroke-linejoin="round" id="mouth">
+<path d="M-3.2 0 Q0 2.8 3.2 0" fill="none" stroke-width="2" id="mouth-line"/>
+</g>
+</g>
+
+<g stroke-linecap="round" id="arms">
+<g id="arm-l">
+<line x1="24" y1="108" x2="20" y2="124" stroke="#2D2A35" stroke-width="11.5"/>
+<line x1="24" y1="108" x2="20" y2="124" stroke="#F4D9A6" stroke-width="6.5"/>
+</g>
+<g id="arm-r">
+<line x1="96" y1="108" x2="110" y2="112" stroke="#2D2A35" stroke-width="11.5"/>
+<line x1="96" y1="108" x2="110" y2="112" stroke="#F4D9A6" stroke-width="6.5"/>
+</g>
+</g>
+
+<g stroke="#2D2A35" stroke-linejoin="round" stroke-linecap="round" id="props-held">
+</g>
+
+<g stroke="#2D2A35" stroke-linecap="round" stroke-linejoin="round" id="fx-character">
+</g>
+
+</g>
+</g>
+</g>
+
+</svg>

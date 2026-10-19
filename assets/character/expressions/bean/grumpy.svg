@@ -1,0 +1,82 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 146" width="320" height="292">
+<title>Hush — grumpy</title><g id="fx-back">
+</g>
+
+<g>
+<g transform="translate(20 2)" id="character">
+<g transform="rotate(0 60 134)" id="pose-root">
+
+<g stroke-linecap="round" id="legs-back">
+<line x1="50" y1="124" x2="50" y2="134" stroke="#2D2A35" stroke-width="12" id="leg-l"/>
+<line x1="50" y1="124" x2="50" y2="134" stroke="#F4D9A6" stroke-width="7"/>
+<line x1="70" y1="124" x2="70" y2="134" stroke="#2D2A35" stroke-width="12" id="leg-r"/>
+<line x1="70" y1="124" x2="70" y2="134" stroke="#F4D9A6" stroke-width="7"/>
+</g>
+
+<g stroke="#2D2A35" stroke-linecap="round" stroke-linejoin="round" id="topper">
+<g transform="translate(60 30) scale(1)" id="topper-leaf">
+<path d="M0 3 Q-1 -5 1 -11" fill="none" stroke-width="2.6"/>
+<path d="M1 -10 C5 -19 15 -21 18 -15 C13 -8 6 -7 1 -10 Z" fill="#E8876A" stroke-width="2.2"/>
+<path d="M0 -7 C-4 -13 -11 -14 -13 -9 C-9 -5 -4 -5 0 -7 Z" fill="#E8876A" stroke-width="2.2"/>
+</g>
+</g>
+
+<g id="body">
+<path d="M60 30 C82 30 92 48 92 72 L92 104 C92 120 80 128 60 128 C40 128 28 120 28 104 L28 72 C28 48 38 30 60 30 Z" fill="#F4D9A6" stroke="#2D2A35" stroke-width="3.2" stroke-linejoin="round"/>
+<ellipse cx="60" cy="107" rx="19" ry="15" fill="#FFF5E1" id="belly"/>
+</g>
+
+<g stroke="#2D2A35" stroke-linejoin="round" stroke-linecap="round" id="accessory">
+</g>
+
+<g transform="translate(60 64)" id="face">
+<g fill="#E8876A" opacity="0.3" id="blush">
+<ellipse cx="-18" cy="7" rx="4.2" ry="2.3"/>
+<ellipse cx="18" cy="7" rx="4.2" ry="2.3"/>
+</g>
+<g id="eyes">
+<g id="eyes-open">
+<ellipse cx="-12" cy="0" rx="5.2" ry="5.2" fill="#2D2A35"/>
+<ellipse cx="12" cy="0" rx="5.2" ry="5.2" fill="#2D2A35"/>
+<g id="eyelids">
+<path d="M-18.8 -7.2 L-5.2 -7.2 L-5.2 -0.78 L-18.8 -0.78 Z" fill="#F4D9A6"/>
+<path d="M5.2 -7.2 L18.8 -7.2 L18.8 -0.78 L5.2 -0.78 Z" fill="#F4D9A6"/>
+<path d="M-18 -0.78 L-6 -0.78" fill="none" stroke="#2D2A35" stroke-width="2" stroke-linecap="round"/>
+<path d="M6 -0.78 L18 -0.78" fill="none" stroke="#2D2A35" stroke-width="2" stroke-linecap="round"/>
+</g>
+<circle cx="-13.66" cy="0.78" r="1.46" fill="#FFFFFF"/>
+<circle cx="10.34" cy="0.78" r="1.46" fill="#FFFFFF"/>
+</g>
+</g>
+<g fill="none" stroke="#2D2A35" stroke-width="2.1" stroke-linecap="round" id="brows">
+<path d="M-17 -10.5 L-8 -10.5"/>
+<path d="M17 -10.5 L8 -10.5"/>
+</g>
+<g transform="translate(0 11)" stroke="#2D2A35" stroke-linecap="round" stroke-linejoin="round" id="mouth">
+<path d="M-3.6 2.2 Q0 -1.4 3.6 2.2" fill="none" stroke-width="2" id="mouth-line"/>
+</g>
+</g>
+
+<g stroke-linecap="round" id="arms">
+<g id="arm-l">
+<line x1="34" y1="94" x2="27" y2="109" stroke="#2D2A35" stroke-width="11.5"/>
+<line x1="34" y1="94" x2="27" y2="109" stroke="#F4D9A6" stroke-width="6.5"/>
+</g>
+<g id="arm-r">
+<line x1="86" y1="94" x2="93" y2="109" stroke="#2D2A35" stroke-width="11.5"/>
+<line x1="86" y1="94" x2="93" y2="109" stroke="#F4D9A6" stroke-width="6.5"/>
+</g>
+</g>
+
+<g stroke="#2D2A35" stroke-linejoin="round" stroke-linecap="round" id="props-held">
+</g>
+
+<g stroke="#2D2A35" stroke-linecap="round" stroke-linejoin="round" id="fx-character">
+</g>
+
+</g>
+</g>
+</g>
+
+</svg>

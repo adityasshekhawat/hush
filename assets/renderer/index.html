@@ -1,0 +1,44 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<!--
+  Character renderer for the v3 pack (ADR-009). The app injects window.HUSH_DATA:
+    poses        { body: { 39 poses } }  for blob, bean and square
+    expressions  { body: { 14 faces } }  (within a body the face group sits at the same spot in every file,
+                 so any face fits any pose of that body; faces differ between bodies)
+    rigs         { body: { eye style: rig } }: source of toppers, accessories, eye shapes, mouths, fx
+    timing       the designer's sequences; frames are rebuilt as (pose, expression) on the current body
+    commandFrames the command-window keyframes, for the input box (it isn't part of any pose)
+    palettes     colour presets
+  and drives everything through window.hush.*. This page never fetches anything.
+
+  The SVG skeleton is built once. Each frame only swaps the pose inside stable wrappers, so blinking, gaze,
+  running animations and overlays (cheeks, zzz) survive frame changes:
+
+    svg ─ #slot-fx-back
+        ─ #clipper (clip at the screen edge for edge poses)
+            └ #character (pose's own translate)
+                └ #lean (tilt to cursor / swing) └ #groove (music) └ #puff (cheeks, droopy)
+                  └ #rise (sneak offsets, half-rise) └ #breath └ #life (one-shot reactions)
+                      ├ #rim (generated light outline for dark desktops)
+                      └ #pose-root (swapped per frame)
+        ─ #slot-hands (hands gripping the edge) ─ #slot-overlay (zzz etc.) ─ #slot-box (command box)
+
+  One owner decides the frame: lifted > sequence > mode (walk/perch) > mood > half-rise > base state.
+  Nothing in this file can make Hush interrupt (PRD § Delight).
+-->
+<style>/*@inline style.css*/</style>
+</head>
+<body>
+<div id="hush"></div>
+<script>
+(function () {
+/*@inline setup.js*/
+/*@inline compose.js*/
+/*@inline life.js*/
+/*@inline reactions.js*/
+})();
+</script>
+</body>
+</html>

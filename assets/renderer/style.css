@@ -1,0 +1,65 @@
+/* renderer/style.css: inlined into index.html by Swift. */
+html, body { margin: 0; height: 100%; background: transparent; overflow: hidden; -webkit-user-select: none; cursor: default; }
+#hush { position: absolute; left: 0; right: 0; display: flex; justify-content: center; }
+/* Breathing and grooving run on HTML wrappers, which the GPU moves without repainting the SVG
+   (anything animated *inside* the SVG is repainted every frame it changes). */
+#groovewrap, #breathwrap { will-change: transform; transform-origin: 50% 95%; }
+#hush.breathe #breathwrap { animation: breathe 3.2s ease-in-out infinite; }
+#hush.droopy #breathwrap, #hush.st-doze #breathwrap, #hush.st-perchDoze #breathwrap { animation-duration: 5s; }
+#hush.groove #groovewrap { animation: groove .55s ease-in-out infinite; }
+#hush.settle { transition: bottom .3s ease; }
+#hush svg { display: block; overflow: visible; }
+#lean, #groove, #puff, #rise, #breath, #life { transform-box: view-box; transform-origin: 60px 134px; }
+#lean { transition: transform .35s cubic-bezier(.3, .9, .4, 1.2); }
+#hush.lifted #lean { transition: transform .12s ease-out; transform-origin: 60px 60px; }
+#puff { transition: transform .35s cubic-bezier(.3, .9, .4, 1.4); }
+#rise { transition: transform .34s cubic-bezier(.3, 1.45, .5, 1); }
+#rim { opacity: .92; }
+
+/* sneak mode shows the whole face; typing ducks lower (eyes just over the edge); half-rise comes up from below */
+#hush.st-peek #rise { transform: translateY(-12px); }
+#hush.st-duck #rise { transform: translateY(10px); }
+#hush.rising #rise { transform: translateY(40px); transition: none; }
+
+#hush.full #puff { transform: scale(1.08, .97); }
+#hush.droopy #puff { transform: translateY(2px) scale(1.02, .95); }
+#hush.full.droopy #puff { transform: translateY(2px) scale(1.08, .94); }
+@keyframes groove { 0%, 100% { transform: translateY(0) rotate(-3deg); } 50% { transform: translateY(-3px) rotate(3deg); } }
+
+@keyframes breathe { 0%, 100% { transform: scale(1, 1); } 50% { transform: scale(1.03, .975); } }
+
+#hush.st-hurry #life { animation: run .32s steps(4, jump-none) infinite; }
+@keyframes run { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-4px); } }
+#hush.st-tap #life { animation: tapbody .6s steps(6, jump-none) infinite; }
+@keyframes tapbody { 0%, 100% { transform: translateX(0); } 30% { transform: translateX(3px) rotate(2deg); } }
+#hush.asking[class] #life { animation: ask 1.8s steps(12, jump-none) infinite; }
+@keyframes ask { 0%, 100% { transform: rotate(-4deg); } 50% { transform: rotate(4deg); } }
+
+/* props and effects (props' children are wrapped in .anim so their transform attributes survive) */
+#fx-speed-lines:not([opacity="0"]) line { animation: speed .45s steps(5, jump-none) infinite; }
+#fx-speed-lines line:nth-child(2) { animation-delay: .15s; }
+#fx-speed-lines line:nth-child(3) { animation-delay: .3s; }
+@keyframes speed { 0% { transform: translateX(8px); opacity: .2; } 50% { opacity: 1; } 100% { transform: translateX(-8px); opacity: .1; } }
+#fx-tap-marks:not([opacity="0"]) { animation: tapfx .6s steps(6, jump-none) infinite; transform-box: fill-box; transform-origin: 0% 50%; }
+@keyframes tapfx { 0% { transform: scale(.75); opacity: .2; } 35% { transform: scale(1.12); opacity: 1; } 100% { transform: scale(1); opacity: .35; } }
+#fx-dizzy-stars:not([opacity="0"]) > * { animation: orbit 1.2s steps(12, jump-none) infinite; transform-box: view-box; transform-origin: 0 4px; }
+@keyframes orbit { from { transform: rotate(0); } to { transform: rotate(360deg); } }
+#fx-sparkles:not([opacity="0"]) > * { animation: twinkle 1.1s steps(6, jump-none) infinite alternate; transform-box: fill-box; transform-origin: center; }
+@keyframes twinkle { from { transform: scale(.7); opacity: .5; } to { transform: scale(1.1); opacity: 1; } }
+
+#hush.enter svg { animation: pop .3s cubic-bezier(.3, .8, .3, 1.3); }
+@keyframes pop { from { transform: translateY(8%) scale(.92); opacity: .3; } to { transform: none; opacity: 1; } }
+#hush.from-edge { transform: translateX(110%); transition: none; }
+#hush.slide { transition: transform .5s cubic-bezier(.3, .8, .3, 1.05); }
+
+/* The remaining in-SVG loops only run in short-lived states (hurry, tap, asking, sequences) and are stepped
+   (5–12 updates/s, not 60) because the SVG is repainted on every frame it changes. */
+/* Calm: nobody's near and nothing's happening → looping animations pause (an animated SVG repaints every frame).
+   Blinks and glances still play now and then. Hurry/tap keep moving: they mean something needs you. */
+/* Removed, not paused: WebKit keeps a display link (60–120 Hz wakeups) alive for any animation, paused or not. */
+#hush.calm:not(.st-hurry):not(.st-tap), #hush.calm:not(.st-hurry):not(.st-tap) * { animation: none !important; }
+#hush.hidden, #hush.hidden * { animation: none !important; }
+
+@media (prefers-reduced-motion: reduce) {
+  #hush, #hush *, #hush svg * { animation: none !important; transition: none !important; }
+}

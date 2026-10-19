@@ -1,0 +1,79 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 146" width="320" height="292">
+<title>Hush — perch2</title><g id="fx-back">
+<g id="prop-window">
+<rect x="4" y="116" width="152" height="44" rx="7" fill="#FFFFFF" stroke="#2D2A35" stroke-width="2.2"/>
+<line x1="5" y1="131" x2="155" y2="131" stroke="#2D2A35" stroke-width="1.4" opacity="0.25"/>
+<circle cx="16" cy="123.5" r="2.6" fill="#D9D6DE"/>
+<circle cx="25" cy="123.5" r="2.6" fill="#D9D6DE"/>
+<circle cx="34" cy="123.5" r="2.6" fill="#D9D6DE"/>
+</g>
+</g>
+
+<g>
+<g transform="translate(20 -12)" id="character">
+<g transform="rotate(0 60 134)" id="pose-root">
+
+<g stroke="#2D2A35" stroke-linecap="round" stroke-linejoin="round" id="topper">
+<g transform="translate(60 30) scale(1)" id="topper-leaf">
+<path d="M0 3 Q-1 -5 1 -11" fill="none" stroke-width="2.6"/>
+<path d="M1 -10 C5 -19 15 -21 18 -15 C13 -8 6 -7 1 -10 Z" fill="#E8876A" stroke-width="2.2"/>
+<path d="M0 -7 C-4 -13 -11 -14 -13 -9 C-9 -5 -4 -5 0 -7 Z" fill="#E8876A" stroke-width="2.2"/>
+</g>
+</g>
+
+<g id="body">
+<path d="M60 30 C82 30 92 48 92 72 L92 104 C92 120 80 128 60 128 C40 128 28 120 28 104 L28 72 C28 48 38 30 60 30 Z" fill="#F4D9A6" stroke="#2D2A35" stroke-width="3.2" stroke-linejoin="round"/>
+<ellipse cx="60" cy="107" rx="19" ry="15" fill="#FFF5E1" id="belly"/>
+</g>
+
+<g stroke-linecap="round" id="legs-front-dangling">
+<line x1="50" y1="124" x2="43" y2="139" stroke="#2D2A35" stroke-width="12"/>
+<line x1="50" y1="124" x2="43" y2="139" stroke="#F4D9A6" stroke-width="7"/>
+<line x1="70" y1="124" x2="76" y2="140" stroke="#2D2A35" stroke-width="12"/>
+<line x1="70" y1="124" x2="76" y2="140" stroke="#F4D9A6" stroke-width="7"/>
+</g>
+
+<g stroke="#2D2A35" stroke-linejoin="round" stroke-linecap="round" id="accessory">
+</g>
+
+<g transform="translate(60 64)" id="face">
+<g fill="#E8876A" opacity="0.5" id="blush">
+<ellipse cx="-18" cy="7" rx="4.2" ry="2.3"/>
+<ellipse cx="18" cy="7" rx="4.2" ry="2.3"/>
+</g>
+<g id="eyes">
+<g id="eyes-open">
+<ellipse cx="-14.2" cy="0" rx="5.2" ry="5.2" fill="#2D2A35"/>
+<ellipse cx="9.8" cy="0" rx="5.2" ry="5.2" fill="#2D2A35"/>
+<circle cx="-15.86" cy="-1.87" r="1.87" fill="#FFFFFF"/>
+<circle cx="8.14" cy="-1.87" r="1.87" fill="#FFFFFF"/>
+</g>
+</g>
+<g transform="translate(0 11)" stroke="#2D2A35" stroke-linecap="round" stroke-linejoin="round" id="mouth">
+<path d="M-3.2 0 Q0 2.8 3.2 0" fill="none" stroke-width="2" id="mouth-line"/>
+</g>
+</g>
+
+<g stroke-linecap="round" id="arms">
+<g id="arm-l">
+<line x1="34" y1="94" x2="30" y2="116" stroke="#2D2A35" stroke-width="11.5"/>
+<line x1="34" y1="94" x2="30" y2="116" stroke="#F4D9A6" stroke-width="6.5"/>
+</g>
+<g id="arm-r">
+<line x1="86" y1="94" x2="90" y2="116" stroke="#2D2A35" stroke-width="11.5"/>
+<line x1="86" y1="94" x2="90" y2="116" stroke="#F4D9A6" stroke-width="6.5"/>
+</g>
+</g>
+
+<g stroke="#2D2A35" stroke-linejoin="round" stroke-linecap="round" id="props-held">
+</g>
+
+<g stroke="#2D2A35" stroke-linecap="round" stroke-linejoin="round" id="fx-character">
+</g>
+
+</g>
+</g>
+</g>
+
+</svg>

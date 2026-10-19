@@ -1,0 +1,7 @@
+# Read by ripgrep, so Claude Code's Grep/Glob skip these (they're still readable on purpose).
+# ~600 KB of SVG and a 560 KB HTML file would otherwise flood search results and context.
+# What's inside them: docs/character-inventory.md.
+assets/character/
+docs/character-lab.html
+assets/brand/
+site/hush-data.js

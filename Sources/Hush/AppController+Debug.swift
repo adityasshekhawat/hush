@@ -1,0 +1,227 @@
+import AppKit
+import HushCore
+import HushMac
+import SwiftUI
+
+/// Opt-in debug hooks (dev.hush.debug) and the Developer menu simulations.
+extension AppController {
+    func installDebugHooks() {
+        DistributedNotificationCenter.default().addObserver(
+            forName: Notification.Name("dev.hush.debug"), object: nil, queue: .main
+        ) { [weak self] n in
+            let cmd = n.object as? String ?? ""
+            MainActor.assumeIsolated { self?.runDebug(cmd) }
+        }
+        NSLog("Hush debug hooks on")
+    }
+
+    func runDebug(_ cmd: String) {
+        let parts = cmd.split(separator: ":", maxSplits: 1).map(String.init)
+        switch (parts.first ?? "", parts.count > 1 ? parts[1] : "") {
+        case ("mail", "ordinary"): simulate(.ordinary)
+        case ("mail", "ask"): simulate(.ask)
+        case ("mail", "vip"): simulate(.vip)
+        case ("mail", "bulk"): simulate(.bulk)
+        case ("meeting", let m): simulateMeeting(inMinutes: Double(m) ?? 10)
+        case ("pose", "live"): previewAway = false; previewOverride = nil
+        case ("pose", "away"): previewAway = true; previewOverride = .hide
+        case ("pose", let p): previewOverride = CharacterState(rawValue: p)
+        case ("shoo", _): handle(.shoo)
+        case ("click", _): handle(.click)
+        case ("react", "hover"): renderer.react(.hover(true))
+        case ("react", "unhover"): renderer.react(.hover(false))
+        case ("react", "poke"): renderer.react(.poke)
+        case ("react", "pat"): renderer.react(.pat(true))
+        case ("react", "unpat"): renderer.react(.pat(false))
+        case ("react", "lift"): handle(.dragBegan)
+        case ("react", "swing"): renderer.react(.swing(1200))
+        case ("react", "drop"): handle(.dragEnded)
+        case ("calm", let m): renderer.react(.debugCalm(m))
+        case ("body", "restore"): renderer.apply(look)
+        case ("body", let b):
+            // Preview only; the saved look is untouched.
+            var l = look
+            l.body = b
+            renderer.apply(l)
+        case ("wear", let spec):
+            // Preview only: wear:head=wizard,neck=cape,carry=laptop,palette=berry,body=square
+            var l = look
+            for pair in spec.split(separator: ",") {
+                let kv = pair.split(separator: "=").map(String.init)
+                guard kv.count == 2 else { continue }
+                switch kv[0] {
+                case "palette": l.palette = kv[1]
+                case "body": l.body = kv[1]
+                case "topper": l.topper = kv[1]
+                default: if WearSlot(rawValue: kv[0]) != nil { l.outfit[kv[0]] = kv[1] == "none" ? nil : kv[1] }
+                }
+            }
+            renderer.apply(l)
+        case ("agent", let spec):
+            // agent:<kind>[:<session>] e.g. agent:prompt:s1, agent:stop:s1 (pretends the run started 5 min ago)
+            let parts = spec.split(separator: ":").map(String.init)
+            if let kind = AgentSessionEvent.Kind(rawValue: parts[0]) {
+                let sid = parts.count > 1 ? parts[1] : "debug-session-1"
+                let at = kind == .prompt && parts.count > 2 && parts[2] == "old" ? Date().addingTimeInterval(-300) : Date()
+                // A host app that isn't frontmost, so the run counts as "in the background" (iTerm if installed).
+                agentEvent(AgentSessionEvent(sessionID: sid, cwd: FileManager.default.homeDirectoryForCurrentUser.appendingPathComponent("Developer/hush").path, kind: kind,
+                                             app: "com.googlecode.iterm2", at: at))
+            }
+        case ("command", "open"): toggleCommandBox()
+        case ("digest", "now"): digest.showNow()
+        case ("digest", "away"):
+            // Pretend you were away for the last 3 hours and just came back (needs the digest switched on).
+            digest.focusChanged(away: true, now: Date().addingTimeInterval(-3 * 3600))
+            digest.focusChanged(away: false)
+        case ("login", let v): LoginItem.set(v == "on")
+        case ("onboard", "reset"): onboarding.reset()
+        case ("onboard", "start"): onboarding.start(from: .arrival)
+        case ("onboard", "next"): onboarding.next()
+        case ("onboard", "persona"): onboarding.togglePersona(.builder)
+        case ("onboard", "hi"): ["hover", "pat"].forEach { onboarding.observed($0) }
+        case ("ask", let q):
+            // Same routing as the box, from the app that's frontmost now.
+            let app = NSWorkspace.shared.frontmostApplication?.bundleIdentifier
+            // Same path as the command box, including the smarter router's check when the rules aren't sure.
+            let route = AskRouter.route(q, context: ask.context(frontmostApp: app))
+            ask.submit(route.text, lane: route.lane, frontmostApp: app, followUp: nil, check: !route.confident && !route.explicit)
+        case ("askfrom", let spec):
+            // askfrom:<bundle id>|<question>: route and answer as if asked from that app.
+            let parts = spec.split(separator: "|", maxSplits: 1).map(String.init)
+            if parts.count == 2 {
+                let route = AskRouter.route(parts[1], context: ask.context(frontmostApp: parts[0]))
+                ask.ask(route.text, lane: route.lane, frontmostApp: parts[0])
+            }
+        case ("box", let text):
+            // Preview the command box with typed text (scripted opens can't take focus, so keep it open).
+            commandPanel.keepOpenForPreview = true
+            if !commandPanel.isOpen { toggleCommandBox(); commandPanel.keepOpenForPreview = true }
+            commandPanel.model.text = text == "-" ? "" : text
+        case ("boxtab", _): commandPanel.model.tab()
+        case ("handoffpreview", let q):
+            // Shows the hand-off receipt without opening anything.
+            ask.card.model.question = q
+            ask.card.model.lane = .handoff(.chatgpt)
+            ask.card.model.context = "from a web browser"
+            ask.card.model.phase = .handedOff(.chatgpt)
+            ask.card.show(above: cardAvoidRect())
+            renderer.react(.wave)
+        case ("boxclose", _): commandPanel.close(restoreFocus: false)
+        case ("askstop", _): ask.stop()
+        case ("envelope", "close"): envelope.close()
+        case ("rules", "show"): showRules()
+        case ("panel", _): openPanel?()
+        case ("appearance", let v): NSApp.appearance = v == "light" ? NSAppearance(named: .aqua) : v == "dark" ? NSAppearance(named: .darkAqua) : nil
+        case ("session", "first"): if let id = ask.card.model.sessions.first?.id { ask.selectSession(id) }
+        case ("calendar", "request"):
+            Task { let ok = await requestCalendarAccess(); DiagnosticsLog.write("calendar: request returned \(ok)") }
+        case ("history", _): ask.showHistory()
+        case ("wardrobe", _): openWardrobe?()
+        case ("settings", let s): openSettings?(SettingsSection.allCases.first { $0.rawValue.lowercased().hasPrefix(s) } ?? .general)
+        case ("rare", let id): rare.debugFind(id)
+        case ("held", "day"): showHeldBack(.day)
+        case ("held", "week"): showHeldBack(.week)
+        case ("browser", let v): ask.browserTasks = v == "on"
+        case ("approve", _): ask.browser.approve()
+        case ("answer", let v): ask.browser.answer(v == "yes")
+        case ("followup", let q):
+            if let f = ask.followUpSource { ask.ask(q, lane: f.lane, frontmostApp: nil, followUp: f) }
+        case ("askrepo", let path):
+            if !ask.allowedRepos.contains(path) { ask.allowedRepos = ask.allowedRepos + [path] }
+            ask.pickedRepo = path
+        case ("hooks", "install"): HookInstaller.install()
+        case ("move", "perch"): wanderer.debugPerch()
+        case ("move", "leave"): wanderer.leavePerch()
+        case ("move", "drop-on-front"):
+            // Simulates a slightly-off drop: floor line 12 pt above the front window's top edge.
+            if let w = Wanderer.focusedWindow() {
+                handle(.dragBegan)
+                let r = Wanderer.screenRect(w.bounds)
+                var f = panel.frame
+                f.origin.x = r.midX - f.width / 2
+                f.origin.y = r.maxY - renderer.characterHeight * 146 / 100 * 34 / 146 + 12
+                panel.setFrame(f, display: true)
+                handle(.dragEnded)
+            }
+        case ("move", "walk"): setHome(homeX < 0.5 ? 0.92 : 0.04)
+        case ("mood", let n): renderer.react(.mood(Int(n) ?? 0))
+        case ("play", "inbox"): renderer.react(.inboxZero)
+        case ("play", "command"): playCommandWindow()
+        case ("antic", "copy"): antics.debugEvent(.copied)
+        case ("antic", "blow"): renderer.react(.blow)
+        case ("antic", "paste"): antics.debugEvent(.pasted)
+        case ("antic", "ask"): antics.debugAsk()
+        case ("antic", "touch"): antics.touched()
+        case ("antic", "shot"): antics.debugEvent(.screenshot)
+        case ("antic", "shake"): renderer.react(.woozy)
+        case ("antic", "flinch"): antics.debugEvent(.windowPassing(dx: 40))
+        case ("antic", "perk"): antics.debugEvent(.chargerPlugged)
+        case ("antic", "morning"): renderer.react(.morning)
+        case ("antic", "dance"): renderer.react(.dance)
+        case ("antic", "tuck"): antics.tuckIn()
+        case ("antic", "groove"): antics.debugEvent(.audioPlaying(true))
+        case ("antic", "ungroove"): antics.debugEvent(.audioPlaying(false))
+        case ("antic", "droopy"): antics.debugEvent(.batteryLow(true))
+        case ("antic", "undroopy"): antics.debugEvent(.batteryLow(false))
+        case ("resolve", _): resolveActive(.opened)
+        default: break
+        }
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) { [weak self] in
+            guard let self else { return }
+            NSLog("Hush state=%@ waiting=%d pile=%d", self.currentState?.rawValue ?? "nil", self.waiting.count, self.ambientPile)
+        }
+    }
+
+    // MARK: calendar
+
+    enum DemoMail { case ordinary, ask, vip, bulk }
+
+    func simulate(_ kind: DemoMail) {
+        let id = "demo:" + UUID().uuidString
+        let item: InboxItem
+        switch kind {
+        case .ordinary:
+            item = InboxItem(id: id, kind: .mail, senderName: "Sam Rivera", senderAddress: "sam@example.com",
+                             subject: "Photos from Saturday", snippet: "Uploaded the album", receivedAt: Date())
+        case .ask:
+            item = InboxItem(id: id, kind: .mail, senderName: "Priya Nair", senderAddress: "priya@example.com",
+                             subject: "Can you review the Q4 plan by EOD?", snippet: "Two sections need your call",
+                             receivedAt: Date())
+        case .vip:
+            // Engine-only, never saved: the demo address shouldn't end up in the user's real VIP list.
+            // One Task so the VIP is in place before the item is evaluated.
+            var demo = settings
+            demo.vips.insert(Self.demoVIP)
+            let vipItem = InboxItem(id: id, kind: .mail, senderName: "Demo VIP", senderAddress: Self.demoVIP,
+                                    subject: "Quick call?", snippet: "Need five minutes before the board meeting",
+                                    receivedAt: Date())
+            Task { [demo] in
+                await engine.update(settings: demo)
+                guard let d = try await engine.evaluate(vipItem) else { return }
+                await handle(d)
+            }
+            return
+        case .bulk:
+            item = InboxItem(id: id, kind: .mail, senderName: "Shop", senderAddress: "deals@shop.example",
+                             subject: "48 hours only", headers: ["List-Unsubscribe": "<mailto:u@shop.example>"],
+                             receivedAt: Date())
+        }
+        submit(item)
+    }
+
+    func simulateMeeting(inMinutes m: Double) {
+        let start = Date().addingTimeInterval(m * 60)
+        demoMeetings.append(Meeting(id: "demo-" + UUID().uuidString, title: "Design review (demo)", start: start,
+                                    end: start.addingTimeInterval(30 * 60), attendees: ["Priya Nair", "Sam Rivera"]))
+        planReminders()
+    }
+
+    /// The held-back ledger at the top of the menu.
+    var summaryLines: (today: String, week: String) {
+        get async {
+            let d = try? await engine.daySummary(), w = try? await engine.weekSummary()
+            return (d.map { "Today: \($0.shown) shown · \($0.heldBack) held back" } ?? "Today: no data",
+                    w.map { "This week: \($0.shown) shown · \($0.heldBack) held back" } ?? "This week: no data")
+        }
+    }
+}

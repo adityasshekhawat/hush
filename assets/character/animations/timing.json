@@ -1,0 +1,458 @@
+[
+  {
+    "animation": "Command window",
+    "folder": "animations/01-command-window",
+    "trigger": "global hotkey, or double-click Hush",
+    "note": "A small input box unfolds above Hush. The box is plain UI showing your words, never Hush’s; Hush only reacts with posture. On Enter it thinks, then hands the result back as an envelope you can open.",
+    "frames": [
+      {
+        "frame": 1,
+        "file": "01-pops-up-from-the-edge.svg",
+        "ms": 300,
+        "pose": "peek",
+        "expr": "neutral",
+        "caption": "Pops up from the edge"
+      },
+      {
+        "frame": 2,
+        "file": "02-box-unfolds-looks-up.svg",
+        "ms": 700,
+        "pose": "stand",
+        "expr": "neutral",
+        "caption": "Box unfolds; looks up"
+      },
+      {
+        "frame": 3,
+        "file": "03-head-tilt-while-you-type.svg",
+        "ms": 900,
+        "pose": "listen",
+        "expr": "neutral",
+        "caption": "Head tilt while you type"
+      },
+      {
+        "frame": 4,
+        "file": "04-thinks-after-enter.svg",
+        "ms": 800,
+        "pose": "think",
+        "expr": "thinking",
+        "caption": "Thinks after Enter"
+      },
+      {
+        "frame": 5,
+        "file": "05-hands-back-the-answer.svg",
+        "ms": 1100,
+        "pose": "hold",
+        "expr": "happy",
+        "caption": "Hands back the answer"
+      }
+    ]
+  },
+  {
+    "animation": "Dragged around, then dizzy",
+    "folder": "animations/02-dragged-around-then-dizzy",
+    "trigger": "user drags and flings Hush",
+    "note": "Stretch follows drag velocity; the swing angle follows drag direction. Dizziness length scales with how hard it was shaken (0.6–2 s), then it shakes it off and looks a little sheepish.",
+    "frames": [
+      {
+        "frame": 1,
+        "file": "01-picked-up-legs-dangle.svg",
+        "ms": 350,
+        "pose": "grab",
+        "expr": "surprised",
+        "caption": "Picked up, legs dangle"
+      },
+      {
+        "frame": 2,
+        "file": "02-flung-stretches.svg",
+        "ms": 350,
+        "pose": "swing",
+        "expr": "squint",
+        "caption": "Flung: stretches"
+      },
+      {
+        "frame": 3,
+        "file": "03-dropped-squash.svg",
+        "ms": 200,
+        "pose": "land",
+        "expr": "squint",
+        "caption": "Dropped: squash"
+      },
+      {
+        "frame": 4,
+        "file": "04-stars-circle-wobble.svg",
+        "ms": 1300,
+        "pose": "dizzy",
+        "expr": "dizzy",
+        "caption": "Stars circle, wobble"
+      },
+      {
+        "frame": 5,
+        "file": "05-shakes-it-off.svg",
+        "ms": 500,
+        "pose": "shake",
+        "expr": "squint",
+        "caption": "Shakes it off"
+      },
+      {
+        "frame": 6,
+        "file": "06-sheepish-back-to-work.svg",
+        "ms": 900,
+        "pose": "stand",
+        "expr": "apologetic",
+        "caption": "Sheepish, back to work"
+      }
+    ]
+  },
+  {
+    "animation": "Ignored, getting grumpy",
+    "folder": "animations/03-ignored-getting-grumpy",
+    "trigger": "notification untouched for 10 / 20 / 40 min",
+    "note": "A slow, comic escalation that tops out at a huff: never louder, never blocking, never a sound. Off by default and opt-in under a “Moods” setting, so the respectful default stays intact.",
+    "frames": [
+      {
+        "frame": 1,
+        "file": "01-offers-the-envelope.svg",
+        "ms": 1000,
+        "pose": "hold",
+        "expr": "neutral",
+        "caption": "Offers the envelope"
+      },
+      {
+        "frame": 2,
+        "file": "02-10-min-taps-a-foot.svg",
+        "ms": 900,
+        "pose": "tapfoot",
+        "expr": "grumpy",
+        "caption": "10 min: taps a foot"
+      },
+      {
+        "frame": 3,
+        "file": "03-20-min-arms-crossed-pout.svg",
+        "ms": 900,
+        "pose": "cross",
+        "expr": "pout",
+        "caption": "20 min: arms crossed, pout"
+      },
+      {
+        "frame": 4,
+        "file": "04-40-min-one-small-stomp.svg",
+        "ms": 500,
+        "pose": "stomp",
+        "expr": "angry",
+        "caption": "40 min: one small stomp"
+      },
+      {
+        "frame": 5,
+        "file": "05-sits-and-huffs-still-waiting.svg",
+        "ms": 1400,
+        "pose": "huff",
+        "expr": "hmph",
+        "caption": "Sits and huffs, still waiting"
+      }
+    ]
+  },
+  {
+    "animation": "Poke",
+    "folder": "animations/04-poke",
+    "trigger": "single click on Hush",
+    "note": "Cheap delight. Rate-limit it: the fifth poke in a row swaps the giggle for the grumpy face.",
+    "frames": [
+      {
+        "frame": 1,
+        "file": "01-squish-on-click.svg",
+        "ms": 150,
+        "pose": "poked",
+        "expr": "squint",
+        "caption": "Squish on click"
+      },
+      {
+        "frame": 2,
+        "file": "02-hands-over-mouth.svg",
+        "ms": 500,
+        "pose": "giggle",
+        "expr": "happy",
+        "caption": "Hands over mouth"
+      },
+      {
+        "frame": 3,
+        "file": "03-wiggle.svg",
+        "ms": 220,
+        "pose": "wiggleL",
+        "expr": "happy",
+        "caption": "Wiggle"
+      },
+      {
+        "frame": 4,
+        "file": "04-wiggle.svg",
+        "ms": 220,
+        "pose": "wiggleR",
+        "expr": "happy",
+        "caption": "Wiggle"
+      },
+      {
+        "frame": 5,
+        "file": "05-settles.svg",
+        "ms": 700,
+        "pose": "stand",
+        "expr": "happy",
+        "caption": "Settles"
+      }
+    ]
+  },
+  {
+    "animation": "Inbox zero",
+    "folder": "animations/05-inbox-zero",
+    "trigger": "last unread item cleared",
+    "note": "Rare on purpose: at most once a day, so it stays special.",
+    "frames": [
+      {
+        "frame": 1,
+        "file": "01-anticipation-squat.svg",
+        "ms": 220,
+        "pose": "crouch",
+        "expr": "happy",
+        "caption": "Anticipation squat"
+      },
+      {
+        "frame": 2,
+        "file": "02-jump-and-confetti.svg",
+        "ms": 450,
+        "pose": "cheer",
+        "expr": "happy",
+        "caption": "Jump and confetti"
+      },
+      {
+        "frame": 3,
+        "file": "03-lands.svg",
+        "ms": 200,
+        "pose": "land",
+        "expr": "happy",
+        "caption": "Lands"
+      },
+      {
+        "frame": 4,
+        "file": "04-proud-little-glow.svg",
+        "ms": 1000,
+        "pose": "proud",
+        "expr": "happy",
+        "caption": "Proud little glow"
+      }
+    ]
+  },
+  {
+    "animation": "Window perch",
+    "folder": "animations/06-window-perch",
+    "trigger": "idle; sits on the top edge of the focused window",
+    "note": "Legs swing slowly, eyes follow the cursor, and it nods off after five idle minutes. Moves with the window when you drag it.",
+    "frames": [
+      {
+        "frame": 1,
+        "file": "01-sits-on-the-title-bar.svg",
+        "ms": 900,
+        "pose": "perch",
+        "expr": "neutral",
+        "caption": "Sits on the title bar"
+      },
+      {
+        "frame": 2,
+        "file": "02-swings-legs-glances.svg",
+        "ms": 900,
+        "pose": "perch2",
+        "expr": "neutral",
+        "caption": "Swings legs, glances"
+      },
+      {
+        "frame": 3,
+        "file": "03-watches-the-cursor.svg",
+        "ms": 900,
+        "pose": "perch",
+        "expr": "neutral",
+        "caption": "Watches the cursor"
+      },
+      {
+        "frame": 4,
+        "file": "04-nods-off.svg",
+        "ms": 1400,
+        "pose": "perchDoze",
+        "expr": "sleepy",
+        "caption": "Nods off"
+      }
+    ]
+  },
+  {
+    "animation": "Edge walk",
+    "folder": "animations/07-edge-walk",
+    "trigger": "moving between screen edges or corners",
+    "note": "A four-frame waddle loop at about 140 ms per frame, travelling roughly 6 px per frame at 64 px tall.",
+    "frames": [
+      {
+        "frame": 1,
+        "file": "01-left-foot-up.svg",
+        "ms": 140,
+        "pose": "walk1",
+        "expr": "neutral",
+        "caption": "Left foot up"
+      },
+      {
+        "frame": 2,
+        "file": "02-down.svg",
+        "ms": 140,
+        "pose": "walk2",
+        "expr": "neutral",
+        "caption": "Down"
+      },
+      {
+        "frame": 3,
+        "file": "03-right-foot-up.svg",
+        "ms": 140,
+        "pose": "walk3",
+        "expr": "neutral",
+        "caption": "Right foot up"
+      },
+      {
+        "frame": 4,
+        "file": "04-down.svg",
+        "ms": 140,
+        "pose": "walk4",
+        "expr": "neutral",
+        "caption": "Down"
+      }
+    ]
+  },
+  {
+    "animation": "Morning wake-up",
+    "folder": "animations/08-morning-wake-up",
+    "trigger": "first unlock of the day",
+    "note": "Plays once, then shows the day’s first item.",
+    "frames": [
+      {
+        "frame": 1,
+        "file": "01-still-asleep.svg",
+        "ms": 900,
+        "pose": "doze",
+        "expr": "sleepy",
+        "caption": "Still asleep"
+      },
+      {
+        "frame": 2,
+        "file": "02-big-yawn.svg",
+        "ms": 800,
+        "pose": "yawn",
+        "expr": "yawn",
+        "caption": "Big yawn"
+      },
+      {
+        "frame": 3,
+        "file": "03-stretch.svg",
+        "ms": 600,
+        "pose": "stretch",
+        "expr": "squint",
+        "caption": "Stretch"
+      },
+      {
+        "frame": 4,
+        "file": "04-ready.svg",
+        "ms": 900,
+        "pose": "stand",
+        "expr": "happy",
+        "caption": "Ready"
+      }
+    ]
+  },
+  {
+    "animation": "Focus mode and screen sharing",
+    "folder": "animations/09-focus-mode-and-screen-sharing",
+    "trigger": "Do Not Disturb, screen share or full-screen video",
+    "note": "Leaves fast with no flourish, and stays hidden until focus ends.",
+    "frames": [
+      {
+        "frame": 1,
+        "file": "01-idle.svg",
+        "ms": 600,
+        "pose": "stand",
+        "expr": "neutral",
+        "caption": "Idle"
+      },
+      {
+        "frame": 2,
+        "file": "02-notices.svg",
+        "ms": 300,
+        "pose": "notice",
+        "expr": "surprised",
+        "caption": "Notices"
+      },
+      {
+        "frame": 3,
+        "file": "03-ducks-down.svg",
+        "ms": 200,
+        "pose": "dive",
+        "expr": "squint",
+        "caption": "Ducks down"
+      },
+      {
+        "frame": 4,
+        "file": "04-only-the-sprout-shows.svg",
+        "ms": 1200,
+        "pose": "hide",
+        "expr": "neutral",
+        "caption": "Only the sprout shows"
+      }
+    ]
+  },
+  {
+    "animation": "Eye tracking",
+    "folder": "animations/10-eye-tracking",
+    "trigger": "cursor within about 200 px",
+    "note": "Continuous rather than frame-based: pupils follow the cursor, clamped to ±2.2 units, with a short lag so it feels alive.",
+    "frames": [
+      {
+        "frame": 1,
+        "file": "01-left.svg",
+        "ms": 400,
+        "pose": "stand",
+        "expr": "neutral",
+        "caption": "Left"
+      },
+      {
+        "frame": 2,
+        "file": "02-up-left.svg",
+        "ms": 400,
+        "pose": "stand",
+        "expr": "neutral",
+        "caption": "Up-left"
+      },
+      {
+        "frame": 3,
+        "file": "03-up.svg",
+        "ms": 400,
+        "pose": "stand",
+        "expr": "neutral",
+        "caption": "Up"
+      },
+      {
+        "frame": 4,
+        "file": "04-up-right.svg",
+        "ms": 400,
+        "pose": "stand",
+        "expr": "neutral",
+        "caption": "Up-right"
+      },
+      {
+        "frame": 5,
+        "file": "05-right.svg",
+        "ms": 400,
+        "pose": "stand",
+        "expr": "neutral",
+        "caption": "Right"
+      },
+      {
+        "frame": 6,
+        "file": "06-down.svg",
+        "ms": 400,
+        "pose": "stand",
+        "expr": "neutral",
+        "caption": "Down"
+      }
+    ]
+  }
+]

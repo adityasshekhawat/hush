@@ -1,0 +1,71 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 146" width="320" height="292">
+<title>Hush — doze</title><g id="fx-back">
+<g fill="none" stroke="#2D2A35" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" opacity="0.6" id="fx-zzz">
+<path d="M116 34 H125 L116 43 H125"/>
+<path d="M132 16 H138 L132 22 H138"/>
+</g>
+</g>
+
+<g>
+<g transform="translate(20 8)" id="character">
+<g transform="rotate(5 60 134)" id="pose-root">
+
+<g stroke="#2D2A35" stroke-linecap="round" stroke-linejoin="round" id="topper">
+<g transform="translate(60 52) scale(1)" id="topper-leaf">
+<path d="M0 3 Q-1 -5 1 -11" fill="none" stroke-width="2.6"/>
+<path d="M1 -10 C5 -19 15 -21 18 -15 C13 -8 6 -7 1 -10 Z" fill="#E8876A" stroke-width="2.2"/>
+<path d="M0 -7 C-4 -13 -11 -14 -13 -9 C-9 -5 -4 -5 0 -7 Z" fill="#E8876A" stroke-width="2.2"/>
+</g>
+</g>
+
+<g id="body">
+<path d="M40 52 L80 52 C96 52 102 58 102 74 L102 112 C102 124 96 128 84 128 L36 128 C24 128 18 124 18 112 L18 74 C18 58 24 52 40 52 Z" fill="#F4D9A6" stroke="#2D2A35" stroke-width="3.2" stroke-linejoin="round"/>
+<ellipse cx="60" cy="116" rx="25" ry="8" fill="#FFF5E1" id="belly"/>
+</g>
+
+<g fill="#F4D9A6" stroke="#2D2A35" stroke-width="2.8" id="legs-front-seated">
+<ellipse cx="45" cy="129" rx="9" ry="5.5"/>
+<ellipse cx="75" cy="129" rx="9" ry="5.5"/>
+</g>
+<g stroke="#2D2A35" stroke-linejoin="round" stroke-linecap="round" id="accessory">
+</g>
+
+<g transform="translate(60 84)" id="face">
+<g fill="#E8876A" opacity="0.5" id="blush">
+<ellipse cx="-22" cy="7" rx="4.2" ry="2.3"/>
+<ellipse cx="22" cy="7" rx="4.2" ry="2.3"/>
+</g>
+<g id="eyes">
+<g fill="none" stroke="#2D2A35" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" id="eyes-drawn">
+<path d="M-21 0 Q-16 4.5 -11 0"/>
+<path d="M11 0 Q16 4.5 21 0"/>
+</g>
+</g>
+<g transform="translate(0 11)" stroke="#2D2A35" stroke-linecap="round" stroke-linejoin="round" id="mouth">
+<circle cx="0" cy="1" r="1.7" fill="none" stroke-width="1.8" id="mouth-small-o"/>
+</g>
+</g>
+
+<g stroke-linecap="round" id="arms">
+<g id="arm-l">
+<line x1="24" y1="108" x2="48" y2="116" stroke="#2D2A35" stroke-width="11.5"/>
+<line x1="24" y1="108" x2="48" y2="116" stroke="#F4D9A6" stroke-width="6.5"/>
+</g>
+<g id="arm-r">
+<line x1="96" y1="108" x2="72" y2="116" stroke="#2D2A35" stroke-width="11.5"/>
+<line x1="96" y1="108" x2="72" y2="116" stroke="#F4D9A6" stroke-width="6.5"/>
+</g>
+</g>
+
+<g stroke="#2D2A35" stroke-linejoin="round" stroke-linecap="round" id="props-held">
+</g>
+
+<g stroke="#2D2A35" stroke-linecap="round" stroke-linejoin="round" id="fx-character">
+</g>
+
+</g>
+</g>
+</g>
+
+</svg>

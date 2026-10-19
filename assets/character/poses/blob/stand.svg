@@ -1,0 +1,72 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 146" width="320" height="292">
+<title>Hush — stand</title><g id="fx-back">
+</g>
+
+<g>
+<g transform="translate(20 2)" id="character">
+<g transform="rotate(0 60 134)" id="pose-root">
+
+<g stroke-linecap="round" id="legs-back">
+<line x1="50" y1="124" x2="50" y2="134" stroke="#2D2A35" stroke-width="12" id="leg-l"/>
+<line x1="50" y1="124" x2="50" y2="134" stroke="#F4D9A6" stroke-width="7"/>
+<line x1="70" y1="124" x2="70" y2="134" stroke="#2D2A35" stroke-width="12" id="leg-r"/>
+<line x1="70" y1="124" x2="70" y2="134" stroke="#F4D9A6" stroke-width="7"/>
+</g>
+
+<g stroke="#2D2A35" stroke-linecap="round" stroke-linejoin="round" id="topper">
+<g transform="translate(60 44) scale(1)" id="topper-leaf">
+<path d="M0 3 Q-1 -5 1 -11" fill="none" stroke-width="2.6"/>
+<path d="M1 -10 C5 -19 15 -21 18 -15 C13 -8 6 -7 1 -10 Z" fill="#E8876A" stroke-width="2.2"/>
+<path d="M0 -7 C-4 -13 -11 -14 -13 -9 C-9 -5 -4 -5 0 -7 Z" fill="#E8876A" stroke-width="2.2"/>
+</g>
+</g>
+
+<g id="body">
+<path d="M60 44 C88 44 102 64 102 90 C102 116 86 128 60 128 C34 128 18 116 18 90 C18 64 32 44 60 44 Z" fill="#F4D9A6" stroke="#2D2A35" stroke-width="3.2" stroke-linejoin="round"/>
+<ellipse cx="60" cy="113" rx="23" ry="12" fill="#FFF5E1" id="belly"/>
+</g>
+
+<g stroke="#2D2A35" stroke-linejoin="round" stroke-linecap="round" id="accessory">
+</g>
+
+<g transform="translate(60 80)" id="face">
+<g fill="#E8876A" opacity="0.5" id="blush">
+<ellipse cx="-21" cy="7" rx="4.2" ry="2.3"/>
+<ellipse cx="21" cy="7" rx="4.2" ry="2.3"/>
+</g>
+<g id="eyes">
+<g id="eyes-open">
+<ellipse cx="-15" cy="0" rx="5.2" ry="5.2" fill="#2D2A35"/>
+<ellipse cx="15" cy="0" rx="5.2" ry="5.2" fill="#2D2A35"/>
+<circle cx="-16.66" cy="-1.87" r="1.87" fill="#FFFFFF"/>
+<circle cx="13.34" cy="-1.87" r="1.87" fill="#FFFFFF"/>
+</g>
+</g>
+<g transform="translate(0 11)" stroke="#2D2A35" stroke-linecap="round" stroke-linejoin="round" id="mouth">
+<path d="M-3.2 0 Q0 2.8 3.2 0" fill="none" stroke-width="2" id="mouth-line"/>
+</g>
+</g>
+
+<g stroke-linecap="round" id="arms">
+<g id="arm-l">
+<line x1="24" y1="104" x2="17" y2="119" stroke="#2D2A35" stroke-width="11.5"/>
+<line x1="24" y1="104" x2="17" y2="119" stroke="#F4D9A6" stroke-width="6.5"/>
+</g>
+<g id="arm-r">
+<line x1="96" y1="104" x2="103" y2="119" stroke="#2D2A35" stroke-width="11.5"/>
+<line x1="96" y1="104" x2="103" y2="119" stroke="#F4D9A6" stroke-width="6.5"/>
+</g>
+</g>
+
+<g stroke="#2D2A35" stroke-linejoin="round" stroke-linecap="round" id="props-held">
+</g>
+
+<g stroke="#2D2A35" stroke-linecap="round" stroke-linejoin="round" id="fx-character">
+</g>
+
+</g>
+</g>
+</g>
+
+</svg>

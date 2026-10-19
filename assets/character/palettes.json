@@ -1,0 +1,56 @@
+{
+  "oat": {
+    "body": "#F4D9A6",
+    "belly": "#FFF5E1",
+    "accent": "#E8876A",
+    "cheek": "#E8876A"
+  },
+  "mint": {
+    "body": "#C6E8D2",
+    "belly": "#F0FAF3",
+    "accent": "#2F8F6B",
+    "cheek": "#EF9C8A"
+  },
+  "lilac": {
+    "body": "#DCD0F4",
+    "belly": "#F6F1FF",
+    "accent": "#8A63D2",
+    "cheek": "#EC9BB8"
+  },
+  "sky": {
+    "body": "#C3DFF6",
+    "belly": "#EEF7FF",
+    "accent": "#3B7CC8",
+    "cheek": "#F0A0A0"
+  },
+  "rose": {
+    "body": "#F7CDC6",
+    "belly": "#FFF1EC",
+    "accent": "#D2504A",
+    "cheek": "#E57E77"
+  },
+  "peach": {
+    "body": "#F7C6A3",
+    "belly": "#FFF1E6",
+    "accent": "#D9694A",
+    "cheek": "#D9694A"
+  },
+  "matcha": {
+    "body": "#CFDDA6",
+    "belly": "#F4F8E8",
+    "accent": "#6E8F3A",
+    "cheek": "#6E8F3A"
+  },
+  "butter": {
+    "body": "#F6E39A",
+    "belly": "#FFFBE8",
+    "accent": "#D08A2E",
+    "cheek": "#D08A2E"
+  },
+  "berry": {
+    "body": "#DDB0D6",
+    "belly": "#F9EEF7",
+    "accent": "#9C4B8C",
+    "cheek": "#9C4B8C"
+  }
+}

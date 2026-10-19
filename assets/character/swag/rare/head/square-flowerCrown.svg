@@ -1,0 +1,88 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 146" width="320" height="292">
+<title>Hush — square-flowerCrown</title><g id="fx-back">
+</g>
+
+<g>
+<g transform="translate(20 2)" id="character">
+<g transform="rotate(0 60 134)" id="pose-root">
+
+<g stroke-linecap="round" id="legs-back">
+<line x1="50" y1="124" x2="50" y2="134" stroke="#2D2A35" stroke-width="12" id="leg-l"/>
+<line x1="50" y1="124" x2="50" y2="134" stroke="#F4D9A6" stroke-width="7"/>
+<line x1="70" y1="124" x2="70" y2="134" stroke="#2D2A35" stroke-width="12" id="leg-r"/>
+<line x1="70" y1="124" x2="70" y2="134" stroke="#F4D9A6" stroke-width="7"/>
+</g>
+
+<g stroke="#2D2A35" stroke-linecap="round" stroke-linejoin="round" id="topper">
+</g>
+
+<g id="body">
+<path d="M40 52 L80 52 C96 52 102 58 102 74 L102 112 C102 124 96 128 84 128 L36 128 C24 128 18 124 18 112 L18 74 C18 58 24 52 40 52 Z" fill="#F4D9A6" stroke="#2D2A35" stroke-width="3.2" stroke-linejoin="round"/>
+<ellipse cx="60" cy="116" rx="25" ry="8" fill="#FFF5E1" id="belly"/>
+</g>
+
+<g stroke="#2D2A35" stroke-linejoin="round" stroke-linecap="round" id="accessory">
+<g transform="translate(60 52)" id="rare-flower-crown">
+<path d="M-41 9 Q0 2 41 9" fill="none" stroke-width="4.6"/>
+<path d="M-41 9 Q0 2 41 9" fill="none" stroke="#7DB37A" stroke-width="2.4"/>
+<path transform="translate(-12.3 5.6) rotate(-20)" d="M0 0 C3 -4 8 -4 9 -1 C6 2 2 2 0 0 Z" fill="#7DB37A" stroke-width="1.4"/>
+<path transform="translate(12.3 5.6) rotate(20)" d="M0 0 C-3 -4 -8 -4 -9 -1 C-6 2 -2 2 0 0 Z" fill="#7DB37A" stroke-width="1.4"/>
+<g transform="translate(-25.42 6)">
+<g fill="#2D2A35" stroke-width="2.8"><circle cx="0" cy="-2.7" r="2.4"/><circle cx="2.6" cy="-0.8" r="2.4"/><circle cx="1.6" cy="2.2" r="2.4"/><circle cx="-1.6" cy="2.2" r="2.4"/><circle cx="-2.6" cy="-0.8" r="2.4"/></g>
+<g fill="#FFFDF7" stroke="none"><circle cx="0" cy="-2.7" r="2.4"/><circle cx="2.6" cy="-0.8" r="2.4"/><circle cx="1.6" cy="2.2" r="2.4"/><circle cx="-1.6" cy="2.2" r="2.4"/><circle cx="-2.6" cy="-0.8" r="2.4"/></g>
+<circle cx="0" cy="0" r="1.5" fill="#E9B949" stroke="none"/>
+</g>
+<g transform="translate(0 4.6)">
+<g fill="#2D2A35" stroke-width="2.8"><circle cx="0" cy="-3" r="2.7"/><circle cx="2.9" cy="-0.9" r="2.7"/><circle cx="1.8" cy="2.4" r="2.7"/><circle cx="-1.8" cy="2.4" r="2.7"/><circle cx="-2.9" cy="-0.9" r="2.7"/></g>
+<g fill="#F3A6B8" stroke="none"><circle cx="0" cy="-3" r="2.7"/><circle cx="2.9" cy="-0.9" r="2.7"/><circle cx="1.8" cy="2.4" r="2.7"/><circle cx="-1.8" cy="2.4" r="2.7"/><circle cx="-2.9" cy="-0.9" r="2.7"/></g>
+<circle cx="0" cy="0" r="1.7" fill="#E9B949" stroke="none"/>
+</g>
+<g transform="translate(25.42 6)">
+<g fill="#2D2A35" stroke-width="2.8"><circle cx="0" cy="-2.7" r="2.4"/><circle cx="2.6" cy="-0.8" r="2.4"/><circle cx="1.6" cy="2.2" r="2.4"/><circle cx="-1.6" cy="2.2" r="2.4"/><circle cx="-2.6" cy="-0.8" r="2.4"/></g>
+<g fill="#FFF5E1" stroke="none"><circle cx="0" cy="-2.7" r="2.4"/><circle cx="2.6" cy="-0.8" r="2.4"/><circle cx="1.6" cy="2.2" r="2.4"/><circle cx="-1.6" cy="2.2" r="2.4"/><circle cx="-2.6" cy="-0.8" r="2.4"/></g>
+<circle cx="0" cy="0" r="1.5" fill="#E8876A" stroke="none"/>
+</g>
+</g>
+</g>
+
+<g transform="translate(60 84)" id="face">
+<g fill="#E8876A" opacity="0.5" id="blush">
+<ellipse cx="-22" cy="7" rx="4.2" ry="2.3"/>
+<ellipse cx="22" cy="7" rx="4.2" ry="2.3"/>
+</g>
+<g id="eyes">
+<g id="eyes-open">
+<ellipse cx="-16" cy="0" rx="5.2" ry="5.2" fill="#2D2A35"/>
+<ellipse cx="16" cy="0" rx="5.2" ry="5.2" fill="#2D2A35"/>
+<circle cx="-17.66" cy="-1.87" r="1.87" fill="#FFFFFF"/>
+<circle cx="14.34" cy="-1.87" r="1.87" fill="#FFFFFF"/>
+</g>
+</g>
+<g transform="translate(0 11)" stroke="#2D2A35" stroke-linecap="round" stroke-linejoin="round" id="mouth">
+<path d="M-3.2 0 Q0 2.8 3.2 0" fill="none" stroke-width="2" id="mouth-line"/>
+</g>
+</g>
+
+<g stroke-linecap="round" id="arms">
+<g id="arm-l">
+<line x1="24" y1="108" x2="17" y2="123" stroke="#2D2A35" stroke-width="11.5"/>
+<line x1="24" y1="108" x2="17" y2="123" stroke="#F4D9A6" stroke-width="6.5"/>
+</g>
+<g id="arm-r">
+<line x1="96" y1="108" x2="103" y2="123" stroke="#2D2A35" stroke-width="11.5"/>
+<line x1="96" y1="108" x2="103" y2="123" stroke="#F4D9A6" stroke-width="6.5"/>
+</g>
+</g>
+
+<g stroke="#2D2A35" stroke-linejoin="round" stroke-linecap="round" id="props-held">
+</g>
+
+<g stroke="#2D2A35" stroke-linecap="round" stroke-linejoin="round" id="fx-character">
+</g>
+
+</g>
+</g>
+</g>
+
+</svg>
