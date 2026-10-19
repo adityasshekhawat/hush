@@ -98,6 +98,12 @@ extension AppController {
             if !commandPanel.isOpen { toggleCommandBox(); commandPanel.keepOpenForPreview = true }
             commandPanel.model.text = text == "-" ? "" : text
         case ("boxtab", _): commandPanel.model.tab()
+        case ("pause", let l): pause(PauseLength(rawValue: l) ?? .hour)
+        case ("resume", _): resume()
+        case ("saver", let v):
+            // saver:on|off: act as if Low Power Mode were on, for measuring (ADR-022).
+            defaults.set(v == "on", forKey: "HushForceSaver")
+            applyEnergy()
         case ("pouch", let v):
             // pouch:simpler|shorter|bullets: pick a verb as if from the chips (needs full cheeks and consent).
             if let verb = PouchVerb(rawValue: v) { pouch.debugPick(verb) }

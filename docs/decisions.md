@@ -362,3 +362,29 @@ with these decisions, made for the user and for open source. Each was weighed ag
   Developer account.
 - **Art:** the spec's props (flags, door, pocket watch, satchel, bin, journal, blind) come from `docs/v1-art-brief.md`;
   behaviour ships first with existing props as placeholders.
+
+## ADR-022 · Never in the way, and cheap: pause, the hush key, energy saver, off-screen means off (2026-10-19)
+
+Milestone 1 of the v1 spec (ADR-021, features 4 and 5).
+- **Pause** 15 minutes, 1 hour or until tomorrow (08:00; in the small hours, this morning) from the menu bar panel.
+  `UserFocus.paused` hides Hush like a call does: things queue and show when the pause ends; a meeting that already
+  started is dropped as stale. The end time survives a relaunch; the menu bar glyph sleeps and the panel says
+  "Paused until 15:30". Pure parts (`PauseLength`, `PauseText`) are tested.
+- **⌥⇧⌘H, the hush key:** puts away whatever Hush is showing (the appearance counts as ignored, not shooed, so it
+  doesn't lower that sender); with nothing showing it pauses for an hour; paused, it brings Hush back. ⌘⇧H stays
+  Ask Hush. `GlobalHotKey` now installs one Carbon handler for every hotkey (a second handler failed to install).
+- **Locked or asleep** (`com.apple.screenIsLocked`, `screensDidSleep`, no polling) hides Hush; **off screen means
+  off:** while paused, locked or in a call, the pointer timer and the play sensors (clipboard, windows, screenshots)
+  stop and restart fresh.
+- **Energy saver** in Low Power Mode or under 20 % battery: the renderer stays calm (no looping animation, no idle
+  fidgets), pointer checks run at half rate. Alerts and reactions still play. Plain battery power doesn't trigger
+  it: idle cost is already near the floor, and Hush shouldn't feel lifeless on every laptop away from a charger.
+  This deviates from the spec's "on battery".
+- **Tapping on the glass** knocks in two-knock bursts every 6 s instead of a constant loop (12.7 % → 5.8 % CPU).
+- **Click-through:** near Hush, a global mouse-moved monitor (no permission) flips click-through on every move instead
+  of at the next 5 Hz poll, so a click just beside Hush isn't swallowed; it's installed only while the cursor is
+  within reach. Not measured with real clicks.
+- Measured in docs/performance.md with `scripts/measure.sh`; the numbers were taken during use and are upper bounds.
+
+**Not done from the spec's features 4 and 5:** configurable auto-retreat, a debug overlay for frame rate, and the
+blind / sign / sleeping-cap art (docs/v1-art-brief.md, priority 1).

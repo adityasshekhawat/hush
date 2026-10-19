@@ -75,24 +75,31 @@ public final class PlaySensors {
     private var onAC: Bool?
     private var batteryLow = false
     private let shotQuery = NSMetadataQuery()
+    private var shotObserver: Any?
 
     public init() {}
 
+    /// Safe to call again after `stop()` (Hush suspends its sensors while paused, locked or in a call).
     public func start() {
+        guard timer == nil else { return }
+        changeCount = NSPasteboard.general.changeCount   // copies made while suspended don't count
         timer = Timer.scheduledTimer(withTimeInterval: 0.25, repeats: true) { [weak self] _ in
             MainActor.assumeIsolated { self?.tick() }
         }
         timer?.tolerance = 0.05
         startScreenshotQuery()
         checkPower()
-        appObserver = NSWorkspace.shared.notificationCenter.addObserver(
+        if appObserver == nil { appObserver = NSWorkspace.shared.notificationCenter.addObserver(
             forName: NSWorkspace.didActivateApplicationNotification, object: nil, queue: .main) { [weak self] _ in
             MainActor.assumeIsolated { self?.lastAppSwitch = ProcessInfo.processInfo.systemUptime }
-        }
+        } }
     }
 
     public func stop() {
         timer?.invalidate()
+        timer = nil
+        pasteTimer?.invalidate()
+        pasteTimer = nil
         shotQuery.stop()
     }
 
@@ -241,10 +248,12 @@ public final class PlaySensors {
         shotQuery.predicate = NSPredicate(format: "kMDItemIsScreenCapture = 1 AND kMDItemContentCreationDate >= %@",
                                           Date() as NSDate)
         shotQuery.searchScopes = [NSMetadataQueryUserHomeScope]
-        NotificationCenter.default.addObserver(forName: .NSMetadataQueryDidUpdate, object: shotQuery, queue: .main) { [weak self] n in
-            let added = (n.userInfo?[NSMetadataQueryUpdateAddedItemsKey] as? [Any])?.count ?? 0
-            guard added > 0 else { return }
-            MainActor.assumeIsolated { self?.screenshotTaken() }
+        if shotObserver == nil {
+            shotObserver = NotificationCenter.default.addObserver(forName: .NSMetadataQueryDidUpdate, object: shotQuery, queue: .main) { [weak self] n in
+                let added = (n.userInfo?[NSMetadataQueryUpdateAddedItemsKey] as? [Any])?.count ?? 0
+                guard added > 0 else { return }
+                MainActor.assumeIsolated { self?.screenshotTaken() }
+            }
         }
         shotQuery.start()
     }

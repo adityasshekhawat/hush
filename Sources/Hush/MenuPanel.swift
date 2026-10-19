@@ -24,6 +24,8 @@ struct MenuPanelActions {
     var history: () -> Void
     var sessions: () -> Void
     var settings: (SettingsSection) -> Void
+    var pause: (PauseLength) -> Void
+    var resume: () -> Void
     var quit: () -> Void
 }
 
@@ -61,6 +63,7 @@ struct MenuPanelView: View {
                 Text(line).font(HushFont.footer).foregroundStyle(.tertiary)
             }
             quickButtons
+            pauseRow
             Divider()
             VStack(spacing: 6) {
                 ForEach(settings.connections) { c in ConnectionRow(model: settings, c: c) }
@@ -122,6 +125,26 @@ struct MenuPanelView: View {
                 Button("Setup: \(settings.setupLeft.count) left") { actions.settings(.setup) }.buttonStyle(HushPill(kind: .secondary))
             }
         }
+    }
+
+    /// One action to take Hush away (ADR-022). ⌥⇧⌘H does the same.
+    private var pauseRow: some View {
+        HStack(spacing: 6) {
+            if settings.app.pausedUntil != nil {
+                Image(systemName: "pause.circle.fill").foregroundStyle(.secondary)
+                Text(settings.statusWord).font(HushFont.footer).foregroundStyle(.secondary)
+                Spacer()
+                Button("Resume", action: actions.resume).buttonStyle(HushPill(kind: .primary, height: 24))
+            } else {
+                Text("Pause").font(HushFont.footer).foregroundStyle(.secondary)
+                ForEach(PauseLength.allCases, id: \.self) { l in
+                    Button(l == .untilTomorrow ? "Tomorrow" : l.title) { actions.pause(l) }
+                        .buttonStyle(HushPill(kind: .secondary, height: 24))
+                }
+                Spacer()
+            }
+        }
+        .help("⌥⇧⌘H puts away what I'm showing, or pauses me for an hour")
     }
 
     private var developer: some View {
@@ -200,7 +223,7 @@ final class MenuPanel {
         p.level = .popUpMenu
         p.collectionBehavior = [.canJoinAllSpaces, .fullScreenAuxiliary, .ignoresCycle]
         p.hidesOnDeactivate = false
-        let a = actions ?? .init(showHeld: {}, openCard: {}, digest: {}, history: {}, sessions: {}, settings: { _ in }, quit: {})
+        let a = actions ?? .init(showHeld: {}, openCard: {}, digest: {}, history: {}, sessions: {}, settings: { _ in }, pause: { _ in }, resume: {}, quit: {})
         let wrapped = MenuPanelActions(
             showHeld: { [weak self] in self?.close(); a.showHeld() },
             openCard: { [weak self] in self?.close(); a.openCard() },
@@ -208,6 +231,8 @@ final class MenuPanel {
             history: { [weak self] in self?.close(); a.history() },
             sessions: { [weak self] in self?.close(); a.sessions() },
             settings: { [weak self] s in self?.close(); a.settings(s) },
+            pause: { [weak self] l in self?.close(); a.pause(l) },
+            resume: { [weak self] in self?.close(); a.resume() },
             quit: a.quit)
         let view = MenuPanelView(model: model, settings: settings, actions: wrapped)
             .padding(.horizontal, HushSpace.cardH).padding(.vertical, HushSpace.cardV)

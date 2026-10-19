@@ -40,6 +40,8 @@ enum Reaction {
     case commandWindow
     /// Crouch and spring up (hopping onto a window).
     case jump
+    /// Energy saver (Low Power Mode, low battery): always calm, no idle fidgets (ADR-022).
+    case saver(Bool)
     /// Window ordered in/out (calls): pause all animation while it's gone.
     case visible(Bool)
     case debugCalm(String)

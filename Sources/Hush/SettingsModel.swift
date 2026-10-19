@@ -195,6 +195,7 @@ final class SettingsModel: ObservableObject {
 
     var statusWord: String {
         if app.waiting.count > 0 { return app.waiting.count == 1 ? "Holding 1 thing" : "Holding \(app.waiting.count) things" }
+        if let until = app.pausedUntil { return PauseText.status(until: until, now: Date()) }
         if app.focus.state.hidesCharacter { return "In focus" }
         if app.settings.quietHours?.contains(Date(), calendar: .current) == true { return "Asleep" }
         if agentWorking { return "Claude is working" }

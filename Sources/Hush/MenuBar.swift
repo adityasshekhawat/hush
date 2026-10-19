@@ -46,6 +46,8 @@ final class MenuBar: NSObject {
             history: { [weak app] in app?.ask.showHistory() },
             sessions: { [weak app] in app?.ask.showSessions() },
             settings: { [weak self] s in self?.settingsWindow.show(s) },
+            pause: { [weak app] l in app?.pause(l) },
+            resume: { [weak app] in app?.resume() },
             quit: { NSApp.terminate(nil) })
         app.onWaitingChange = { [weak self] n in self?.setHolding(count: n) }
         app.onRefresh = { [weak self] in self.map { $0.setHolding(count: $0.waitingCount) } }
@@ -67,8 +69,9 @@ final class MenuBar: NSObject {
         let tuckedIn = (app.defaults.object(forKey: "lastTuckIn") as? Date).map { Calendar.current.isDate($0, inSameDayAs: now) } ?? false
         let badge = MenuBarBadge(waiting: count, showCount: showsCount,
                                  meetingWaiting: app.waiting.contains { $0.item.kind == .meeting },
-                                 focused: app.focus.state.hidesCharacter,
-                                 asleep: (app.settings.quietHours?.contains(now, calendar: .current) ?? false) || tuckedIn)
+                                 focused: app.focus.state.hidesCharacter && !app.focus.state.paused,
+                                 asleep: (app.settings.quietHours?.contains(now, calendar: .current) ?? false) || tuckedIn
+                                    || app.focus.state.paused)
         guard badge != shown, let button = item.button else { return }
         shown = badge
         button.image = glyphs[badge.glyph]

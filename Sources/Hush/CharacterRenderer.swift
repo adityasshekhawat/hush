@@ -137,6 +137,7 @@ final class WebCharacterRenderer: NSObject, CharacterRenderer, WKScriptMessageHa
         case .cheeks: js("hush.cheeks()")
         case .blow: js("hush.blow()")
         case .chew(let on): js("hush.chew(\(on))")
+        case .saver(let on): js("hush.setSaver(\(on))")
         case .askPat(let a): js("hush.askPat('\(a.rawValue)')")
         case .proud: js("hush.proud()")
         case .rareFirst(let id): js("hush.rareFirst('\(id)')")

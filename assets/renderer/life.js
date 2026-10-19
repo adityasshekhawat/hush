@@ -145,7 +145,7 @@ function lookAround() {
 }
 function fidgetLoop() {
   setTimeout(() => {
-    const quiet = !live.hovered && !live.pressed && !live.lifted && !live.seq && !live.mode && now() - live.pointerMovedAt > 2500
+    const quiet = !live.hovered && !live.pressed && !live.lifted && !live.seq && !live.mode && !live.saver && now() - live.pointerMovedAt > 2500
       && !el.classList.contains("hidden");
     if (quiet && !reduced) {
       const yawny = live.modes.has("late") || live.modes.has("droopy");

@@ -30,7 +30,8 @@ html, body { margin: 0; height: 100%; background: transparent; overflow: hidden;
 
 #hush.st-hurry #life { animation: run .32s steps(4, jump-none) infinite; }
 @keyframes run { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-4px); } }
-#hush.st-tap #life { animation: tapbody .6s steps(6, jump-none) infinite; }
+/* Knocks come in bursts (two knocks, then still), not a constant loop: about a quarter of the cost (ADR-022). */
+#hush.st-tap.knock #life { animation: tapbody .6s steps(6, jump-none) 2; }
 @keyframes tapbody { 0%, 100% { transform: translateX(0); } 30% { transform: translateX(3px) rotate(2deg); } }
 #hush.asking[class] #life { animation: ask 1.8s steps(12, jump-none) infinite; }
 @keyframes ask { 0%, 100% { transform: rotate(-4deg); } 50% { transform: rotate(4deg); } }
@@ -40,7 +41,7 @@ html, body { margin: 0; height: 100%; background: transparent; overflow: hidden;
 #fx-speed-lines line:nth-child(2) { animation-delay: .15s; }
 #fx-speed-lines line:nth-child(3) { animation-delay: .3s; }
 @keyframes speed { 0% { transform: translateX(8px); opacity: .2; } 50% { opacity: 1; } 100% { transform: translateX(-8px); opacity: .1; } }
-#fx-tap-marks:not([opacity="0"]) { animation: tapfx .6s steps(6, jump-none) infinite; transform-box: fill-box; transform-origin: 0% 50%; }
+#hush.knock #fx-tap-marks:not([opacity="0"]) { animation: tapfx .6s steps(6, jump-none) 2; transform-box: fill-box; transform-origin: 0% 50%; }
 @keyframes tapfx { 0% { transform: scale(.75); opacity: .2; } 35% { transform: scale(1.12); opacity: 1; } 100% { transform: scale(1); opacity: .35; } }
 #fx-dizzy-stars:not([opacity="0"]) > * { animation: orbit 1.2s steps(12, jump-none) infinite; transform-box: view-box; transform-origin: 0 4px; }
 @keyframes orbit { from { transform: rotate(0); } to { transform: rotate(360deg); } }

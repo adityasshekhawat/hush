@@ -60,6 +60,17 @@ extension AppController {
     }
 
     func focusChanged(_ f: UserFocus) {
+        // Locked, paused or in a call: Hush is off screen, so stop following the pointer and sensing (ADR-022).
+        let offScreen = f.locked || f.paused || f.inCall
+        antics.setSuspended(offScreen)
+        if offScreen {
+            pointerTimer?.invalidate()
+            pointerTimer = nil
+            watchPointerClosely(false)
+        } else if pointerTimer == nil {
+            schedulePointerTimer(fast: false)
+        }
+        onRefresh?()
         antics.focusChanged(f)
         digest?.focusChanged(away: f.away)
         Task {

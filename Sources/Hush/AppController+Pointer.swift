@@ -11,7 +11,9 @@ extension AppController {
         guard fast != pointerFast || pointerTimer == nil else { return }
         pointerFast = fast
         pointerTimer?.invalidate()
-        let t = Timer(timeInterval: fast ? 1.0 / 20 : 1.0 / 5, repeats: true) { [weak self] _ in
+        // Energy saver halves both rates (ADR-022).
+        let hz: Double = (fast ? 20 : 5) / (energySaver ? 2 : 1)
+        let t = Timer(timeInterval: 1 / hz, repeats: true) { [weak self] _ in
             MainActor.assumeIsolated { self?.trackPointer() }
         }
         t.tolerance = fast ? 0.004 : 0.05
@@ -35,6 +37,7 @@ extension AppController {
         let near = hypot(m.x - f.midX, m.y - f.midY) < Self.pointerReach
         if near || pointerWasNear { renderer.pointer(at: local) }
         pointerWasNear = near
+        watchPointerClosely(near)
         if pointerFast { antics.pointer(x: m.x) }
         let over = characterBounds.contains(local)
         // Keep receiving events for the whole gesture, even if the pointer outruns the character.

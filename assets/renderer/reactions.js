@@ -221,6 +221,15 @@ setInterval(() => {
     live.handNap = true; refresh();
   }
 }, 2000);
+// Tapping on the glass (ADR-022): a two-knock burst every 6 s while the state lasts, still in between.
+let knockTimer = null;
+function knockBursts() {
+  clearTimeout(knockTimer);
+  if (s.state !== "07-tap") { el.classList.remove("knock"); return; }
+  el.classList.remove("knock"); void el.offsetWidth;   // restart the two-iteration animation
+  el.classList.add("knock");
+  knockTimer = setTimeout(knockBursts, 6000);
+}
 function wakeFromHandNap() { if (!live.handNap) return; live.handNap = false; lockFace("surprised", 600); shiver(); }
 
 window.hush = {
@@ -229,6 +238,7 @@ window.hush = {
     const prev = s.state, prevDuck = s.duck;
     if (prev !== k) markActive("state " + k);
     s.state = k; s.duck = !!(o && o.duck);
+    if (prev !== k && (k === "07-tap" || prev === "07-tap")) knockBursts();
     if (k === "09-hide" && !s.duck && (prev !== k || prevDuck)) { focusDive(); return; }
     if (!isEdgeState()) live.risen = false;
     if (live.lifted || live.seq) return;  // applied when the lift / sequence ends
@@ -285,6 +295,8 @@ window.hush = {
     if (live.alwaysCalm) el.classList.add("calm");
   },
   setVisible(on) { el.classList.toggle("hidden", !on); if (on) markActive(); },
+  // Energy saver (ADR-022): always calm, no idle fidgets. Reactions and alerts still play.
+  setSaver(on) { live.saver = on; live.alwaysCalm = on; if (on) el.classList.add("calm"); post({ type: "log", message: "saver " + on }); },
 };
 refresh();
 blinkLoop();

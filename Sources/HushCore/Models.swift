@@ -104,20 +104,26 @@ public struct UserFocus: Sendable, Equatable {
     public var typing: Bool
     /// No keyboard or mouse input for a while: the only time Hush dozes off.
     public var away: Bool
+    /// You paused Hush (menu bar or ⌥⇧⌘H): gone until the pause ends, things queue (ADR-022).
+    public var paused: Bool
+    /// The screen is locked or asleep: nothing to show, so nothing renders.
+    public var locked: Bool
 
     public init(inCall: Bool = false, screenSharing: Bool = false, fullScreen: Bool = false, typing: Bool = false,
-                away: Bool = false) {
+                away: Bool = false, paused: Bool = false, locked: Bool = false) {
         self.inCall = inCall
         self.screenSharing = screenSharing
         self.fullScreen = fullScreen
         self.typing = typing
         self.away = away
+        self.paused = paused
+        self.locked = locked
     }
 
     public static let idle = UserFocus()
 
     /// Hidden entirely: calls, screen shares, full-screen work.
-    public var hidesCharacter: Bool { inCall || screenSharing || fullScreen }
+    public var hidesCharacter: Bool { inCall || screenSharing || fullScreen || paused || locked }
     /// Anything that should hold back a gentle or interrupt appearance.
     public var isBusy: Bool { hidesCharacter || typing }
 }

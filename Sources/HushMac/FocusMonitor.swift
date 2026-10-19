@@ -27,6 +27,16 @@ public final class FocusMonitor {
     /// No input of any kind for this long → away (Hush may doze).
     public var awayAfter: TimeInterval = 5 * 60
 
+    /// You paused Hush until then (ADR-022). Cleared here when it passes, then `onPauseEnded` fires.
+    public var pausedUntil: Date? {
+        didSet { refresh() }
+    }
+    public var onPauseEnded: (() -> Void)?
+    /// Screen locked or displays asleep (system notifications, no polling).
+    private var screenLocked = false
+    private var displaysAsleep = false
+    private var lockObservers: [(NotificationCenter, NSObjectProtocol)] = []
+
     private var streakStart: Date?
 
     private var timer: Timer?
@@ -43,6 +53,24 @@ public final class FocusMonitor {
         ) { [weak self] _ in
             MainActor.assumeIsolated { self?.refresh() }
         }
+        let dnc = DistributedNotificationCenter.default()
+        let ws = NSWorkspace.shared.notificationCenter
+        let watch: [(NotificationCenter, String, @MainActor (FocusMonitor) -> Void)] = [
+            (dnc, "com.apple.screenIsLocked", { $0.screenLocked = true }),
+            (dnc, "com.apple.screenIsUnlocked", { $0.screenLocked = false }),
+            (ws, NSWorkspace.screensDidSleepNotification.rawValue, { $0.displaysAsleep = true }),
+            (ws, NSWorkspace.screensDidWakeNotification.rawValue, { $0.displaysAsleep = false }),
+        ]
+        for (center, name, apply) in watch {
+            let o = center.addObserver(forName: Notification.Name(name), object: nil, queue: .main) { [weak self] _ in
+                MainActor.assumeIsolated {
+                    guard let self else { return }
+                    apply(self)
+                    self.refresh()
+                }
+            }
+            lockObservers.append((center, o))
+        }
         refresh()
     }
 
@@ -50,15 +78,24 @@ public final class FocusMonitor {
         timer?.invalidate()
         timer = nil
         if let activationObserver { NSWorkspace.shared.notificationCenter.removeObserver(activationObserver) }
+        for (center, o) in lockObservers { center.removeObserver(o) }
+        lockObservers = []
     }
 
     public func refresh() {
+        if let until = pausedUntil, until <= Date() {
+            pausedUntil = nil   // didSet refreshes
+            onPauseEnded?()
+            return
+        }
         let next = UserFocus(
             inCall: Self.microphoneInUse(),
             screenSharing: false,
             fullScreen: detectsFullScreen && Self.frontmostIsFullScreen(),
             typing: typingNow(),
-            away: CGEventSource.secondsSinceLastEventType(.combinedSessionState, eventType: Self.anyInput) >= awayAfter)
+            away: CGEventSource.secondsSinceLastEventType(.combinedSessionState, eventType: Self.anyInput) >= awayAfter,
+            paused: pausedUntil != nil,
+            locked: screenLocked || displaysAsleep)
         if next != state {
             state = next
             onChange?(next)

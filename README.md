@@ -76,6 +76,8 @@ Ignored too long, with Moods on (off by default): taps a foot (10 min) → cross
 | Double-click / ⌘⇧H | Command window sequence: rises, listens, thinks |
 | Type | Ducks after ~2 s, back ~8 s after you stop |
 | Join a call | Disappears; things queue until you're done |
+| ⌥⇧⌘H | Puts away what it's showing; with nothing showing, pauses for an hour; paused, comes back |
+| Menu bar ▸ Pause | 15 minutes, 1 hour or until tomorrow. Things queue and show when it ends |
 
 ### Antics (only when it's quiet)
 

@@ -76,6 +76,13 @@ final class AppController {
     /// The app you were in when you opened the command box (context for the answer).
     var lastCommandApp: String?
     var hotKey: GlobalHotKey?
+    /// ⌥⇧⌘H: put away / pause / resume (ADR-022).
+    var hushKey: GlobalHotKey?
+    var energyObserver: Any?
+    /// Low Power Mode or low battery (ADR-022).
+    var energySaver = false
+    /// Global mouse-move monitor, only while the cursor is near Hush (instant click-through).
+    var moveMonitor: Any?
     var agentTimer: Timer?
     /// Opt-in Moods: seconds an unopened mail has been visibly waiting (paused while you're busy).
     var moodSeconds: TimeInterval = 0
@@ -184,6 +191,7 @@ final class AppController {
         // ⌘⇧H opens the command box (Phase 0 spike; Phase 2 sends it to the agent).
         hotKey = GlobalHotKey { [weak self] in self?.toggleCommandBox() }
         DiagnosticsLog.write("hotkey: ⌘⇧H \(hotKey == nil ? "NOT registered" : "registered")")
+        registerHushKey()
         ask = AskController(host: .init(
             engine: engine,
             react: { [weak self] r in self?.renderer.react(r) },
@@ -264,6 +272,7 @@ final class AppController {
         }
 
         focus.onChange = { [weak self] f in self?.focusChanged(f) }
+        restorePause()
         applyFullScreenPreference()
         focus.start()
 
@@ -273,6 +282,7 @@ final class AppController {
         }
         if CalendarSource.access == .granted { calendar.start() }
         Task { await triage.prewarm() }
+        watchEnergy()
 
         updateAppearance()
         DistributedNotificationCenter.default().addObserver(

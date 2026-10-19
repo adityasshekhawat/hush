@@ -42,6 +42,9 @@ final class AnticsController {
     var firstTuckIn: (() -> Void)?
     /// The cheeks emptied (a paste, or popped): "hand it to Hush" forgets its last rework.
     var onCheeksEmptied: (() -> Void)?
+    /// Battery under 20 % (energy saver, ADR-022).
+    private(set) var batteryLow = false
+    var onBatteryLow: ((Bool) -> Void)?
 
     /// Cheeks stay full until a paste (or a click on Hush). No timer: "puffed till you paste".
     private(set) var cheeksFull = false
@@ -61,6 +64,17 @@ final class AnticsController {
         }
         clockTick()
     }
+
+    /// Paused, locked or in a call: Hush is off screen, so stop sensing (ADR-022). Resuming restarts it fresh.
+    func setSuspended(_ off: Bool) {
+        guard off != suspended else { return }
+        suspended = off
+        if off { sensors.stop() } else {
+            sensors.start()
+            sensors.watchForPaste = cheeksFull
+        }
+    }
+    private var suspended = false
 
     // MARK: inputs from the app
 
@@ -108,6 +122,8 @@ final class AnticsController {
             host.react(.mode("droopy", false))
             if may(.perk) { host.react(.perk) }
         case .batteryLow(let low):
+            batteryLow = low
+            onBatteryLow?(low)
             host.react(.mode("droopy", low))
         case .audioPlaying(let on):
             host.react(.mode("groove", on))
