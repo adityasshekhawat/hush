@@ -47,8 +47,10 @@ runs you're watching stay quiet.</td>
 <tr>
 <td><img src="docs/media/holds-clock.png" alt="Hush holding a clock" width="170"></td>
 <td><strong>Remembers your meetings.</strong> From the Mac's Calendar (Google, Outlook and iCloud calendars you've
-added work too): it holds a clock 10 minutes before and hurries in 2 minutes before. It's its own window, not a
-notification, so Focus and Do Not Disturb don't hide it. <em>One-click join links are coming.</em></td>
+added work too): it holds up a clock 5 minutes before, with one line about what the meeting is for, and hurries in a
+minute before and waits. With a Zoom, Meet, Teams or similar link, <strong>one click on Hush joins</strong>. "1 more
+min" snoozes it, and it leaves on its own once your microphone turns on. It's its own window, not a notification, so
+Focus and Do Not Disturb don't hide it.</td>
 </tr>
 <tr>
 <td><img src="docs/media/ask-hush.gif" alt="Hush listening while you type a question" width="170"></td>
@@ -136,6 +138,7 @@ Its data stays in `~/Library/Application Support/Hush/`.
 - **⌘⇧H** and ask "XLOOKUP in Google Sheets".
 - **Drag it** onto the top edge of a window and let go.
 - Start a long Claude Code run in another window and go do something else.
+- Settings ▸ Developer ▸ **Meeting in 2 min**, then click Hush when it comes out.
 - Look at the menu bar panel at the end of the day: "63 held back today".
 
 ## How it works

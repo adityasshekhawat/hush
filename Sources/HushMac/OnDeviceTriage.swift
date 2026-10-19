@@ -74,7 +74,28 @@ public actor OnDeviceTriage: AttentionClassifier, GistWriter {
 
     public func gist(for item: InboxItem) async -> String {
         if let g = gists.removeValue(forKey: item.id) { return g }
+        if item.kind == .meeting, enabled, let notes = item.notes, let line = await meetingLine(item.subject, notes) { return line }
         return await plain.gist(for: item)
+    }
+
+    /// The T-5 context line from the invite's notes (ADR-025), or nil to fall back.
+    private func meetingLine(_ title: String, _ notes: String) async -> String? {
+        #if canImport(FoundationModels)
+        guard #available(macOS 26.0, *), Self.systemStatus == .on else { return nil }
+        do {
+            let line = try await Self.withTimeout(Self.timeout) {
+                let session = LanguageModelSession(instructions: MeetingContext.instructions)
+                return try await session.respond(to: MeetingContext.prompt(title: title, notes: notes),
+                                                 options: GenerationOptions(samplingMode: .greedy)).content
+            }
+            return line.flatMap(MailTriage.cleanGist)
+        } catch {
+            Self.log("meeting: context line failed (\(error.localizedDescription))")
+            return nil
+        }
+        #else
+        return nil
+        #endif
     }
 
     struct Answer: Sendable {

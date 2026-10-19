@@ -46,11 +46,14 @@ public struct InboxItem: Sendable, Equatable, Codable {
     /// Agent items: bundle id of the app hosting the session (Open brings it forward) and the project folder name.
     public var sourceApp: String?
     public var project: String?
+    /// Meetings: the invite's notes, trimmed, for the on-device context line (ADR-025). Never stored or sent.
+    public var notes: String?
 
     public init(
         id: String, kind: ItemKind, senderName: String? = nil, senderAddress: String? = nil,
         subject: String, snippet: String = "", headers: [String: String] = [:],
-        receivedAt: Date, startsAt: Date? = nil, openURL: URL? = nil, sourceApp: String? = nil, project: String? = nil
+        receivedAt: Date, startsAt: Date? = nil, openURL: URL? = nil, sourceApp: String? = nil, project: String? = nil,
+        notes: String? = nil
     ) {
         self.id = id
         self.kind = kind
@@ -64,6 +67,7 @@ public struct InboxItem: Sendable, Equatable, Codable {
         self.openURL = openURL
         self.sourceApp = sourceApp
         self.project = project
+        self.notes = notes
     }
 
     public var senderDomain: String? {

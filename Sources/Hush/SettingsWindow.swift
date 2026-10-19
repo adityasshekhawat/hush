@@ -101,6 +101,14 @@ struct SettingsView: View {
             Toggle("Quiet hours, 22:00 to 07:00", isOn: model.quietHours)
         } footer: { Text("Only meeting times, VIPs and your own rules can interrupt. Everything else waits.") }
         Section {
+            Picker("Heads-up before a meeting", selection: model.meetingHeadsUp) {
+                ForEach([3, 5, 10, 15], id: \.self) { Text("\($0) min").tag($0) }
+            }
+            Picker("Come out and wait", selection: model.meetingComeOut) {
+                ForEach([1, 2, 3], id: \.self) { Text("\($0) min before").tag($0) }
+            }
+        } footer: { Text("Hush is its own window, so Focus and Do Not Disturb don't hide it. With a video link, one click on Hush joins.") }
+        Section {
             Toggle("Open at login", isOn: model.openAtLogin)
             Toggle("Hide in full-screen apps", isOn: model.hideInFullScreen)
             Toggle("Hide from screen shares and screenshots", isOn: model.hiddenFromCapture)

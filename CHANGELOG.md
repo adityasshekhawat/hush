@@ -5,6 +5,10 @@ Hush is pre-alpha and built from source. Notable changes, newest first. Decision
 
 ## Unreleased
 
+- **Meetings:** a heads-up 5 minutes before with one line about what it's for (written on your Mac), then Hush comes
+  out a minute before and waits. One click on Hush joins the call (Zoom, Meet, Teams and more). "1 more min" snoozes;
+  joining (your mic turning on) puts it away. Events marked "free" are skipped. Lead times in Settings.
+
 - **The agent watcher says what your agent wants.** "Claude wants to run npm test", with risky requests (deleting
   files, force-pushing, production, secrets) flagged for a careful look by rules in code. Runs that stop on an error
   ("Hit a usage limit") get a quiet card. Open lands on the exact Terminal or iTerm tab. Approvals wait until you

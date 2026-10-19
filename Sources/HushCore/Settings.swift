@@ -40,8 +40,8 @@ public struct HushSettings: Sendable, Equatable, Codable {
         vips: Set<String> = [],
         confidenceThreshold: Double = 0.7,
         shoosToLower: Int = 3,
-        gentleMeetingLead: TimeInterval = 10 * 60,
-        interruptMeetingLead: TimeInterval = 2 * 60
+        gentleMeetingLead: TimeInterval = 5 * 60,
+        interruptMeetingLead: TimeInterval = 1 * 60
     ) {
         self.maxInterruptsPerDay = maxInterruptsPerDay
         self.quietHours = quietHours
@@ -50,6 +50,15 @@ public struct HushSettings: Sendable, Equatable, Codable {
         self.shoosToLower = shoosToLower
         self.gentleMeetingLead = gentleMeetingLead
         self.interruptMeetingLead = interruptMeetingLead
+    }
+
+    /// The v1 timings are T-5 / T-1 (ADR-021, ADR-025). Settings saved with the old untouched defaults (10 / 2) move
+    /// to the new ones; anything you chose yourself stays.
+    public mutating func migrateMeetingLeads() {
+        if gentleMeetingLead == 10 * 60 && interruptMeetingLead == 2 * 60 {
+            gentleMeetingLead = 5 * 60
+            interruptMeetingLead = 1 * 60
+        }
     }
 
     public func isVIP(_ item: InboxItem) -> Bool {

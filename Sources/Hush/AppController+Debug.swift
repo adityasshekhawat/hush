@@ -224,8 +224,11 @@ extension AppController {
 
     func simulateMeeting(inMinutes m: Double) {
         let start = Date().addingTimeInterval(m * 60)
-        demoMeetings.append(Meeting(id: "demo-" + UUID().uuidString, title: "Design review (demo)", start: start,
-                                    end: start.addingTimeInterval(30 * 60), attendees: ["Priya Nair", "Sam Rivera"]))
+        // A demo call link (example.zoom.us doesn't exist, so "joining" opens a harmless page) and notes for the context line.
+        demoMeetings.append(Meeting(id: "demo-" + UUID().uuidString, title: "Q4 roadmap (demo)", start: start,
+                                    end: start.addingTimeInterval(30 * 60), attendees: ["Priya Nair", "Sam Rivera", "Dana Lee", "Lee Park"],
+                                    joinURL: URL(string: "https://example.zoom.us/j/123456789"),
+                                    notes: "Walk through the Q4 roadmap. Bring the hiring plan and last quarter's numbers."))
         planReminders()
     }
 

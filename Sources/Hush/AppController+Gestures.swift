@@ -23,6 +23,15 @@ extension AppController {
                 if pouch.clicked() { antics.refillCheeks(); return }
                 if antics.cheeksFull { antics.emptyCheeks(); return }
             }
+            // One click joins: a meeting about to start, with a call link, goes straight to the call (ADR-025).
+            if let a = active, a.item.kind == .meeting, a.finalLevel == .interrupt,
+               let url = a.item.openURL, url.scheme == "https" {
+                NSWorkspace.shared.open(url)
+                DiagnosticsLog.write("meeting: joined from a click on Hush")
+                resolveActive(.opened)
+                renderer.react(.handOver)
+                return
+            }
             if active != nil {
                 showCard()
             } else if ambientPile > 0 {
@@ -131,6 +140,7 @@ extension AppController {
                 }
             },
             later: { [weak self] in self?.envelope.close() },
+            snooze: a.item.kind == .meeting && a.finalLevel == .interrupt ? { [weak self] in self?.snoozeMeeting(a) } : nil,
             undo: { [weak self] in
                 guard let self, let rule = self.envelope.model.savedRule else { return }
                 Task { try? await self.engine.deleteRule(id: rule.id) }

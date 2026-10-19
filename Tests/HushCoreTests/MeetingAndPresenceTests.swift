@@ -10,11 +10,11 @@ import Testing
                 end: tenAM.addingTimeInterval((m + 30) * 60), isAllDay: allDay)
     }
 
-    @Test func tenAndTwoMinuteReminders() {
+    @Test func fiveAndOneMinuteReminders() {
         let r = MeetingReminderPlanner.reminders(for: [meeting(inMinutes: 30)], settings: s, now: tenAM)
         #expect(r.map(\.level) == [.gentle, .interrupt])
-        #expect(r[0].fireAt == tenAM.addingTimeInterval(20 * 60))
-        #expect(r[1].fireAt == tenAM.addingTimeInterval(28 * 60))
+        #expect(r[0].fireAt == tenAM.addingTimeInterval(25 * 60))
+        #expect(r[1].fireAt == tenAM.addingTimeInterval(29 * 60))
     }
 
     @Test func insideGentleWindowFiresNow() {

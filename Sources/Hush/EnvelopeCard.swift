@@ -20,6 +20,8 @@ struct EnvelopeActions {
     var copy: (() -> Void)?
     var notThisKind: () -> Void
     var later: () -> Void
+    /// Meetings about to start: "1 more min" (ADR-025).
+    var snooze: (() -> Void)? = nil
     var undo: () -> Void
     var editRule: () -> Void
 }
@@ -69,6 +71,9 @@ struct EnvelopeView: View {
                         if let copy = actions.copy, v.offersCopy {
                             Button("Copy", action: copy).buttonStyle(HushPill(kind: .secondary))
                         }
+                        if let snooze = actions.snooze {
+                            Button("1 more min", action: snooze).buttonStyle(HushPill(kind: .secondary))
+                        }
                         if v.offersNotThisKind {
                             Button("Not this kind again", action: actions.notThisKind).buttonStyle(HushPill(kind: .secondary))
                         }
@@ -107,7 +112,8 @@ struct EnvelopeVariant {
             source = "Calendar · " + (item.startsAt.map(Self.until) ?? ago)
             title = interrupt ? "\(item.subject) is starting" : item.subject
             subtitle = Self.timeRange(item) + (item.snippet.isEmpty ? "" : " · \(item.snippet)")
-            openTitle = interrupt && item.openURL != nil ? "Join" : "Open"
+            let call = item.openURL?.scheme == "https"
+            openTitle = call ? "Join" : "Open in Calendar"
             offersNotThisKind = !interrupt
             offersCopy = false
         case .mail:

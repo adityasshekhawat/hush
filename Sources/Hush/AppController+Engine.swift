@@ -24,8 +24,19 @@ extension AppController {
                 MainActor.assumeIsolated { self?.planReminders() }
             }
         }
-        // Drop meeting appearances whose meeting has started.
-        waiting.removeAll { $0.item.kind == .meeting && ($0.item.startsAt ?? .distantFuture) <= now }
+        // A started meeting's reminder stays for the late window ("running late"), then goes (ADR-025).
+        let over = waiting.filter { MeetingReminderPlanner.isOver($0.item, now: now) }
+        if let a = active, over.contains(where: { $0.id == a.id }) { envelope.close(); resolveActive(.ignored) }
+        waiting.removeAll { MeetingReminderPlanner.isOver($0.item, now: now) }
+        if let soonest = waiting.compactMap({ $0.item.kind == .meeting ? $0.item.startsAt : nil }).min() {
+            let at = soonest.addingTimeInterval(MeetingReminderPlanner.lateWindow + 1)
+            if at > now, reminderTimer == nil || reminderTimer!.fireDate > at {
+                reminderTimer?.invalidate()
+                reminderTimer = Timer.scheduledTimer(withTimeInterval: at.timeIntervalSince(now), repeats: false) { [weak self] _ in
+                    MainActor.assumeIsolated { self?.planReminders() }
+                }
+            }
+        }
         refresh()
     }
 
@@ -47,6 +58,12 @@ extension AppController {
         case .shown:
             // FR-9: gist is written on arrival so the card opens instantly.
             gistByDecision[d.id] = await gists.gist(for: d.item)
+            // T-1 replaces the T-5 card for the same meeting (ADR-025).
+            if d.item.kind == .meeting, d.finalLevel == .interrupt, let start = d.item.startsAt {
+                let earlier = waiting.filter { $0.item.kind == .meeting && $0.item.startsAt == start && $0.item.subject == d.item.subject }
+                if let a = active, earlier.contains(where: { $0.id == a.id }) { envelope.close(); resolveActive(.opened) }
+                waiting.removeAll { e in earlier.contains { $0.id == e.id } }
+            }
             waiting.append(d)
             if wanderer?.place == .perched || wanderer?.place == .jumping { wanderer.leavePerch() }
             // Louder first; among equals, a risky approval, then needs you, then finished, then an error (ADR-024).
@@ -75,6 +92,8 @@ extension AppController {
             schedulePointerTimer(fast: false)
         }
         onRefresh?()
+        // The mic came on near a meeting: you joined. Its reminder has done its job (ADR-025).
+        if f.inCall { meetingJoined() }
         antics.focusChanged(f)
         digest?.focusChanged(away: f.away)
         Task {
@@ -94,6 +113,8 @@ extension AppController {
         resetMood()
         // An agent waiting on your OK stays until you answer; the card clears itself when you do (ADR-024).
         if AgentSessionTracker.waitsForAnswer(a.item) { return }
+        // A meeting about to start stays until you join, snooze or dismiss it, or it's over (ADR-025).
+        if a.item.kind == .meeting && a.finalLevel == .interrupt { return }
         let timeout = a.finalLevel == .interrupt ? Self.interruptTimeout
             : (moodsEnabled && a.item.kind == .mail ? Self.moodsTimeout : Self.gentleTimeout)
         ignoreTimer = Timer.scheduledTimer(withTimeInterval: timeout, repeats: false) { [weak self] _ in

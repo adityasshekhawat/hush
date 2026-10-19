@@ -70,3 +70,15 @@ public enum MailTriage {
         return flat.count > n ? String(flat.prefix(n)) + "…" : flat
     }
 }
+
+/// The meeting context line at T-5 (ADR-025): one short line from the invite's notes, on Apple's on-device model.
+/// Only the title and trimmed notes go in (MeetingLinks.trimNotes drops links and dial-in text); nothing is stored.
+public enum MeetingContext {
+    public static let instructions = """
+        You write one short line for a meeting reminder card, from the invite's notes: the topic, and anything to \
+        prepare or bring. Under 60 characters, plain words, no quotes, no full stop, no names of the people invited. \
+        If the notes say nothing useful, reply with an empty line.
+        """
+
+    public static func prompt(title: String, notes: String) -> String { "Meeting: \(title)\nNotes: \(notes)" }
+}

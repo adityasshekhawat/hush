@@ -431,3 +431,24 @@ Milestone 2 of the v1 spec (ADR-021, feature 1).
 **Not done (spec feature 1):** the flag rail and its art (`docs/v1-art-brief.md` priority 2; the envelope's "Also
 waiting" line stands in), a model one-liner, Codex error events (Codex has no StopFailure here), and verifying exact-
 tab focus in a real Terminal and iTerm.
+
+## ADR-025 · Meetings: T-5 and T-1, one-click join, stays until you're in (2026-10-19)
+
+Milestone 3 of the v1 spec (ADR-021, feature 2).
+- **Timing:** heads-up (gentle) 5 minutes before, come out (interrupt) 1 minute before, both configurable in
+  Settings ▸ General. Settings saved with the old untouched defaults (10 / 2) migrate once; your own choices stay.
+  The T-1 card replaces the T-5 one for the same meeting.
+- **Join:** `MeetingLinks` (tested) finds the call in the event URL, then the location, then the notes, from known
+  providers only (Zoom, Meet, Teams, Webex, Whereby, Around, FaceTime, Slack huddles, Jitsi, Gather), so a random
+  link is never taken for the call. At T-1 a click on Hush opens it directly; the card says Join (or Open in Calendar
+  without a link). Finding a link the regex misses with the model is not done: known providers cover the common case.
+- **Stays until you're in:** the T-1 appearance has no timeout. It goes when you join (the mic turns on within 10
+  minutes of the start), snooze ("1 more min", which brings it back after a minute), dismiss, or 5 minutes after the
+  start (the late window). It counts toward the daily cap like any interrupt.
+- **Context line:** at T-5, Apple's on-device model writes one line from the invite's notes (`MeetingContext`), after
+  `MeetingLinks.trimNotes` drops links, dial-in numbers and passcodes. Title and notes only, never stored. The plain
+  gist no longer shows "Someone: <title>" for meetings.
+- **Skips:** declined, cancelled, all-day and "free" events. Hush is its own window, so Focus and Do Not Disturb don't
+  hide it (the spec's acceptance criterion holds by construction).
+
+**Not done:** the door and pocket watch art (`docs/v1-art-brief.md` priority 3; the clock and hurry poses stand in).

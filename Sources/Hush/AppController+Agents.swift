@@ -54,6 +54,34 @@ extension AppController {
         refresh()
     }
 
+    /// "1 more min": put the meeting card away and bring it back in a minute, until the late window ends (ADR-025).
+    func snoozeMeeting(_ d: Decision) {
+        envelope.close()
+        if active?.id == d.id { resolveActive(.ignored) } else { waiting.removeAll { $0.id == d.id } }
+        meetingSnoozes += 1
+        var item = d.item
+        item.id = d.item.id + ":snooze:\(meetingSnoozes)"
+        DiagnosticsLog.write("meeting: snoozed a minute")
+        DispatchQueue.main.asyncAfter(deadline: .now() + 60) { [weak self] in
+            guard let self, !MeetingReminderPlanner.isOver(item, now: Date()) else { return }
+            item.receivedAt = Date()
+            self.submit(item, preset: .interrupt)
+        }
+        refresh()
+    }
+
+    /// The mic came on: if a meeting starts within 10 minutes either way, you've joined it (ADR-025).
+    func meetingJoined() {
+        let now = Date()
+        let joined = waiting.filter { d in
+            d.item.kind == .meeting && d.item.startsAt.map { abs($0.timeIntervalSince(now)) < 10 * 60 } == true
+        }
+        guard !joined.isEmpty else { return }
+        if let a = active, joined.contains(where: { $0.id == a.id }) { envelope.close(); resolveActive(.opened) }
+        waiting.removeAll { d in joined.contains { $0.id == d.id } }
+        DiagnosticsLog.write("meeting: call started, cleared \(joined.count) reminder(s)")
+    }
+
     func toggleCommandBox() {
         onboarding?.observedHotkey()
         if commandPanel.isOpen { commandPanel.close(); return }

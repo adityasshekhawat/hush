@@ -79,6 +79,7 @@ final class AppController {
     /// ⌥⇧⌘H: put away / pause / resume (ADR-022).
     var hushKey: GlobalHotKey?
     var agentAppObserver: Any?
+    var meetingSnoozes = 0
     var energyObserver: Any?
     /// Low Power Mode or low battery (ADR-022).
     var energySaver = false
@@ -102,6 +103,9 @@ final class AppController {
 
     init() throws {
         settings = Self.load(HushSettings.self, key: "settings") ?? HushSettings()
+        let before = settings
+        settings.migrateMeetingLeads()   // T-5 / T-1 (ADR-025), unless you'd chosen your own
+        if settings != before { Self.save(settings, key: "settings") }
         look = Self.load(CharacterLook.self, key: "look") ?? CharacterLook()
         if !CharacterLook.bodies.contains(look.body) { look.body = "blob" }
         homeX = defaults.object(forKey: "homeX") as? CGFloat ?? 0.92

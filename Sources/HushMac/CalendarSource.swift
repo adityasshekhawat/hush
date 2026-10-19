@@ -59,7 +59,8 @@ public final class CalendarSource {
         let predicate = store.predicateForEvents(withStart: now.addingTimeInterval(-60 * 60),
                                                  end: now.addingTimeInterval(horizon), calendars: nil)
         return store.events(matching: predicate)
-            .filter { $0.status != .canceled && !Self.declined($0) }
+            // Skip cancelled and declined events, and ones you marked "free" (ADR-025).
+            .filter { $0.status != .canceled && !Self.declined($0) && $0.availability != .free }
             .map { e in
                 Meeting(
                     id: e.calendarItemIdentifier,
@@ -68,7 +69,9 @@ public final class CalendarSource {
                     end: e.endDate,
                     isAllDay: e.isAllDay,
                     attendees: (e.attendees ?? []).filter { !$0.isCurrentUser }.compactMap { $0.name },
-                    openURL: URL(string: "ical://ekevent/\(e.calendarItemIdentifier)?method=show&options=more"))
+                    openURL: URL(string: "ical://ekevent/\(e.calendarItemIdentifier)?method=show&options=more"),
+                    joinURL: MeetingLinks.joinURL(url: e.url, location: e.location, notes: e.notes),
+                    notes: MeetingLinks.trimNotes(e.notes))
             }
     }
 

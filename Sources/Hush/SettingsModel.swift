@@ -25,6 +25,13 @@ final class SettingsModel: ObservableObject {
 
     // MARK: general
 
+    /// Meeting lead times in minutes (ADR-025).
+    var meetingHeadsUp: Binding<Int> {
+        binding({ Int(self.app.settings.gentleMeetingLead / 60) }, { v in self.app.setSettings { $0.gentleMeetingLead = TimeInterval(v * 60) } })
+    }
+    var meetingComeOut: Binding<Int> {
+        binding({ Int(self.app.settings.interruptMeetingLead / 60) }, { v in self.app.setSettings { $0.interruptMeetingLead = TimeInterval(v * 60) } })
+    }
     var interruptsPerDay: Binding<Int> {
         binding({ self.app.settings.maxInterruptsPerDay }, { n in self.app.setSettings { $0.maxInterruptsPerDay = n } })
     }

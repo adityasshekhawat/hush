@@ -43,6 +43,8 @@ public struct SubjectGistWriter: GistWriter {
 
     public func gist(for item: InboxItem) async -> String {
         if item.kind == .agent { return item.snippet }
+        // Meetings show the time and who; a "who: subject" line would only repeat the title.
+        if item.kind == .meeting { return "" }
         let who = item.senderName ?? item.senderAddress ?? "Someone"
         var subject = item.subject
         while let r = subject.range(of: #"^\s*(re|fwd?|aw):\s*"#, options: [.regularExpression, .caseInsensitive]) {
