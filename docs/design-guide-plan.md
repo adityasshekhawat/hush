@@ -1,7 +1,7 @@
 # Design guide: implementation plan
 
 2026-10-19 · Source: `docs/design-guide.md` (from `hush-design-guide (1).zip`), plus the canvas boards Guide 00 to 10
-(not in the zip; needed for pixel matching). Per the guide: the README wins on behaviour, the guide wins on looks.
+(not in the zip; needed for pixel matching). Per the guide: docs/features.md wins on behaviour, the guide wins on looks.
 
 ## What the package changes
 

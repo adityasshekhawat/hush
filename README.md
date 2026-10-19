@@ -1,33 +1,88 @@
-# Hush
+<p align="center">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="assets/brand/lockup/hush-lockup-horizontal-on-dark.svg">
+    <img src="assets/brand/lockup/hush-lockup-horizontal-color.svg" alt="Hush" width="260">
+  </picture>
+</p>
 
-A playful buddy that lives at the edge of your Mac's screen and helps when it counts. It's silent: it speaks with
-its body, and words only appear on cards you open. It sits on top of the AI models you already use, so it gets more
-capable as they do. It is not another chat app.
+<p align="center"><strong>A small, silent friend at the edge of your Mac that only steps forward when something has earned it.</strong></p>
 
-**Status (2026-10-19):** pre-alpha. A native macOS app (Swift, macOS 15+), built from source and unsigned.
-Positioning: [`docs/positioning.md`](docs/positioning.md) · Spec: [`docs/PRD.md`](docs/PRD.md).
+<p align="center">
+  <a href="https://github.com/adityasshekhawat/hush/actions/workflows/test.yml"><img src="https://github.com/adityasshekhawat/hush/actions/workflows/test.yml/badge.svg" alt="Tests"></a>
+  <img src="https://img.shields.io/badge/macOS-15%2B-lightgrey" alt="macOS 15 or later">
+  <a href="LICENSE"><img src="https://img.shields.io/badge/code-Apache--2.0-blue" alt="Code licence: Apache-2.0"></a>
+</p>
 
-This README lists everything **shipped** in the app today, organised by the surfaces a designer works on.
-✅ built · ⏳ planned.
+<p align="center">
+  <img src="docs/media/poke.gif" alt="Hush giggles when you poke it" width="200">
+  <img src="docs/media/inbox-zero.gif" alt="Hush cheers" width="200">
+  <img src="docs/media/morning.gif" alt="Hush stretches in the morning" width="200">
+</p>
 
----
+Hush lives at the bottom of your screen, peeking over the edge. It never makes a sound and never talks. It watches
+your AI coding agents and your calendar, keeps quiet about what can wait, and uses body language for what can't.
+At the end of the day it tells you how much it spared you: *"You got 4 things from me today. I held back 63."*
 
-## 1. Design principles (the rules that win every trade-off)
+**Status:** pre-alpha. A native macOS app, free and open source, built from source for now.
 
-1. **Silent.** Body language first. No sound, no voice, no chat persona.
-2. **Attention is earned.** Only meeting times, VIPs and your own rules may interrupt; the model never does on its
-   own. A daily cap (default 5) bounds interrupts.
-3. **Respect focus.** Hush ducks while you type, vanishes during calls, stays out of screen shares and screenshots,
-   and follows or hides in full-screen apps.
-4. **Delight never interrupts.** Play happens only when you're idle and nothing real is waiting, and never counts
-   toward the cap.
-5. **Scrutable and local.** Every decision is logged on your Mac. Nothing is sent anywhere on its own: only things
-   you ask for leave the Mac, and the table below says exactly which.
-6. **A doorway, not a destination.** One question, one answer card (plus up to 3 follow-ups), then act in your app
-   or continue in ChatGPT/Claude.
-7. **Light on the Mac.** Measured, not promised: see [`docs/performance.md`](docs/performance.md).
+## Why
 
-### What leaves your Mac
+Notifications treat every ping as urgent, so the important ones drown and the rest break your focus. Desktop pets
+are cute but don't help. AI companions talk at you. Hush is the opposite of all three: a character with judgment
+about **when not to show up**. Only your meetings, your VIPs and your own rules may interrupt you, never a model on
+its own, and a daily cap (5 by default) keeps even those rare.
+
+## What it does
+
+<table>
+<tr>
+<td width="180"><img src="docs/media/holds-envelope.png" alt="Hush holding an envelope" width="170"></td>
+<td><strong>Watches your AI agents.</strong> Claude Code and Codex sessions, through hooks you approve. Hush thinks
+while an agent works where you aren't looking, holds up an envelope when a long run finishes ("Claude finished in
+hush · ran for 4m"), and perks up when one needs your OK. One click takes you back to its terminal. Quick runs you're
+watching stay quiet.</td>
+</tr>
+<tr>
+<td><img src="docs/media/holds-clock.png" alt="Hush holding a clock" width="170"></td>
+<td><strong>Remembers your meetings.</strong> From the Mac's Calendar (Google, Outlook and iCloud calendars you've
+added work too): it holds a clock 10 minutes before and hurries in 2 minutes before. It's its own window, not a
+notification, so Focus and Do Not Disturb don't hide it. <em>One-click join links are coming.</em></td>
+</tr>
+<tr>
+<td><img src="docs/media/ask-hush.gif" alt="Hush listening while you type a question" width="170"></td>
+<td><strong>Answers in place (⌘⇧H).</strong> One quick question, one answer card shaped to it (a formula, a command,
+steps) with buttons that send it where you're working, like Excel or your terminal. Bigger questions open in
+ChatGPT, Claude or Perplexity. Answers use your own Claude Code login (see below).</td>
+</tr>
+<tr>
+<td><img src="docs/media/poke.gif" alt="Hush" width="170"></td>
+<td><strong>Hand it to Hush.</strong> Copy some text and Hush's cheeks fill up. Click it, pick <em>Simpler</em>,
+<em>Shorter</em> or <em>Bullets</em>, and it chews, then hands the result back on your clipboard. Paste, and the
+cheeks blow out. Runs on your Mac with Apple Intelligence.</td>
+</tr>
+<tr>
+<td><img src="docs/media/hides.gif" alt="Hush ducking out of sight" width="170"></td>
+<td><strong>Stays out of your way.</strong> It ducks while you type, disappears during calls, and is left out of
+screen shares and screenshots. Pause it for 15 minutes, an hour or until tomorrow from the menu bar, or press
+⌥⇧⌘H to put away whatever it's showing. Clicks pass straight through everywhere except Hush itself.</td>
+</tr>
+<tr>
+<td><img src="docs/media/dizzy.gif" alt="Hush dizzy after being flung" width="170"></td>
+<td><strong>Plays, but only when you're idle.</strong> Drag and fling it and it gets dizzy. It perches on your window
+after a couple of quiet minutes, stretches in the morning, bobs along to music. Play never interrupts and never
+counts toward the daily cap.</td>
+</tr>
+<tr>
+<td><img src="docs/media/perch.gif" alt="Hush perched on a window" width="170"></td>
+<td><strong>Make it yours.</strong> Three bodies, five colours, eyes, toppers and a wardrobe of 45 pieces, all free.
+Some rare pieces turn up on their own.</td>
+</tr>
+</table>
+
+**Not yet:** mail. The Apple Mail extension is in progress; until it lands, mail is only simulated (Settings ▸
+Developer). When it arrives, Apple's on-device model judges each mail on your Mac.
+
+## What leaves your Mac
 
 No Hush server, no account, no analytics, no crash reporting. Everything Hush learns and logs stays in
 `~/Library/Application Support/Hush/`. These are the only times anything leaves the Mac, and each one starts with
@@ -42,282 +97,70 @@ something you do:
 | Hand a question off ("open in ChatGPT / Claude / Perplexity") | The question, in the link that opens (from "hand it to Hush", only the instruction: you paste the text yourself) | The assistant you picked |
 
 **Stays on the Mac:** your calendar (read through macOS); the Claude Code and Codex hooks, which send Hush only the
-event, session id, folder, host app and terminal device; mail judging and its gist, and "hand it to Hush", which use
-Apple's on-device model when Apple Intelligence is on; transcripts for the digest (only if you turn it on); the
-clipboard, which Hush reads only when you click it to rework what you copied.
+event, session id, folder, host app and terminal device; mail judging and "hand it to Hush", which use Apple's
+on-device model when Apple Intelligence is on; transcripts for the digest (only if you turn it on); the clipboard,
+which Hush reads only when you click it to rework what you copied.
 
-Planned (ADR-021): quick answers and Summarise move to Apple's on-device model, and the remaining Claude features
-sit behind one switch that's off until you turn it on.
+Planned: quick answers and Summarise move to Apple's on-device model, and the remaining Claude features sit behind
+one switch that's off until you turn it on.
 
----
+## Install
 
-## 2. The character
+There's no signed download yet, so Hush is built from source. A Mac that builds an app runs it without Gatekeeper
+warnings.
 
-### Look (menu bar ▸ Character, and in onboarding)
-
-| Slot | Options |
-| --- | --- |
-| Body | blob, bean, square |
-| Palette | oat, mint, lilac, sky, rose (body, belly, accent, cheek; ink `#2D2A35`, paper `#FFFDF7`) |
-| Eyes | round, oval, pebble |
-| Topper | none, antenna, ears, leaf |
-| Accessory | none, scarf, cap, glasses |
-
-Art: 39 poses × 14 expressions per body, 16 effects, 6 props, 10 keyframed sequences
-([`docs/character-inventory.md`](docs/character-inventory.md)). Rendered as SVG in a transparent overlay, ~140 pt.
-
-### Where it lives
-
-- **Sneak mode (default):** peeks over the bottom screen edge, only head and hands showing.
-- **Home spot:** bottom left, centre or right (menu ▸ Home spot); it walks there along the edge.
-- **Perch:** after 2 idle minutes it hops onto the top edge of the focused window, swings its legs, rides along when
-  the window moves, dozes after 5 min. Drop it on any window's top edge and it settles there.
-- **Follows you** into full-screen apps and across Spaces (or hides there; a setting).
-
-### Attention ladder (how it signals something real, without words)
-
-| Level | Meaning | Hush does |
-| --- | --- | --- |
-| Ambient | Logged, not shown | Nothing visible; counted as "held back" |
-| Gentle | Worth knowing | Rises and **holds an envelope**; holds a **clock** for meetings; **notices** (alert) when an agent asks permission |
-| Interrupt | Can't wait (meeting in 2 min, VIP, your rule) | **Hurries** up, eager |
-| Thinking | A Claude Code agent is working somewhere you're not looking | Ambient **think** pose |
-
-Ignored too long, with Moods on (off by default): taps a foot (10 min) → crosses arms (20) → stomp and huff (40).
-
-### Playing with it
-
-| You | Hush |
-| --- | --- |
-| Move the cursor near | Eyes follow, leans toward you |
-| Hover | Pops half out of the edge and waves |
-| Click | Opens what it's holding; otherwise a hop, wave or wiggle |
-| Click 4+ times fast | Dizzy spin, then grumpy |
-| Press and hold | A pat: leans into your hand, blissful |
-| Drag and drop | Startled grab, swings with your motion, lands with squash and dust; drop point = new home |
-| Flick away / right-click | Shoo: bows and backs off (3 shoos of one sender lowers that sender) |
-| Double-click / ⌘⇧H | Command window sequence: rises, listens, thinks |
-| Type | Ducks after ~2 s, back ~8 s after you stop |
-| Join a call | Disappears; things queue until you're done |
-| ⌥⇧⌘H | Puts away what it's showing; with nothing showing, pauses for an hour; paused, comes back |
-| Menu bar ▸ Pause | 15 minutes, 1 hour or until tomorrow. Things queue and show when it ends |
-
-### Antics (only when it's quiet)
-
-| When | Hush |
-| --- | --- |
-| You copy | Cheeks puff like a hamster and stay full; paste blows the air out (copy again: gulp, refill) |
-| Click it with full cheeks | **Hand it to Hush:** Simpler, Shorter or Bullets. It chews, hands the result back on your clipboard, and your ⌘V blows the cheeks out. On this Mac with Apple Intelligence; asks once before reading what you copied; **Original** puts your text back |
-| Screenshot | Caught in the flash, squints |
-| Shake the cursor | Woozy |
-| Rest the cursor on it 20 s | Falls asleep under your hand |
-| Drag a window past it | Flinches |
-| Music playing | Bobs along |
-| Charger in / battery under 20 % | Perks up / droopy and yawny |
-| First unlock of the day, or back from a long break | Morning yawn and stretch |
-| Late at night | Yawns more |
-| Friday after 18:00 | A little dance, once |
-| 30 min without a pat | Pops up hopefully and asks for one (max 3/day; sighs if ignored) |
-| Inbox zero | Crouch, cheer, proud |
-| End of day (after 18:30) | **Tuck-in card:** "You got 4 things from me today. I held back 63." On Fridays, the week: "This week you got 18 things from me. I held back 240." |
-
-Between moments: blinking, breathing, glancing around, small stretches, dozing after 5 min idle.
-
----
-
-## 3. Surfaces (UI)
-
-All cards are floating panels that **never cover Hush**: placed above it (14 pt gap, 16 pt headroom, room for its
-36 pt hover rise) and re-placed when it moves. They don't steal keyboard focus unless you type in them.
-Material background, 16 pt continuous corners, SF Symbols, system fonts, custom pill buttons (macOS's own prominent
-buttons render grey in these non-activating panels).
-
-### 3.1 Envelope card ✅ (320 pt)
-Opens when you click Hush while it's holding something. Title, subtitle, a 3-line gist, then **Open** ·
-**Not this kind again** (becomes a rule) · **Later**. Shown for:
-- meeting reminders
-- mail (simulated until MailKit)
-- agent events: "Claude finished in hush · Ran for 4m" / "Claude needs you in hush · Waiting for a permission prompt"
-- Ask Hush results you closed the card on: "Answer ready", "Browser task done"
-- the digest (opens it directly)
-
-### 3.2 Ask Hush: command box ✅ (⌘⇧H or double-click)
-One text field above Hush with a live **route chip** showing Hush's plan as you type:
-
-| Chip | Lane | What happens |
-| --- | --- | --- |
-| ⚡ "answer here" | Quick | One fast model call; the answer comes back as a shaped card |
-| ‹/› "ask about *repo*" | Repo | Read-only Claude Code run in an allowed repo; the card streams progress |
-| ↗ "open in ChatGPT / Claude / Perplexity" | Hand-off | Opens that assistant with the question pre-filled |
-| 🧭 "plan it for your browser" | Browser task (beta, opt-in) | A plan card first; after **Run it**, it works in your browser (see 3.8) |
-
-Tab or the chip's menu overrides the route. Routing runs in code (word rules, the app you're in, recent repo
-activity), not in a model.
-
-**Follow-up mode:** with an answer showing, ⌘⇧H (or **Follow up** on the card) opens the box above the card with a
-"↩ Follow-up ×" chip and placeholder "Ask a follow-up…". It keeps the card's lane and sends the last turns as
-context. Backspace on an empty box or × asks something new. Up to 3 turns; after that, carry on in your assistant.
-
-### 3.3 Answer card ✅ (420 pt)
-Header (lane, status, Stop) · body shaped to the answer · action row (max 3) · a quiet footer (no model, time or cost:
-those live in History and the menu bar panel's "this month" line),
-a receipt line after an action, and **Follow up** (quiet text button, bottom right).
-
-**Shapes:** formula (monospace, copyable) · command (terminal block) · fact (big short answer) · steps (numbered) ·
-prose · repo (streamed text, tools used, cost and turns).
-
-**Action row (app router)**, ranked by the answer's shape and the app you asked from, with that app's icon:
-
-| Answer | Actions |
-| --- | --- |
-| Formula | Paste in Excel (when you're in it) or Open in Excel · New Google Sheet |
-| Command | Send to Warp / iTerm / Terminal |
-| Code (repo) | Ask Cursor (opens Cursor's chat pre-filled) |
-| Notes / steps | Save to Notion (in Notion) · Save to Obsidian (new note) · Ask Cursor (in Cursor) |
-| Every answer | Copy · Continue in your assistant (ChatGPT / Claude / Perplexity) |
-
-Receipts: "Copied. Press ⌘V in Excel." · "Saved as a new note (also copied)." · "Opened in Cursor. Review the prompt
-there." Nothing is pasted or run in another app automatically. Character reactions: **wave** (handed off),
-**hand over** (answer delivered), **sorry** (failed).
-
-### 3.4 History ✅
-Menu ▸ Agent ▸ Show history: every question with its lane, model, cost and result, kept on the Mac.
-"Forget history" clears it.
-
-### 3.5 "While you were away" digest ✅ (opt-in, 440 pt)
-After 10+ min away, Hush holds a gentle envelope. The card lists each Claude Code session that ran:
-- project, branch, status pill (working / finished / stopped), title
-- "You asked: …" and "Claude: …"
-- files changed, commands, commits, PR links
-- **Open** (jumps to the terminal or editor it ran in) and **Summarise** (2–3 sentences)
-
-Footer: "Read on this Mac from ~/.claude/projects. Summarise sends a short excerpt to Claude." Consent dialog on
-first use. Menu ▸ Agent ▸ Show digest (last 3 hours).
-
-### 3.6 Onboarding ✅ (400 pt card)
-1. **Arrival:** "Hi, I'm Hush."
-2. **Make me yours:** body, colour, topper, accessory, "Surprise me".
-3. **"What do you mostly do on your Mac?"** (pick any): I build software · I build with AI · I manage work and
-   messages · I just want company. Answers switch on matching features.
-4. **Say hi:** three tiny tries (hover, press and hold for a pat, double-click).
-5. **Connect:** Calendar, Claude Code sessions, ⌘⇧H, each optional. "Nothing leaves your Mac unless you ask."
-6. **"How often may I tap the glass?"** Interrupts per day.
-7. **Goodbye:** "That's it. I'll be right down here." Then first-week tips, one at a time.
-
-Skip setup and Back are always available. Menu ▸ Setup shows what's left and replays the intro.
-
-### 3.7 Menu bar ✅
-The menu opens with the **held-back ledger**: "Today: 4 shown · 63 held back" and "This week: 18 shown · 240 held
-back". Template glyph ("Line Peek"): **outline** when idle, **filled** when something waits, optional count (off by
-default, caps at "9+"). The menu:
-
-- **Status:** Calendar connected · Mail (waiting on MailKit) · Claude Code: watching (remove hooks…) · Codex: watching (when Codex is set up)
-- **Character:** Body, Palette, Eyes, Topper, Accessory
-- **Home spot** · **Interrupts per day** (1 / 3 / 5 / 8) · **Quiet hours** 22:00–07:00
-- **Toggles:** Perch on windows when idle · Moods · Hide in full-screen apps · Hide from screen shares and
-  screenshots (on by default) · Show count in menu bar · Open at login
-- **Agent:** Open long questions in (ChatGPT / Claude / Perplexity) · Models (per lane: Haiku / Sonnet / Opus) ·
-  allowed repos · digest on/off · history
-- **Agent ▸ Browser tasks (beta)** on/off · **Run browser tasks in** (Automatic, or a browser that has the Claude
-  extension: Chrome, Comet, Arc, Brave, Edge)
-- **Setup** (steps left, replay intro, first-week tips) · Developer (simulators) · Quit
-
-### 3.8 Browser tasks ✅ beta (answer card, 420 pt)
-Opt-in. You ask for something done in the browser ("make a google sheet of these numbers: 12, 40, 7"). Three states
-on the answer card, blue **Browser task** badge:
-
-1. **Plan:** a one-line summary, numbered steps, an orange **asks first** tag on steps that send, buy, delete or
-   post, "Opens only *sites*. A new address asks you first; links it clicks aren't checked.", "It's told to ask
-   before sending, buying or deleting, and never to type passwords." Footer: "Runs in Comet" · **Cancel** ·
-   **Run it** (⌘⏎).
-2. **Running:** the last few steps with checkmarks ("Opening a tab", "Going to the page", "Reading the page",
-   "Working in the page"), a working line, **Stop**.
-3. **A question:** an orange box inside the card: "Before I do this" (the model is about to do something
-   irreversible) or "This needs your OK" (a site outside the plan), with **No** · **Yes, go ahead**. Unanswered
-   questions expire after about 5 minutes and count as no.
-
-Done shows a short summary and the usual footer; if the card was closed, it arrives as a gentle envelope. Hush's
-reactions: **hand over** (plan ready, done), **perk** (needs you), **sorry** (failed). What's enforced in code: which
-tools run, which addresses open; everything is logged on the Mac.
-
-Needs the Claude extension (claude.ai/chrome) signed in with the same account as Claude Code. Claude Code connects
-it to Chrome, Arc, Brave and Edge itself; for Comet, Hush adds the missing connection file when you press Run it.
-
----
-
-## 4. What Hush pays attention to
-
-| Source | Status | How |
-| --- | --- | --- |
-| Calendar | ✅ | macOS Calendar: gentle 10 min before a meeting, interrupt 2 min before |
-| Claude Code and Codex sessions | ✅ | Hooks send Hush the event, session id, folder, host app and terminal device, nothing else: working, needs you, finished (with run time). Cards say which agent: "Codex finished in hush". Codex needs its hooks trusted once with `/hooks` |
-| Claude Code transcripts | ✅ opt-in | Read on the Mac for the digest |
-| Your focus | ✅ | Mic in use (calls), full-screen, typing, away |
-| Copy/paste, screenshots, power, audio | ✅ | For antics only; no permissions needed |
-| Mail | ⏳ not connected yet | MailKit extension is next; until then mail is only simulated from the Developer menu. When it lands, it's judged on this Mac by Apple Intelligence when that's on, otherwise by rules |
-| Screen sharing | ✅ | Hush's windows are left out of screen shares, recordings and screenshots (a setting, on by default), so viewers never see it. Presenting without a call isn't detected, so Hush may still appear on your own screen |
-
-## 5. Models (they're settings)
-
-| Lane | Default | Used for |
-| --- | --- | --- |
-| Quick answers | Haiku | Ask Hush quick lane |
-| Code questions | Sonnet | Ask Hush repo lane (read-only tools) |
-| Digest summaries | Haiku | Summarise button |
-| Browser tasks | Sonnet | Plan + run (hidden from the Models menu for now) |
-| Mail triage + gist | Apple's on-device model | Whether a mail is worth showing, and its one-line gist. On this Mac only, free; rules when Apple Intelligence is off (Settings ▸ Connections) |
-
-Aliases always point at the newest model of each tier, so upgrades arrive for free. The Claude lanes run on your
-own Claude Code login and use your own Claude usage. A small test set of real asks (`swift run hush-eval`) decides when a default changes: on the
-first run Haiku and Sonnet both got every quick ask right, and Haiku cost about 20× less, so Haiku stays.
-Plan: [`docs/lanes-plan.md`](docs/lanes-plan.md).
-
-## 6. Coming next ⏳
-
-- The v1 plan ([`docs/decisions.md`](docs/decisions.md) ADR-021): agent watcher with a flag rail and one-click jump
-  to the right terminal, meetings with one-click join, first run, the "What Hush saw" journal, then mail.
-- Quick answers and Summarise on Apple's on-device model; the other Claude features behind one opt-in switch.
-- A signed, notarised download. Until then, Hush is built from source.
-- Every wardrobe piece stays free and in this repo.
-
-The design guide's surfaces are all built: see [`docs/design-guide-plan.md`](docs/design-guide-plan.md) for what differs.
-
-## 7. Copy rules
-
-Plain, warm and short. Hush talks like a small friend, not an assistant. No em-dashes, no AI-tell adjectives, no
-exclamation spam.
-
----
-
-## Build from source
-
-**Requirements**
-- macOS 15 (Sequoia) or later, Apple silicon or Intel
-- Xcode Command Line Tools with Swift 6.1 or later (`xcode-select --install`); full Xcode isn't needed
-- Optional: Apple Intelligence turned on (macOS 26 or later, Apple silicon) for mail judging and "hand it to Hush".
-  Without it, Hush uses rules and offers your assistant instead.
-- Optional: [Claude Code](https://claude.com/claude-code), signed in with your own account. Agent alerts need it
-  installed (they use its hooks, no model calls). Ask Hush answers, Summarise and browser tasks run on your Claude
-  Code login and use your own Claude usage. Without it, Hush still does everything else.
+**You need**
+- macOS 15 or later
+- Xcode, or the Command Line Tools with Swift 6.1 or later (`xcode-select --install`)
+- Optional: Apple Intelligence on (macOS 26 or later, Apple silicon) for "hand it to Hush" and mail judging
+- Optional: [Claude Code](https://claude.com/claude-code) for agent alerts (they use its hooks, no model calls) and
+  for Ask Hush answers, which use your own Claude usage
 
 ```sh
-git clone <this repo> && cd hush
-./scripts/swift.sh test    # core logic (146 tests); picks a usable SDK on CLT-only Macs
-./scripts/bundle.sh        # build, install to /Applications/Hush.app, launch
+git clone https://github.com/adityasshekhawat/hush.git && cd hush
+./scripts/bundle.sh        # builds, installs to /Applications/Hush.app and opens it
 ```
 
-The build is signed ad hoc, so it runs on the Mac that built it. If it quits, open it from Spotlight or
-`open -a Hush`. Its data stays in `~/Library/Application Support/Hush/`.
+Hush walks you through the rest: a look, a few tries, then Calendar and your Claude Code sessions, each optional.
+Its data stays in `~/Library/Application Support/Hush/`.
 
-**For contributors:** `swift run hush-eval` runs the Ask Hush test set against a real model (a few cents on your
-login). The code map is [`CLAUDE.md`](CLAUDE.md); decisions are in [`docs/decisions.md`](docs/decisions.md). See
-[`CONTRIBUTING.md`](CONTRIBUTING.md) and [`SECURITY.md`](SECURITY.md).
+## Things to try
+
+- **Hover** over Hush: it pops up and waves. **Press and hold:** a pat.
+- **Click it four times fast.** Then wait.
+- **Copy a paragraph,** click Hush, pick *Shorter*, paste.
+- **⌘⇧H** and ask "XLOOKUP in Google Sheets".
+- **Drag it** onto the top edge of a window and let go.
+- Start a long Claude Code run in another window and go do something else.
+- Look at the menu bar panel at the end of the day: "63 held back today".
+
+## How it works
+
+- `Sources/HushCore`: the decision engine (rules, then a classifier, then quiet hours, the daily cap and focus) and
+  everything else that can be tested without a Mac UI. Time is injected, storage is SQLite.
+- `Sources/HushMac`: macOS adapters (Calendar, focus and call detection, Apple's on-device model, hooks).
+- `Sources/Hush`: the app. The character is SVG art drawn in a small web view; cards are SwiftUI.
+- `Sources/hushctl`: the tiny helper the Claude Code and Codex hooks run.
+
+[`CLAUDE.md`](CLAUDE.md) is the code map, [`docs/features.md`](docs/features.md) lists everything Hush does,
+[`docs/decisions.md`](docs/decisions.md) records why, and [`docs/performance.md`](docs/performance.md) has measured
+CPU and memory. Changes are in [`CHANGELOG.md`](CHANGELOG.md).
+
+## Contributing
+
+Code, ideas and **art** are welcome. Hush needs hats, outfits, props, buddies and seasonal pieces drawn to fit its
+bodies: see [`CONTRIBUTING.md`](CONTRIBUTING.md). The bar for every change is restraint: it should make Hush quieter,
+kinder or more useful, never louder. Found a security problem? See [`SECURITY.md`](SECURITY.md).
+
+```sh
+./scripts/swift.sh test    # the core tests
+```
 
 ## Licence
 
 - **Code:** [Apache License 2.0](LICENSE).
-- **Hush itself** (the character's shapes, faces, poses and animations), **the name, logo and app icon** are
-  reserved. Forks are welcome under their own name, icon and character.
+- **Hush itself** (the character's shapes, faces, poses and animations, including the images above), **the name,
+  logo and app icon** are reserved. Forks are welcome under their own name, icon and character.
 - **Wardrobe pieces, props, effects and edge pieces** (`assets/character/swag`): [CC BY-SA 4.0](assets/character/swag/LICENSE).
   Remix them, and contribute new ones.
 - Details: [`LICENSE-ASSETS.md`](LICENSE-ASSETS.md) and [`NOTICE`](NOTICE).

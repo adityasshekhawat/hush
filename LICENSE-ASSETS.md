@@ -12,8 +12,8 @@ what makes it Hush, so it stays reserved, the way an open-source app keeps its l
   and the palettes as its look. Files: `assets/character/rig/`, `poses/`, `expressions/`, `states/`,
   `animations/`, `palettes.json`.
 - **The name "Hush", the logo, the wordmark, the app icon and the menu bar glyphs:** `assets/brand/`.
-- **Copies of these anywhere else in the repository,** such as the pack generated into `site/hush-data.js`, and
-  screenshots or videos of the character.
+- **Copies of these anywhere else in the repository,** such as the pack generated into `site/hush-data.js`, the
+  renders in `docs/media/`, and screenshots or videos of the character.
 
 ## Open: everything that isn't Hush's original shape
 

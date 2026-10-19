@@ -3,7 +3,7 @@ import HushCore
 import SwiftUI
 
 // Browser tasks on the answer card (docs/design-guide.md §5.6): plan, running (step discs), a question box with a
-// countdown, done. Copy follows the README: the card says what code enforces and what the model is told.
+// countdown, done. Copy follows docs/features.md: the card says what code enforces and what the model is told.
 
 /// Before it runs: a one-line summary, up to 7 numbered steps, "asks first" tags, the sites note.
 struct PlanBody: View {

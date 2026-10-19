@@ -23,7 +23,7 @@ Idle CPU stays ~2–3 % (ADR-011): no persistent animation inside the SVG, no fa
 | Landing page | `site/` (static: `index.html`, `style.css`, `app.js`; `hush.js` draws Hush from the app's own pack like `compose.js`). `site/hush-data.js` is generated: run `python3 scripts/build-site.py` after changing `assets/character` or `Wardrobe.swift`. Links and the waitlist endpoint live in `CONFIG` at the top of `app.js` |
 | Hook helper | `Sources/hushctl/main.swift` (hooks), `Gate.swift` (`hushctl gate`: browser-task permission gate) |
 | Character art | `assets/character/` (search-ignored); brand (logo, app icon, menu bar glyphs) in `assets/brand/`. **Don't open SVGs**; use `docs/character-inventory.md`. |
-| Docs | `docs/decisions.md` (ADRs: read the one you touch), `docs/agent-plan.md` (agent phases), `docs/ask-design.md` (Ask Hush lanes, routing, card shapes), `docs/app-router-plan.md` (answers → the app you work in), `docs/onboarding-plan.md` (install paths + first-run journey), `docs/personas.md` (who it's for), `docs/positioning.md` (how Hush differs from other companions), `docs/lanes-plan.md` (models as settings, "do it" lane), `docs/design-guide.md` (**looks: tokens, motion, every surface**; the README wins on behaviour) + `docs/design-guide-plan.md` (phases D1 to D7), `docs/PRD.md` (spec; large) |
+| Docs | `docs/decisions.md` (ADRs: read the one you touch), `docs/agent-plan.md` (agent phases), `docs/ask-design.md` (Ask Hush lanes, routing, card shapes), `docs/app-router-plan.md` (answers → the app you work in), `docs/onboarding-plan.md` (install paths + first-run journey), `docs/personas.md` (who it's for), `docs/positioning.md` (how Hush differs from other companions), `docs/lanes-plan.md` (models as settings, "do it" lane), `docs/features.md` (**everything Hush does**; wins on behaviour), `docs/design-guide.md` (**looks: tokens, motion, every surface**) + `docs/design-guide-plan.md` (phases D1 to D7), `docs/PRD.md` (spec; large) |
 
 ## Renderer invariants
 One frame owner: lifted > sequence > mode (walk/perch) > mood > half-rise > base state; don't add parallel flags.
@@ -33,6 +33,7 @@ Floor anchors: edge poses y=112, perches y=116, others y=138. Sequences come fro
 - `./scripts/swift.sh test` (core; plain `swift test` also works with Xcode) · `./scripts/bundle.sh` builds, installs to `/Applications/Hush.app`, relaunches it
   (`--no-install` to only build). `./scripts/swift.sh run hush-eval` runs `evals/asks.json` against a real model (costs money); `--lane mail` / `--lane pouch` run `evals/mail.json` / `evals/pouch.json` on the on-device model (free). Hush repoints its Claude Code hooks to wherever it runs from, on launch.
 - Logs (renderer errors, paste, agent, hooks): `~/Library/Application Support/Hush/diagnostics.log`
+- README media: `swift scripts/render-media.swift` renders `docs/media` GIFs/PNGs from the pack (after new art)
 - Cost: `./scripts/measure.sh 40` (CPU and memory of Hush + WebKit helpers; results in `docs/performance.md`)
 - Debug hooks: `defaults write dev.hush.Hush HushDebugHooks -bool YES`, then post distributed notification
   `dev.hush.debug` with a command; the list is the `switch` in `AppController+Debug.swift`. Turn it off after, then relaunch Hush

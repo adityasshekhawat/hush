@@ -1,6 +1,6 @@
 # Hush design guide (for implementation)
 
-This guide covers every surface in the README. The visual reference is the **Design guide** page of the Hush canvas (boards Guide 00 to 09, including 08 Rare finds and 10 Wardrobe and packs). Where this file and the README disagree on behaviour, the README wins. Where they disagree on looks, this file wins.
+This guide covers every surface in [`features.md`](features.md). The visual reference is the **Design guide** page of the Hush canvas (boards Guide 00 to 09, including 08 Rare finds and 10 Wardrobe and packs). Where this file and the README disagree on behaviour, the README wins. Where they disagree on looks, this file wins.
 
 Assets in this folder:
 
@@ -234,7 +234,7 @@ Centre the card horizontally on Hush, then clamp it 12 pt inside the visible scr
 - Title: a one-line summary.
 - Numbered steps: at most 7, plain verbs.
 - An orange **asks first** tag on any step that sends, buys, deletes or posts.
-- A grey sites note naming the allowed sites in bold, plus the two safety sentences from the README.
+- A grey sites note naming the allowed sites in bold, plus the two safety sentences from `features.md`.
 - Footer: "Runs in Comet ▾" on the left, then **Cancel** (quiet) and **Run it ⌘⏎** (primary).
 - Hush plays `handOver`.
 
@@ -279,7 +279,7 @@ Centre the card horizontally on Hush, then clamp it 12 pt inside the visible scr
 
 **Summarise** replaces "Claude:" in place with a white inset of 2 to 3 sentences, showing a 2-line skeleton while it loads.
 
-**Limits:** show at most 5 sessions, then "and 3 more in History". The footer carries the README privacy line.
+**Limits:** show at most 5 sessions, then "and 3 more in History". The footer carries the privacy line from `features.md`.
 
 **Consent dialog** (first use): standard alert layout with the app icon, bold title, small body, and an ink **Allow** button plus **Not now**.
 
