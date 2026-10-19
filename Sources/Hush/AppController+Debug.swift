@@ -197,8 +197,12 @@ extension AppController {
                                     receivedAt: Date())
             Task { [demo] in
                 await engine.update(settings: demo)
-                guard let d = try await engine.evaluate(vipItem) else { return }
-                await handle(d)
+                do {
+                    guard let d = try await engine.evaluate(vipItem) else { return }
+                    await handle(d)
+                } catch {
+                    DiagnosticsLog.write("debug: VIP demo failed: \(error.localizedDescription)")
+                }
             }
             return
         case .bulk:

@@ -30,8 +30,8 @@ One frame owner: lifted > sequence > mode (walk/perch) > mood > half-rise > base
 Floor anchors: edge poses y=112, perches y=116, others y=138. Sequences come from `timing.json`; custom ones use `F(pose, expr, ms)`.
 
 ## Commands
-- `swift test` (core) · `./scripts/bundle.sh` builds, installs to `/Applications/Hush.app`, relaunches it
-  (`--no-install` to only build). `swift run hush-eval` runs `evals/asks.json` against a real model (costs money). Hush repoints its Claude Code hooks to wherever it runs from, on launch.
+- `./scripts/swift.sh test` (core; plain `swift test` works when Xcode is selected) · `./scripts/bundle.sh` builds, installs to `/Applications/Hush.app`, relaunches it
+  (`--no-install` to only build). `./scripts/swift.sh run hush-eval` runs `evals/asks.json` against a real model (costs money). Hush repoints its Claude Code hooks to wherever it runs from, on launch.
 - Logs (renderer errors, paste, agent, hooks): `~/Library/Application Support/Hush/diagnostics.log`
 - Debug hooks: `defaults write dev.hush.Hush HushDebugHooks -bool YES`, then post distributed notification
   `dev.hush.debug` with a command; the list is the `switch` in `AppController+Debug.swift`. Turn it off after, then relaunch Hush
@@ -41,5 +41,6 @@ Floor anchors: edge poses y=112, perches y=116, others y=138. Sequences come fro
 - `HushCore`: Foundation + SQLite3 only; time injected (`now:`); tests use `HushStore(path: ":memory:")`.
 - Backends conform to `AttentionClassifier` / `GistWriter` / `CharacterRenderer`.
 - New dependency → the advisory check from the global CLAUDE.md first.
-- Toolchain: macOS 15, CLT only. If SwiftPM fails with "Undefined symbols … PackageDescription" or
+- Toolchain: dev Mac is macOS 27 with CLT 27 (Swift 6.4), no Xcode; builds use the CLT's macOS 26 SDK via
+  `scripts/sdk.sh` because the 27 SDK's SwiftUI/Testing macros need Xcode (ADR-017). Deployment target stays macOS 15. If SwiftPM fails with "Undefined symbols … PackageDescription" or
   "redefinition of module 'SwiftBridging'", look for stale orphan files under `/Library/Developer/CommandLineTools` (ADR-001).

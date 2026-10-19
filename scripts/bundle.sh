@@ -6,6 +6,7 @@
 set -eu
 
 cd "$(dirname "$0")/.."
+. scripts/sdk.sh
 INSTALL=1
 CONFIG=release
 for arg in "$@"; do
@@ -15,9 +16,9 @@ for arg in "$@"; do
   esac
 done
 
-swift build -c "$CONFIG" --product Hush
-swift build -c "$CONFIG" --product hushctl
-BINDIR="$(swift build -c "$CONFIG" --show-bin-path)"
+scripts/swift.sh build -c "$CONFIG" --product Hush
+scripts/swift.sh build -c "$CONFIG" --product hushctl
+BINDIR="$(scripts/swift.sh build -c "$CONFIG" --show-bin-path)"
 BIN="$BINDIR/Hush"
 
 APP=build/Hush.app

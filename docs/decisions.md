@@ -223,3 +223,28 @@ coming back after ≥10 minutes away scans transcripts in `~/.claude/projects` t
 message, status. The project is re-anchored to the git root. A gentle "While you were away" envelope goes through the
 engine; clicking it opens the digest directly. **Summarise** is the only network step: a capped excerpt of one
 session to Claude Haiku.
+
+## ADR-017 · Build on macOS 27 with CLT 27 against the macOS 26 SDK (2026-10-19)
+
+**Context.** Development moved to a Mac on macOS 27.0.1 with Command Line Tools for Xcode 27.0 (Swift 6.4), still no
+Xcode. Its default macOS 27 SDK declares SwiftUI's `@State` as a macro (`SwiftUIMacros.StateMacro`), and with that SDK
+swift-testing's `@Suite`/`@Test` plugins aren't found either. The SwiftUI macro plugin ships only with Xcode, so
+`swift build` and `swift test` fail. The same CLT also installs the macOS 26.5 SDK, which has neither problem and
+already has `glassEffect` and `FoundationModels`.
+
+**Decision.** `scripts/sdk.sh` sets `SDKROOT` to the CLT's macOS 26 SDK when only CLT is selected and no `SDKROOT` is
+set; `bundle.sh` sources it and `./scripts/swift.sh test` wraps `swift`. With Xcode selected nothing changes.
+Even on the 26 SDK, CLT 27's default build system intermittently loses swift-testing's macro plugin ("plugin for module
+'TestingMacros' not found"), and once it does every incremental build fails until `.build` is deleted. `swift.sh`
+passes `-Xswiftc -plugin-path <CLT>/usr/lib/swift/host/plugins/testing` for build/test/run, which fixed it in 6 of 6
+clean and incremental runs. It also passes `-platform_version macos 15.0 <SDK version>` to the linker: without it
+the binaries recorded `sdk 15.0` (the deployment target), so macOS would treat Hush as a macOS 15 app; now they
+record 26.5 (`otool -l … | grep -A5 LC_BUILD_VERSION`). `bundle.sh` builds through `swift.sh`.
+Swift 6.4 also flagged three fire-and-forget throwing `Task`s that silently dropped store errors; they now log to
+diagnostics.log. The
+deployment target stays macOS 15 (`Package.swift`); macOS 26 features go behind `#available` checks. CI stays on the
+`macos-15` runner. Measured: clean build and all 129 tests pass on Swift 6.4 + the 26.5 SDK.
+
+**Revisit** when Xcode is installed (MailKit needs it anyway, ADR-001): build against the 27 SDK and drop the override.
+Supersedes ADR-001's "macOS 15, CLT only" for this Mac; the unblocks it lists (Foundation Models, glassEffect) are now
+possible without Xcode.

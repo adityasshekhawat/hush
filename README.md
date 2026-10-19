@@ -271,7 +271,7 @@ exclamation spam.
 
 ```sh
 git clone <this repo> && cd hush
-swift test                 # core logic (129 tests)
+./scripts/swift.sh test    # core logic (129 tests); picks a usable SDK on CLT-only Macs
 ./scripts/bundle.sh        # build, install to /Applications/Hush.app, launch
 ```
 

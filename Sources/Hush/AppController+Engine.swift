@@ -33,8 +33,12 @@ extension AppController {
 
     func submit(_ item: InboxItem, preset: AttentionLevel? = nil) {
         Task {
-            guard let d = try await engine.evaluate(item, preset: preset) else { return }
-            await handle(d)
+            do {
+                guard let d = try await engine.evaluate(item, preset: preset) else { return }
+                await handle(d)
+            } catch {
+                DiagnosticsLog.write("engine: evaluate \(item.kind.rawValue) failed: \(error.localizedDescription)")
+            }
         }
     }
 
@@ -59,8 +63,12 @@ extension AppController {
         antics.focusChanged(f)
         digest?.focusChanged(away: f.away)
         Task {
-            let released = try await engine.setFocus(f)
-            for d in released { await handle(d) }
+            do {
+                let released = try await engine.setFocus(f)
+                for d in released { await handle(d) }
+            } catch {
+                DiagnosticsLog.write("engine: releasing queued items failed: \(error.localizedDescription)")
+            }
             refresh()
         }
     }
