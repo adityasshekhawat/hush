@@ -25,6 +25,14 @@ final class SettingsModel: ObservableObject {
 
     // MARK: general
 
+    /// Mail judging reads the first lines too (off by default, ADR-027).
+    var mailSnippets: Binding<Bool> {
+        binding({ UserDefaults.standard.bool(forKey: "mailSnippets") }, { on in
+            UserDefaults.standard.set(on, forKey: "mailSnippets")
+            Task { await self.app.triage.setReadsSnippets(on) }
+        })
+    }
+
     /// Meeting lead times in minutes (ADR-025).
     var meetingHeadsUp: Binding<Int> {
         binding({ Int(self.app.settings.gentleMeetingLead / 60) }, { v in self.app.setSettings { $0.gentleMeetingLead = TimeInterval(v * 60) } })

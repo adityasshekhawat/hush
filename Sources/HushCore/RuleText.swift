@@ -20,6 +20,7 @@ public enum RuleText {
         switch match {
         case .sender(let s): return "mail from \(s)"
         case .senderDomain(let d): return "mail from anyone at \(d)"
+        case .subjectContains(let w): return "mail about “\(w)”"
         case .category(let c):
             if c == "meeting" { return "meeting reminders" }
             if c.hasPrefix("agent:") { return "agent updates in \(c.dropFirst(6))" }
@@ -58,6 +59,12 @@ public enum RuleText {
                 guard isAddress(who) else { return nil }
                 match = .sender(who)
             }
+        } else if r.hasPrefix("mail about ") {
+            // "mail about invoice" or “invoice”: a word or short phrase in the subject (ADR-027).
+            let w = String(rest.dropFirst("mail about ".count))
+                .trimmingCharacters(in: CharacterSet(charactersIn: "\"“”' ").union(.whitespaces))
+            guard (2...40).contains(w.count), w.split(separator: " ").count <= 4 else { return nil }
+            match = .subjectContains(w.lowercased())
         } else if r.hasPrefix("agent updates in ") {
             let project = String(rest.dropFirst("agent updates in ".count)).trimmingCharacters(in: .whitespaces)
             guard !project.isEmpty, !project.contains(" ") else { return nil }
@@ -92,6 +99,8 @@ public enum RuleSuggestions {
         Always tap the glass for mail from anyone at <domain>
         Hold back mail from <email address>
         Hold back mail from anyone at <domain>
+        Always show me mail about <word in the subject>
+        Always tap the glass for mail about <word in the subject>
         Always tap the glass for meeting reminders
         Hold back agent updates in <project folder name>
         Use only addresses, domains and project names the reader actually wrote. If they mention a person or a kind of \

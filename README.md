@@ -83,8 +83,11 @@ Some rare pieces turn up on their own.</td>
 </tr>
 </table>
 
-**Not yet:** mail. The Apple Mail extension is in progress; until it lands, mail is only simulated (Settings ▸
-Developer). When it arrives, Apple's on-device model judges each mail on your Mac.
+**Not yet:** a real mail source. Hush's mail judging is built and measured, but the Apple Mail extension that feeds it
+isn't done, so mail is only simulated for now (Settings ▸ Developer). When it lands: your VIPs and your rules
+("always tap the glass for mail about outage") come out right away; Apple's on-device model brings forward what looks
+like it needs you, gently, by sender and subject (the first lines only if you allow it); everything else waits for a
+digest at a natural break, like coming back from lunch: "14 mails while you were busy · 2 might need you".
 
 ## What leaves your Mac
 

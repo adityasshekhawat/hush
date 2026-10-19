@@ -126,6 +126,10 @@ extension AppController {
             Task { let ok = await requestCalendarAccess(); DiagnosticsLog.write("calendar: request returned \(ok)") }
         case ("history", _): ask.showHistory()
         case ("journal", _): journal.show()
+        case ("maildigest", _):
+            // The digest now, as if at a natural break (ignores the hourly limit).
+            defaults.removeObject(forKey: "lastMailDigest")
+            maybeMailDigest()
         case ("wardrobe", _): openWardrobe?()
         case ("settings", let s): openSettings?(SettingsSection.allCases.first { $0.rawValue.lowercased().hasPrefix(s) } ?? .general)
         case ("rare", let id): rare.debugFind(id)

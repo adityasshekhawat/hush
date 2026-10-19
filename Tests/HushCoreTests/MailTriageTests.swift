@@ -7,11 +7,14 @@ import Testing
         let long = String(repeating: "word ", count: 200)
         let item = InboxItem(id: "1", kind: .mail, senderName: "Priya", senderAddress: "priya@work.com",
                              subject: "Re: Q4 plan\nsign-off", snippet: long, receivedAt: tenAM)
-        let p = MailTriage.prompt(for: item)
+        let p = MailTriage.prompt(for: item, snippet: true)
         #expect(p.contains("From: Priya <priya@work.com>"))
         #expect(p.contains("Subject: Re: Q4 plan sign-off"))
         #expect(p.split(separator: "\n").count == 3)
         #expect(p.count < 700)
+        // By default only the sender and subject go to the model (ADR-027).
+        #expect(!MailTriage.prompt(for: item).contains("Snippet"))
+        #expect(MailTriage.prompt(for: item).split(separator: "\n").count == 2)
         #expect(MailTriage.prompt(for: InboxItem(id: "2", kind: .mail, subject: "hi", receivedAt: tenAM)).contains("From: unknown"))
     }
 

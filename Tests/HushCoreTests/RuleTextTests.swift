@@ -48,3 +48,35 @@ import Testing
         ])
     }
 }
+
+@Suite struct SubjectRules {
+    @Test func wordsInTheSubjectBecomeRules() {
+        let base = UserRule(id: "r", match: .category("meeting"), action: .never, createdAt: tenAM)
+        let r = RuleText.parse("Always tap the glass for mail about “Outage”", base: base)
+        #expect(r?.match == .subjectContains("outage") && r?.action == .alwaysInterrupt)
+        #expect(RuleText.sentence(r!) == "I'll always tap the glass for mail about “outage”.")
+        #expect(RuleText.parse(RuleText.sentence(r!), base: base) == r)
+        #expect(RuleText.parse("Always show me mail about x", base: base) == nil)            // too short
+        #expect(r!.matches(mail("1", subject: "SEV1: outage in eu-west")))
+        #expect(!r!.matches(mail("2", subject: "Weekly digest")))
+    }
+
+    @Test func subjectRulesCanInterruptThroughTheEngine() async throws {
+        let e = DecisionEngine(store: try HushStore(path: ":memory:"), classifier: FixedClassifier(level: .ambient, confidence: 0.9))
+        try await e.addRule(UserRule(match: .subjectContains("outage"), action: .alwaysInterrupt, createdAt: tenAM))
+        let d = try #require(await e.evaluate(mail("o", from: "alerts@x.com", subject: "Outage: api down"), now: tenAM))
+        #expect(d.finalLevel == .interrupt)
+    }
+}
+
+@Suite struct RulesBeatBulk {
+    @Test func yourRuleWinsOverTheBulkFilter() async throws {
+        let e = DecisionEngine(store: try HushStore(path: ":memory:"), classifier: FixedClassifier(level: .ambient, confidence: 0.9))
+        try await e.addRule(UserRule(match: .subjectContains("outage"), action: .alwaysInterrupt, createdAt: tenAM))
+        let alert = try #require(await e.evaluate(mail("a", from: "noreply@status.io", subject: "Outage in eu-west"), now: tenAM))
+        #expect(alert.finalLevel == .interrupt)
+        // Other bulk mail is still dropped.
+        let news = try #require(await e.evaluate(mail("b", from: "noreply@status.io", subject: "Monthly summary"), now: tenAM))
+        #expect(news.outcome == .dropped)
+    }
+}

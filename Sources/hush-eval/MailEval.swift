@@ -3,7 +3,7 @@ import HushCore
 import HushMac
 
 // Mail triage eval (ADR-018): runs evals/mail.json through the same OnDeviceTriage the app uses and prints
-// accuracy, gists and latency. On-device, so it's free:  swift run hush-eval --lane mail [--filter lunch]
+// accuracy, gists and latency. On-device, so it's free:  swift run hush-eval --lane mail [--snippets] [--filter lunch]
 
 struct MailCase: Decodable { var name: String; var from: String; var subject: String; var snippet: String; var expect: String }
 struct MailSet: Decodable { var cases: [MailCase] }
@@ -16,8 +16,10 @@ func runMailEval(root: URL, filter: String?) async throws {
         return
     }
     let triage = OnDeviceTriage(enabled: true)
+    let snippets = CommandLine.arguments.contains("--snippets")
+    await triage.setReadsSnippets(snippets)
     await triage.prewarm()
-    print("Mail triage · \(MailTriage.version) · \(cases.count) mails\n")
+    print("Mail triage · \(MailTriage.version) · \(cases.count) mails · \(snippets ? "sender, subject and snippet" : "sender and subject only")\n")
 
     var right = 0, fellBack = 0, missed = 0, extra = 0
     var times: [Int] = []

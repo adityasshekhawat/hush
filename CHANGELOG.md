@@ -5,6 +5,11 @@ Hush is pre-alpha and built from source. Notable changes, newest first. Decision
 
 ## Unreleased
 
+- **Mail, ready for a source:** rules for words in the subject ("always tap the glass for mail about outage"), which
+  also win over the bulk-mail filter; judging by sender and subject only unless you allow the first lines (measured:
+  22/24 vs 23/24); "Always show them" on a mail the model brought forward; and a digest at natural breaks instead of
+  a visit per mail. Real mail still needs the Apple Mail extension.
+
 - **What Hush saw:** a journal of everything Hush looked at this week, what it did and why, in plain words. On this
   Mac, kept 7 days, with Forget (menu bar ▸ What I saw).
 - **Tell Hush what matters:** in What I've learned, type it your way ("tap the glass when boss@acme.com writes") and

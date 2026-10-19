@@ -74,14 +74,15 @@ public actor DecisionEngine {
                          outcome: .dropped, confidence: nil, modelVersion: nil, reasons: [])
 
         // ---- Step 1: rules in code ----
-        if BulkMailFilter.isBulk(item) {
+        let rules = try store.rules()
+        let rule = rules.first { $0.matches(item) }
+        // Bulk mail is dropped, unless one of your rules asks for it (alerts often come from noreply@; ADR-027).
+        let asked = rule?.action == .alwaysGentle || rule?.action == .alwaysInterrupt
+        if BulkMailFilter.isBulk(item) && !asked {
             d.reasons = ["bulk headers"]
             try store.insert(d)
             return d
         }
-
-        let rules = try store.rules()
-        let rule = rules.first { $0.matches(item) }
         if rule?.action == .never {
             d.reasons = ["rule: not this kind again"]
             try store.insert(d)

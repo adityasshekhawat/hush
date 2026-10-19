@@ -21,6 +21,8 @@ public actor OnDeviceTriage: AttentionClassifier, GistWriter {
     private let rules: any AttentionClassifier
     private let plain: any GistWriter
     private var enabled: Bool
+    /// Read the first lines of a mail too (Settings, off by default; ADR-027). Otherwise sender and subject only.
+    private var readsSnippets = false
     /// Gists written during classification, collected by `gist(for:)` (only shown items ask for one).
     private var gists: [String: String] = [:]
     /// A session warmed up ahead of the next mail; each mail gets a fresh one so nothing carries over.
@@ -32,6 +34,8 @@ public actor OnDeviceTriage: AttentionClassifier, GistWriter {
         self.rules = rules
         self.plain = plain
     }
+
+    public func setReadsSnippets(_ on: Bool) { readsSnippets = on }
 
     public func setEnabled(_ on: Bool) {
         enabled = on
@@ -142,7 +146,8 @@ public actor OnDeviceTriage: AttentionClassifier, GistWriter {
         let started = ContinuousClock.now
         defer { prewarm() }
         do {
-            let answer = try await Self.withTimeout(Self.timeout) { try await Self.respond(to: item, in: session) }
+            let snippet = readsSnippets
+            let answer = try await Self.withTimeout(Self.timeout) { try await Self.respond(to: item, snippet: snippet, in: session) }
             let ms = Int((ContinuousClock.now - started) / .milliseconds(1))
             guard let answer else {
                 Self.log("triage: model took over \(Self.timeout); rules answered")
@@ -162,7 +167,7 @@ public actor OnDeviceTriage: AttentionClassifier, GistWriter {
 
     #if canImport(FoundationModels)
     @available(macOS 26.0, *)
-    private static func respond(to item: InboxItem, in session: LanguageModelSession) async throws -> Answer {
+    private static func respond(to item: InboxItem, snippet: Bool, in session: LanguageModelSession) async throws -> Answer {
         typealias F = MailTriage.Field
         let root = DynamicGenerationSchema(name: "MailTriage", properties: [
             .init(name: F.level, description: F.levelGuide, schema: DynamicGenerationSchema(name: "Level", anyOf: F.levels)),
@@ -170,7 +175,7 @@ public actor OnDeviceTriage: AttentionClassifier, GistWriter {
             .init(name: F.gist, description: F.gistGuide, schema: DynamicGenerationSchema(type: String.self)),
         ])
         let schema = try GenerationSchema(root: root, dependencies: [])
-        let response = try await session.respond(to: MailTriage.prompt(for: item), schema: schema,
+        let response = try await session.respond(to: MailTriage.prompt(for: item, snippet: snippet), schema: schema,
                                                  options: GenerationOptions(samplingMode: .greedy))
         let content = response.content
         let level = try content.value(String.self, forProperty: F.level)

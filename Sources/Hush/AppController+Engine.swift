@@ -94,6 +94,11 @@ extension AppController {
         onRefresh?()
         // The mic came on near a meeting: you joined. Its reminder has done its job (ADR-025).
         if f.inCall { meetingJoined() }
+        // Natural breaks for the mail digest: back from 10+ minutes away, or a call ending (ADR-027).
+        if !f.away, let since = awayStartedAt, Date().timeIntervalSince(since) >= 10 * 60 { maybeMailDigest() }
+        if !f.inCall && wasInCall { maybeMailDigest() }
+        awayStartedAt = f.away ? (awayStartedAt ?? Date()) : nil
+        wasInCall = f.inCall
         antics.focusChanged(f)
         digest?.focusChanged(away: f.away)
         Task {

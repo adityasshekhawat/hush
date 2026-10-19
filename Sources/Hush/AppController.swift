@@ -80,6 +80,9 @@ final class AppController {
     var hushKey: GlobalHotKey?
     var agentAppObserver: Any?
     var meetingSnoozes = 0
+    /// For the mail digest's natural breaks (ADR-027).
+    var awayStartedAt: Date?
+    var wasInCall = false
     /// "What Hush saw" (ADR-026).
     let journal = JournalWindowController()
     var energyObserver: Any?
@@ -115,6 +118,8 @@ final class AppController {
         let store = try HushStore(path: HushStore.defaultPath())
         // FR-4 / FR-14: the on-device model when Apple Intelligence is on and you haven't turned it off; rules otherwise.
         triage = OnDeviceTriage(enabled: defaults.object(forKey: "useOnDeviceModel") as? Bool ?? true)
+        let readsSnippets = defaults.bool(forKey: "mailSnippets")
+        Task { [triage] in await triage.setReadsSnippets(readsSnippets) }
         engine = DecisionEngine(store: store, classifier: triage, settings: settings)
 
         renderer = try WebCharacterRenderer(characterHeight: 104)

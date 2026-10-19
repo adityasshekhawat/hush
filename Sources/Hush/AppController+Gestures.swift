@@ -141,6 +141,8 @@ extension AppController {
             },
             later: { [weak self] in self?.envelope.close() },
             snooze: a.item.kind == .meeting && a.finalLevel == .interrupt ? { [weak self] in self?.snoozeMeeting(a) } : nil,
+            alwaysShow: a.item.kind == .mail && a.reasons.contains(where: { $0.hasPrefix("model:") }) && a.item.senderAddress != nil
+                ? { [weak self] in self?.alwaysShowSender(a) } : nil,
             undo: { [weak self] in
                 guard let self, let rule = self.envelope.model.savedRule else { return }
                 Task { try? await self.engine.deleteRule(id: rule.id) }

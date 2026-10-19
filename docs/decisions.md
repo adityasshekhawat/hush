@@ -472,3 +472,23 @@ journey, persona presets, one-click hooks with the diff, Calendar with a preview
   it shows things. Not logged, not counted.
 
 **Not done:** the sniff and journal-cover art (`docs/v1-art-brief.md` priority 4).
+
+## ADR-027 · Mail: the filter and digest are built; the source isn't (2026-10-19)
+
+Milestone 5 of the v1 spec (ADR-021, feature 3), built against the engine with simulated mail.
+- **Immediate:** VIPs and your rules, now including **words in the subject** (`UserRule.Match.subjectContains`,
+  "always tap the glass for mail about outage"). An explicit "always" rule now wins over the bulk-mail filter
+  (status alerts come from noreply@); "never" and unruled bulk mail are still dropped. The model may bring a mail
+  forward gently with a reason, never interrupt (ADR-021), and the card offers **Always show them** (a sender rule,
+  with the receipt).
+- **Metadata only by default:** the triage prompt is sender and subject; the first 400 characters go in only with
+  Settings ▸ Connections ▸ "Let Apple Intelligence read the first lines of each mail". Measured on evals/mail.json:
+  22/24 (2 real asks missed, 0 shown that could wait) without, 23/24 with.
+- **Digest at natural breaks** (`MailDigest`, tested): coming back from 10+ minutes away or a call ending, at most
+  hourly, if 3 or more mails were held or dropped since the last one: "14 mails while you were busy · 2 might need you
+  · 9 could wait · 3 newsletters", listing up to 3 that might need you. Gentle, computed in code; it's the journal's
+  data, so it needs no extra storage. Quiet hours hold it like anything else.
+
+**Not done: the mail source.** A MailKit extension is an app-extension target (Xcode project), sandboxed, so it
+needs proper signing and an app group to reach Hush, and the user has to enable it in Mail ▸ Settings ▸ Extensions.
+It can't be finished or verified unattended. Until then the Developer menu's simulated mail exercises all of the above.

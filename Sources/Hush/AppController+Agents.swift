@@ -98,6 +98,38 @@ extension AppController {
         }
     }
 
+    /// "Always show them" on a mail the model brought forward: a rule for that sender, with the usual receipt (ADR-027).
+    func alwaysShowSender(_ d: Decision) {
+        guard let address = d.item.senderAddress else { return }
+        let rule = UserRule(match: .sender(address), action: .alwaysGentle, createdAt: Date())
+        Task {
+            try? await engine.addRule(rule)
+            await MainActor.run { self.envelope.showReceipt(rule) }
+        }
+        if active?.id == d.id { resolveActive(.opened) }
+        DiagnosticsLog.write("rules: always show a sender (from a card)")
+    }
+
+    /// The mail digest (ADR-027): at a natural break, at most hourly, what Hush held back since the last visit.
+    func maybeMailDigest() {
+        let now = Date()
+        let last = defaults.object(forKey: "lastMailDigest") as? Date ?? now.addingTimeInterval(-24 * 3600)
+        guard now.timeIntervalSince(last) >= MailDigest.interval else { return }
+        Task {
+            let entries = ((try? await engine.journal(days: 1, now: now)) ?? []).filter { $0.at > last }
+            guard let digest = MailDigest.build(entries) else { return }
+            await MainActor.run {
+                self.defaults.set(now, forKey: "lastMailDigest")
+                let item = InboxItem(id: "maildigest:\(Int(now.timeIntervalSince1970))", kind: .mail, senderName: "Hush",
+                                     senderAddress: MailDigest.ownAddress, subject: digest.title, snippet: digest.summary,
+                                     receivedAt: now, openURL: URL(fileURLWithPath: "/System/Applications/Mail.app"),
+                                     notes: digest.lines.isEmpty ? nil : digest.lines)
+                DiagnosticsLog.write("mail: digest of \(digest.total)")
+                self.submit(item, preset: .gentle)
+            }
+        }
+    }
+
     func toggleCommandBox() {
         onboarding?.observedHotkey()
         if commandPanel.isOpen { commandPanel.close(); return }

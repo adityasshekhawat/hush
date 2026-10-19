@@ -35,13 +35,12 @@ public enum MailTriage {
     static let maxSnippet = 400
     public static let maxGist = 90
 
-    public static func prompt(for item: InboxItem) -> String {
+    /// Sender and subject; the snippet only if you turned that on (off by default, ADR-027).
+    public static func prompt(for item: InboxItem, snippet: Bool = false) -> String {
         let who = [item.senderName, item.senderAddress.map { "<\($0)>" }].compactMap { $0 }.joined(separator: " ")
-        return """
-            From: \(who.isEmpty ? "unknown" : who)
-            Subject: \(clip(item.subject, maxSubject))
-            Snippet: \(clip(item.snippet, maxSnippet))
-            """
+        var lines = ["From: \(who.isEmpty ? "unknown" : who)", "Subject: \(clip(item.subject, maxSubject))"]
+        if snippet && !item.snippet.isEmpty { lines.append("Snippet: \(clip(item.snippet, maxSnippet))") }
+        return lines.joined(separator: "\n")
     }
 
     /// The model's answer as a cascade classification. Unknown levels read as ambient (when unsure, stay quiet).

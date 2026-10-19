@@ -22,6 +22,8 @@ struct EnvelopeActions {
     var later: () -> Void
     /// Meetings about to start: "1 more min" (ADR-025).
     var snooze: (() -> Void)? = nil
+    /// Mail the model brought forward: make it a rule in one tap (ADR-027).
+    var alwaysShow: (() -> Void)? = nil
     var undo: () -> Void
     var editRule: () -> Void
 }
@@ -42,7 +44,8 @@ struct EnvelopeView: View {
                         .font(HushFont.footer.monospacedDigit()).foregroundStyle(.tertiary)
                 }
                 if let rule = model.savedRule {
-                    Text("Got it. I'll hold these back.").font(HushFont.cardTitle)
+                    Text(rule.action == .never ? "Got it. I'll hold these back." : "Got it. I'll always show you these.")
+                        .font(HushFont.cardTitle)
                     Text("“\(RuleText.sentence(rule))”").font(HushFont.subtitle).foregroundStyle(.secondary)
                         .fixedSize(horizontal: false, vertical: true)
                     HStack(spacing: 8) {
@@ -73,6 +76,9 @@ struct EnvelopeView: View {
                         }
                         if let snooze = actions.snooze {
                             Button("1 more min", action: snooze).buttonStyle(HushPill(kind: .secondary))
+                        }
+                        if let alwaysShow = actions.alwaysShow {
+                            Button("Always show them", action: alwaysShow).buttonStyle(HushPill(kind: .secondary))
                         }
                         if v.offersNotThisKind {
                             Button("Not this kind again", action: actions.notThisKind).buttonStyle(HushPill(kind: .secondary))
@@ -115,6 +121,16 @@ struct EnvelopeVariant {
             let call = item.openURL?.scheme == "https"
             openTitle = call ? "Join" : "Open in Calendar"
             offersNotThisKind = !interrupt
+            offersCopy = false
+        case .mail where item.id.hasPrefix("maildigest:"):
+            // The digest visit (ADR-027): what was held back since the last one.
+            symbol = "tray.full.fill"; tone = .lilac
+            source = "Mail · held back"
+            title = item.subject
+            subtitle = item.snippet
+            detail = item.notes
+            openTitle = "Open Mail"
+            offersNotThisKind = false
             offersCopy = false
         case .mail:
             symbol = "envelope.fill"; tone = .blue

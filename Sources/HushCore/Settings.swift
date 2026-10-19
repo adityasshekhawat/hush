@@ -75,6 +75,8 @@ public struct UserRule: Sendable, Equatable, Codable, Identifiable {
         case sender(String)
         case senderDomain(String)
         case category(String)
+        /// A word or phrase in a mail's subject ("invoice", "outage"), case-insensitive (ADR-027).
+        case subjectContains(String)
     }
 
     public enum Action: String, Sendable, Codable {
@@ -102,6 +104,7 @@ public struct UserRule: Sendable, Equatable, Codable, Identifiable {
         case .sender(let s): item.senderAddress == s.lowercased()
         case .senderDomain(let d): item.senderDomain == d.lowercased()
         case .category(let c): item.category == c
+        case .subjectContains(let w): item.kind == .mail && item.subject.range(of: w, options: .caseInsensitive) != nil
         }
     }
 }

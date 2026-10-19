@@ -234,7 +234,12 @@ struct SettingsView: View {
         Section {
             ForEach(model.connections) { c in ConnectionRow(model: model, c: c) }
         } footer: {
-            Text("Nothing leaves your Mac unless you ask. Apple Intelligence reads a mail's sender, subject and first lines on this Mac to decide what's worth showing you.")
+            Text("Nothing leaves your Mac unless you ask.")
+        }
+        Section {
+            Toggle("Let Apple Intelligence read the first lines of each mail", isOn: model.mailSnippets)
+        } footer: {
+            Text("Off: it judges mail by sender and subject only. On: it also reads the first 400 characters, on this Mac, never stored. On catches a few more replies that ask you something.")
         }
     }
 
