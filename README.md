@@ -316,7 +316,8 @@ login). The code map is [`CLAUDE.md`](CLAUDE.md); decisions are in [`docs/decisi
 ## Licence
 
 - **Code:** [Apache License 2.0](LICENSE).
-- **Character art** (`assets/character`): [CC BY-SA 4.0](assets/character/LICENSE). Reuse and remix it; share what you
-  make under the same licence.
-- **The Hush name, logo and app icon** (`assets/brand`) aren't covered by either. Forks are welcome under their own
-  name: see [`TRADEMARKS.md`](TRADEMARKS.md) and [`NOTICE`](NOTICE).
+- **Hush itself** (the character's shapes, faces, poses and animations), **the name, logo and app icon** are
+  reserved. Forks are welcome under their own name, icon and character.
+- **Wardrobe pieces, props, effects and edge pieces** (`assets/character/swag`): [CC BY-SA 4.0](assets/character/swag/LICENSE).
+  Remix them, and contribute new ones.
+- Details: [`LICENSE-ASSETS.md`](LICENSE-ASSETS.md) and [`NOTICE`](NOTICE).

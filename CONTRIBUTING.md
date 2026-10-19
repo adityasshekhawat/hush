@@ -21,10 +21,15 @@ kinder or more useful, never louder.
    screen. Mention it in the pull request.
 
 ## Character art
-The character pack lives in `assets/character` (don't hand-edit SVGs; see `docs/character-inventory.md`). New pieces
-should work on all three bodies and every pose.
+New art is welcome: wardrobe pieces, held props, effects, buddies, seasonal pieces and edge pieces (flags, doors,
+signs). Put them in `assets/character/swag/` (or `edge/`), drawn on the same 160 × 146 canvas with the same layer ids,
+and make them fit all three bodies and every pose. `docs/v1-art-brief.md` has the ground rules, and
+`docs/character-inventory.md` lists what's there (don't hand-edit the existing SVGs).
+
+Hush itself, its body shapes, face, expressions, poses and animations, stays as it is: please don't redraw or modify
+it. See [`LICENSE-ASSETS.md`](LICENSE-ASSETS.md).
 
 ## Licence of contributions
-Code you contribute is under the [Apache License 2.0](LICENSE), and character art under
-[CC BY-SA 4.0](assets/character/LICENSE), the same as the rest of the project. You keep your copyright. The Hush name
-and logo stay reserved ([`TRADEMARKS.md`](TRADEMARKS.md)).
+Code you contribute is under the [Apache License 2.0](LICENSE). New art in `swag/` or `edge/` is under
+[CC BY-SA 4.0](assets/character/swag/LICENSE). You keep your copyright. The Hush character, name and logo stay
+reserved ([`LICENSE-ASSETS.md`](LICENSE-ASSETS.md)).

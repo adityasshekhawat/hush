@@ -29,7 +29,9 @@ useful on its own.
   frames to existing or new poses; the app replays them as (pose, expression) on the current body.
 - **Calm:** short entrances and exits. Nothing loops for long; anything held still must look fine still
   (performance budget: no constant animation).
-- **Licence:** the art ships in the open-source repo under CC BY-SA 4.0. Nothing traced from existing characters.
+- **Licence:** new poses, expressions and sequences of Hush itself are reserved with the rest of the character.
+  New props, wearables, effects and edge pieces are CC BY-SA 4.0 (`LICENSE-ASSETS.md`). Nothing traced from
+  existing characters.
 
 ## Priority 1: pause, battery mode, dismiss (milestone 1)
 

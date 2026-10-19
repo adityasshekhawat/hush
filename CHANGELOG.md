@@ -14,4 +14,5 @@ Hush is pre-alpha and built from source. Notable changes, newest first. Decision
   one-line gist (real mail arrives with the Mail extension, next).
 - **Copies and pastes:** ⌘Tab after copying no longer counts as a paste.
 - Builds on macOS 27 with Xcode 27 or Command Line Tools.
-- Open source: code under Apache-2.0, character art under CC BY-SA 4.0, name and logo reserved.
+- Open source: code under Apache-2.0. Hush's character, name and icon are reserved; wardrobe and prop art is
+  CC BY-SA 4.0 and open for contributions.

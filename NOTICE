@@ -3,8 +3,7 @@ Copyright 2026 The Hush authors
 
 The source code is licensed under the Apache License, Version 2.0 (LICENSE).
 
-The character art in assets/character, and the copy of it generated into site/hush-data.js, is licensed under the
-Creative Commons Attribution-ShareAlike 4.0 International licence (assets/character/LICENSE).
-
-The Hush name, logo, wordmark, app icon and menu bar glyphs in assets/brand are not covered by either licence.
-See TRADEMARKS.md.
+The Hush character, the name "Hush", the logo, the app icon and the menu bar glyphs are not licensed for reuse.
+Wardrobe pieces, props, effects and edge pieces (assets/character/swag, assets/character/edge) are licensed under
+Creative Commons Attribution-ShareAlike 4.0 International (assets/character/swag/LICENSE).
+See LICENSE-ASSETS.md for exactly what is reserved and what is open.

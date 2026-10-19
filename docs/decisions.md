@@ -357,8 +357,8 @@ with these decisions, made for the user and for open source. Each was weighed ag
 - **Not v1:** Deep Work mode.
 - **Defaults:** quiet hours stay 22:00–07:00. No Accessibility permission: "avoid the focused field" is approximated
   by ducking while typing and avoiding the cursor. Hush is "it".
-- **Open source:** code Apache-2.0, character art CC BY-SA 4.0, the name
-  and logo reserved so forks rename. From-source Homebrew formula now; a notarised cask once there's an Apple
+- **Open source:** code Apache-2.0; the Hush character, name and logo reserved,
+  so forks bring their own; wardrobe, props, effects and edge art CC BY-SA 4.0, open for contributions (ADR-023). From-source Homebrew formula now; a notarised cask once there's an Apple
   Developer account.
 - **Art:** the spec's props (flags, door, pocket watch, satchel, bin, journal, blind) come from `docs/v1-art-brief.md`;
   behaviour ships first with existing props as placeholders.
@@ -388,3 +388,14 @@ Milestone 1 of the v1 spec (ADR-021, features 4 and 5).
 
 **Not done from the spec's features 4 and 5:** configurable auto-retreat, a debug overlay for frame rate, and the
 blind / sign / sleeping-cap art (docs/v1-art-brief.md, priority 1).
+
+## ADR-023 · Hush is reserved; the art around it is open (2026-10-19)
+
+Supersedes ADR-021's "character art CC BY-SA 4.0". Following Coucou's model (an open-source Mac agent companion
+that keeps its character, name and icon reserved under an MIT codebase) and the PRD's own risk ("open source makes
+copies easy → name and character art licensed separately"): the code stays Apache-2.0; **Hush itself** (body shapes,
+face, expressions, poses, rig, animations, palettes as its look) and **the name, logo, icon and menu bar glyphs** are
+reserved (`LICENSE-ASSETS.md`), so a fork can't ship Hush under another name. **Everything that isn't Hush's original
+shape**, wardrobe pieces, props, effects, edge pieces (`assets/character/swag/`, `edge/`), is CC BY-SA 4.0 and open
+for contributions, drawn to fit Hush's bodies without changing them. `TRADEMARKS.md` is folded into
+`LICENSE-ASSETS.md`.
