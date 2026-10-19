@@ -38,7 +38,9 @@ final class CommandPanel: NSObject, NSWindowDelegate {
         super.init()
         panel.isOpaque = false
         panel.backgroundColor = .clear
-        panel.hasShadow = true
+        // Drawn by SwiftUI (field and route menu), like the cards. A window shadow here traces the soft SwiftUI shadow's
+        // pixels and shows as a jagged dark ring around the box.
+        panel.hasShadow = false
         panel.level = .statusBar
         panel.collectionBehavior = [.canJoinAllSpaces, .fullScreenAuxiliary, .ignoresCycle]
         panel.isReleasedWhenClosed = false
