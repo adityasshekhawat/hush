@@ -9,6 +9,8 @@
   const CONFIG = {
     github: REPO,
     changelog: REPO + "/blob/main/CHANGELOG.md",
+    stars: REPO + "/stargazers",
+    showAndTell: REPO + "/discussions/categories/show-and-tell",
     privacy: REPO + "#what-leaves-your-mac",
     waitlistURL: "",
     install: "git clone " + REPO + ".git && cd hush && ./scripts/bundle.sh",

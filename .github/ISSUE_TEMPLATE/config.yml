@@ -3,6 +3,9 @@ contact_links:
   - name: A security problem
     url: https://github.com/adityasshekhawat/hush/security/policy
     about: Please report it privately, not in an issue.
+  - name: A question
+    url: https://github.com/adityasshekhawat/hush/discussions/categories/q-a
+    about: Ask in Discussions.
   - name: Getting help
     url: https://github.com/adityasshekhawat/hush/blob/main/SUPPORT.md
     about: Where to ask, and what to include.

@@ -274,6 +274,16 @@ everything Hush does, and [`docs/decisions.md`](docs/decisions.md) records why.
 Want to draw for Hush? It needs hats, outfits, props, buddies and seasonal pieces drawn to fit its bodies. See
 [`CONTRIBUTING.md`](CONTRIBUTING.md). Found a security problem? See [`SECURITY.md`](SECURITY.md).
 
+## Show your Hush
+
+- **Dress yours** on the [website](https://hush-two-sigma.vercel.app/#try), download its card, and post it with
+  **#MyHush**.
+- **Share it** in [Show and tell](https://github.com/adityasshekhawat/hush/discussions/categories/show-and-tell): your
+  outfit, your desktop, the day it held back 63 things.
+- **Give it a star.** Stars are how other people find Hush.
+- **Draw for it.** New hats, props and seasonal pieces are welcome; see the
+  [art issues](https://github.com/adityasshekhawat/hush/issues?q=is%3Aissue+is%3Aopen+label%3Aart).
+
 ## Licence
 
 - **Code:** [Apache License 2.0](LICENSE).

@@ -359,3 +359,5 @@ footer { border-top: 1px solid #2E2A36; }
 .tour-more summary::-webkit-details-marker { display: none; }
 .tour-more[open] summary { margin-bottom: 16px; }
 .join[hidden], .verse[hidden] { display: none; }
+.love { display: flex; flex-direction: column; gap: 10px; padding-top: 12px; border-top: 2px solid rgba(22,20,27,.12); }
+.love-note { font-size: 14.5px; line-height: 1.45; color: #3D3946; }
