@@ -102,7 +102,6 @@ input, textarea { font-family: var(--body); }
 .hero-copy { position: absolute; z-index: 2; left: 32px; bottom: 48px; max-width: 560px; display: flex; flex-direction: column; gap: 18px; }
 .hero-sub { margin: 0; font-size: clamp(1.15rem, 1.6vw, 1.4rem); line-height: 1.45; max-width: 34rem; font-weight: 500; }
 .fine { font-size: 14.5px; line-height: 1.5; color: var(--muted); max-width: 34rem; }
-.eve-card { position: absolute; z-index: 3; width: 300px; right: 5vw; top: calc(10.4vw * 1.76 + 40px); }
 .inst { display: inline-flex; align-items: center; gap: 10px; align-self: flex-start; max-width: 100%; padding: 6px 6px 6px 16px; border-radius: 24px; background: rgba(22,20,27,.08); font-family: ui-monospace, Menlo, monospace; font-size: 14.5px; }
 .inst code { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; user-select: all; -webkit-user-select: all; min-width: 0; }
 .inst button { min-height: 34px; padding: 0 14px; border-radius: 17px; border: none; background: var(--ink); color: var(--cream); font-size: 14px; font-weight: 700; flex: 0 0 auto; transition: transform .12s ease-out; }
@@ -288,11 +287,6 @@ footer { border-top: 1px solid #2E2A36; }
 .foot-note { font-size: 13px; color: #8A8492; }
 
 /* pinned Hush */
-.pin-outer { position: fixed; right: 24px; bottom: 0; z-index: 50; transition: transform .6s cubic-bezier(.2,.8,.2,1), opacity .3s; transform: translateY(110%); opacity: 0; pointer-events: none; }
-.pin-outer.on { transform: none; opacity: 1; pointer-events: auto; }
-.pin-outer.gone { transform: translateX(180px); opacity: 1; }
-.pin-outer .hbtn { touch-action: manipulation; }
-.pinwrap { display: block; }
 .away { position: absolute; right: 70px; bottom: 96px; width: 250px; border: none; padding: 0; cursor: pointer; }
 
 /* phone */
@@ -307,7 +301,6 @@ footer { border-top: 1px solid #2E2A36; }
   .hero-h1 { font-size: 15vw; max-width: 100%; margin-top: 6px; }
   .stamp { position: relative; right: auto; top: auto; display: block; width: fit-content; margin: 18px 8px 0 auto; font-size: 17px; }
   .hero-copy { position: relative; left: auto; bottom: auto; margin-top: 30px; }
-  .eve-card { position: relative; right: auto; left: auto; top: auto; width: auto; max-width: 340px; margin-top: 24px; }
   .flood { height: calc(var(--vh) * 2.4); }
   .f-intro { left: 16px; }
   .f-intro-h { font-size: 13vw; }
@@ -340,7 +333,6 @@ footer { border-top: 1px solid #2E2A36; }
   .close-h { font-size: 14vw; }
   .faq { grid-template-columns: minmax(0, 1fr); }
   .foot-row { padding: 22px 18px; }
-  .pin-outer { right: 10px; }
   .away { right: 0; bottom: 76px; width: min(250px, calc(100vw - 20px)); }
 }
 
@@ -349,7 +341,7 @@ footer { border-top: 1px solid #2E2A36; }
 @media (prefers-reduced-motion: reduce) {
   .w, .bumpA, .bumpB, .breathe, .tk, .rf:hover .rfs, .rf:focus-visible .rfs { animation: none !important; }
   .settle, .adopt-card.settle { animation: fadeIn .15s linear both !important; }
-  .ncw, .nc, .btn, .pill, .sec, .hero, .hwrap, .pin-outer, .fade, .frame-card, .moment, .inst button { transition: opacity .15s linear !important; }
+  .ncw, .nc, .btn, .pill, .sec, .hero, .hwrap, .fade, .frame-card, .moment, .inst button { transition: opacity .15s linear !important; }
   .btn:active, .pill:active, .moment:active, .inst button:active { transform: none; }
   .ncw:hover .nc { transform: none; }
 }

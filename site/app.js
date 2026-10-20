@@ -780,28 +780,6 @@
     grow: growNow,
   });
 
-  // ---------- the pinned Hush ----------
-  new Actor("pin", {
-    base: () => {
-      if (S.sec === "flood") return { pose: "hold" };
-      if (S.sec === "build") return { pose: "sitThink", expr: "thinking" };
-      if (S.sec === "yours") return { pose: "stand", expr: "happy" };
-      return { pose: "stand" };
-    },
-    outfit: () => Object.assign({}, S.customized ? {} : { palette: { hero: "oat", flood: "oat", build: "lilac" }[S.sec] || "oat" }, S.rare || {}),
-    force: () => (S.typing || S.fast ? { pose: "hide" } : null),
-    size: () => (D.phone ? 64 : 90), puffs: true,
-  });
-  $("pin-btn").addEventListener("click", () => $("try").scrollIntoView({ behavior: reduced ? "auto" : "smooth" }));
-  $("away").addEventListener("click", () => { $("away").hidden = true; actors.pin.play([{ pose: "bow", expr: "happy", ms: 900 }, { pose: "" }]); });
-  function renderPin() {
-    const sec = S.sec;
-    const visible = !!S.past && sec !== "try" && sec !== "close" && !(D.phone && sec === "yours");
-    const o = $("pin-outer");
-    o.classList.toggle("on", visible);
-    o.classList.toggle("gone", sec === "close");
-  }
-
   // ---------- scroll ----------
   const SECS = ["hero", "flood", "try", "build", "yours", "close"].map((k) => [k, document.querySelector(`[data-sec="${k}"]`)]);
   let lastY = null, lastT = 0, atEnd = false;
@@ -818,10 +796,7 @@
     const mid = innerHeight * 0.5;
     let sec = S.sec;
     for (const [k, node] of SECS) { const r = node.getBoundingClientRect(); if (r.top <= mid && r.bottom > mid) sec = k; }
-    if (sec !== S.sec) {
-      S.sec = sec;
-      if (sec === "close") actors.pin.play([{ pose: "walk1", ms: 150 }, { pose: "walk2", ms: 150 }, { pose: "walk3", ms: 150 }, { pose: "walk4", ms: 150 }, { pose: "walk1", ms: 150 }, { pose: "" }]);
-    }
+    if (sec !== S.sec) S.sec = sec;
     S.past = SECS[0][1].getBoundingClientRect().bottom < innerHeight * 0.55;
     const end = y + innerHeight >= document.documentElement.scrollHeight - 4;
     if (end && !atEnd) actors.close.play([{ pose: "cheer", expr: "happy", ms: 1100 }, { pose: "bow" }]);
@@ -854,7 +829,6 @@
       S.dozing = false;
       if (!reduced) {
         actors.hero.play([{ pose: "notice", expr: "surprised", ms: 320 }, { pose: "" }]);
-        actors.pin.play([{ pose: "notice", expr: "surprised", ms: 320 }, { pose: "" }]);
       }
       invalidate();
     }
@@ -912,13 +886,12 @@
     if (tg !== "INPUT" && tg !== "TEXTAREA") return;
     wake();
     S.typing = true; invalidate();
-    later("typing", 2000, () => { S.typing = false; actors.pin.play([{ pose: "peek", ms: 700 }, { pose: "" }]); invalidate(); });
+    later("typing", 2000, () => { S.typing = false; invalidate(); });
   }, true);
   document.addEventListener("copy", puffNow, true);
   document.addEventListener("paste", () => {
     if (!S.puff) return;
     S.puff = false; clearTimeout(T.puff);
-    actors.pin.play([{ pose: "bob", expr: "happy", ms: 700 }, { pose: "" }]);
     actors.hero.play([{ pose: "bob", expr: "happy", ms: 700 }, { pose: "" }]);
   }, true);
   let awayAt = 0;
@@ -926,16 +899,7 @@
     if (document.hidden) { awayAt = Date.now(); return; }
     if (!awayAt) return;
     const away = Date.now() - awayAt; awayAt = 0;
-    if (away > 60000) {
-      const min = Math.max(1, Math.round(away / 60000));
-      $("away-min").textContent = min;
-      $("away-held").textContent = Math.min(40, 3 * min + 2);
-      $("away").hidden = false;
-      actors.pin.play([{ pose: "hold", expr: "happy" }]);
-    } else {
-      actors.pin.play([{ pose: "wave", expr: "happy", ms: 1200 }, { pose: "" }]);
-      actors.hero.play([{ pose: "wave", expr: "happy", ms: 1200 }, { pose: "" }]);
-    }
+    if (away > 1000) actors.hero.play([{ pose: "wave", expr: "happy", ms: 1200 }, { pose: "" }]);
   });
   mq.addEventListener("change", (e) => {
     reduced = e.matches;
@@ -954,7 +918,6 @@
     }
     if (lookDirty) { lookDirty = false; computeLooks(); }
     renderFlood();
-    renderPin();
     for (const a of Object.values(actors)) a.render();
   }
 
@@ -979,18 +942,11 @@
 
   buildFlood(); renderTune(); renderNotebook(); go(0); renderMoments(); renderTabs(); renderPanel(); outfitChanged();
 
-  // Time of day: before 10:00 a yawn and a stretch; after 18:30 the tuck-in card; Friday evening, one small dance.
+  // Time of day: before 10:00 a yawn and a stretch; Friday evening, one small dance.
   const now = new Date(), hr = now.getHours();
-  if (hr * 60 + now.getMinutes() >= 18 * 60 + 30) $("eve-card").hidden = false;
   if (!reduced) {
     if (hr < 10) actors.hero.play([{ pose: "yawn", expr: "yawn", ms: 1000 }, { pose: "stretch", expr: "squint", ms: 900 }, { pose: "" }]);
     else if (now.getDay() === 5 && hr >= 18) actors.hero.play([{ pose: "dance", expr: "happy", ms: 1800 }, { pose: "" }]);
   }
-  // One rare piece on the pinned Hush, once per visit, with no announcement.
-  setTimeout(() => {
-    const R = [{ buddy: "bird" }, { head: "partyHat" }, { head: "halo" }, { buddy: "butterfly" }, { head: "flowerCrown" }, { carry: "lantern" }];
-    S.rare = R[Math.floor(Math.random() * R.length)];
-    invalidate();
-  }, 35000);
   invalidate();
 })();
