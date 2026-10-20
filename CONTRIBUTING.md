@@ -42,4 +42,5 @@ and new art under [CC BY-SA 4.0](assets/character/swag/LICENSE). You keep your c
 have the right to share, and nothing traced from other characters or brands.
 
 ## Be kind
-Treat everyone here the way Hush treats your attention: with care. Harassment or personal attacks aren't welcome.
+Treat everyone here the way Hush treats your attention: with care. Taking part means following the
+[code of conduct](CODE_OF_CONDUCT.md); it also says how to report a problem privately.

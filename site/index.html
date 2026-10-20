@@ -258,7 +258,8 @@
           <button type="button" class="btn out" id="copy-link" style="min-height: 48px; font-size: 16px">Copy link</button>
         </div>
         <div class="small-note">The link opens this page with your Hush already dressed.</div>
-        <form class="join" id="join" novalidate>
+        <!-- Hidden until there's a real list to join (always be true to users). -->
+        <form class="join" id="join" novalidate hidden>
           <label for="hush-join" class="sr-only">Email</label>
           <input id="hush-join" type="email" placeholder="you@example.com" autocomplete="email">
           <button type="submit" class="btn ink" id="join-btn" style="min-height: 48px; font-size: 16px">Save Hush a spot</button>
@@ -285,7 +286,7 @@
     </div>
     <div class="inst dark"><span aria-hidden="true">$</span><code data-install></code><button type="button" data-copy-install>Copy</button></div>
     <div style="font-size: 14.5px; color: #A9A1B4">Free and open source · macOS 15 or later · built from source for now · Ask Hush uses your Claude Code login</div>
-    <div class="verse">Hushverse is coming: a small world where Hushies visit each other.</div>
+    <div class="verse" hidden>Hushverse is coming: a small world where Hushies visit each other.</div>
     <div class="faq">
       <details><summary>Do I need Claude to use it?</summary><p>No. The character, meeting nudges, the wardrobe and rare finds work on their own. Agent alerts need Claude Code or Codex installed and use their hooks, with no model calls. Ask Hush answers and Summarise use your Claude Code login.</p></details>
       <details><summary>What does it read?</summary><p>Your calendar, whether you're typing or on a call, and your Claude Code and Codex sessions, all on your Mac. The agent hooks send Hush only the event, session id, folder, host app and terminal device. <a data-link="privacy">What leaves your Mac</a></p></details>
