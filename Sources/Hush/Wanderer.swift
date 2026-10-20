@@ -223,8 +223,12 @@ final class Wanderer {
         NSScreen.screens.contains { abs($0.frame.width - b.width) < 1 && abs($0.frame.height - b.height) < 1 }
     }
 
+    /// The video's stage window (debug hooks only): Hush's own blank window, which it may perch on.
+    nonisolated(unsafe) static var stage: (() -> (id: CGWindowID, bounds: CGRect)?)?
+
     /// The frontmost app's front window, if it's a reasonable place to sit.
     static func focusedWindow() -> (id: CGWindowID, bounds: CGRect)? {
+        if let stage = stage?() { return stage }
         guard let front = NSWorkspace.shared.frontmostApplication,
               front.processIdentifier != ProcessInfo.processInfo.processIdentifier,
               let list = CGWindowListCopyWindowInfo([.optionOnScreenOnly, .excludeDesktopElements], kCGNullWindowID)

@@ -90,6 +90,8 @@ final class AppController {
     var meetingSnoozes = 0
     /// Debug hooks only: records README GIFs from Hush's own windows.
     let recorder = MediaRecorder()
+    /// The video's perch (debug hooks only).
+    var stage: StageWindow?
     /// For the mail digest's natural breaks (ADR-027).
     var awayStartedAt: Date?
     var wasInCall = false

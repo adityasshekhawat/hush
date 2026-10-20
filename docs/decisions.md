@@ -558,3 +558,23 @@ Art from `docs/v1-art-brief.md`, delivered as new files only (notes: `docs/v1-ar
   and door; the rail shown with two flags and opened from a flag; pause and resume run end to end; 180 tests pass.
   The nightcap is also a free head piece (46 wearables): its layer is in every rig file at opacity 0, so the app, the
   landing page and Rive read it like any other; in energy saver it takes the place of whatever hat you wear.
+
+## ADR-031 · The website's tour video is recorded by Hush itself (2026-10-21)
+
+- **How:** `scripts/record-video.sh` drives the running app through debug hooks, like the README GIFs (ADR-028), and
+  `MediaRecorder` writes an MP4 as it goes (`VideoWriter`, H.264, 1280 × 720 from a 768 × 432 pt frame around Hush,
+  about 28 fps). Titles are drawn on the frames (`caption:`), the desktop is drawn, and cards fall back to material
+  because the recorder can't see glass.
+- **Privacy by construction:** only Hush's own windows are ever captured, over a drawn wallpaper and blank windows.
+  For perching, Hush opens a blank window of its own (`stage:open`, `StageWindow`); the recorder draws it as a generic
+  window and `Wanderer.stage` lets Hush perch on it (debug only). The end-of-day card uses the README's example
+  numbers (`heldback:` demo), never your counts. The journal, rules, menu panel and settings, which hold real data,
+  are left out.
+- **Truthful:** simulated meetings, mail and agent sessions use the demo ids `cleandemo` removes; the video says so at
+  the end and under the player. Hand it to Hush (Apple's on-device model) and Ask Hush (one quick question through
+  the Claude Code login) ran for real. Your clipboard, look, Hush's spot and settings are put back.
+- **Website:** a "Watch the tour" button in the hero and a section after it (`site/media/hush-demo.mp4`, poster, no
+  autoplay, `preload="none"`).
+- **Deploys:** Vercel is connected to the GitHub repo and deploys `main`; the project's root directory is `site`
+  (it was the repo root, which served the repository's files at the site's address for about two hours on
+  2026-10-20; those deployments were deleted).

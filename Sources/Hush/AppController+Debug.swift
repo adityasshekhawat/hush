@@ -53,18 +53,21 @@ extension AppController {
                 case "palette": l.palette = kv[1]
                 case "body": l.body = kv[1]
                 case "topper": l.topper = kv[1]
+                case "eyes": l.eyes = kv[1]
                 default: if WearSlot(rawValue: kv[0]) != nil { l.outfit[kv[0]] = kv[1] == "none" ? nil : kv[1] }
                 }
             }
             renderer.apply(l)
         case ("agent", let spec):
-            // agent:<kind>[:<session>] e.g. agent:prompt:s1, agent:stop:s1 (pretends the run started 5 min ago)
+            // agent:<kind>[:<session>[:old[:<project>]]] e.g. agent:prompt:s1:old:site, agent:stop:s1::site
+            // ("old": pretends the run started 5 min ago)
             let parts = spec.split(separator: ":").map(String.init)
             if let kind = AgentSessionEvent.Kind(rawValue: parts[0]) {
                 let sid = parts.count > 1 ? parts[1] : "debug-session-1"
                 let at = kind == .prompt && parts.count > 2 && parts[2] == "old" ? Date().addingTimeInterval(-300) : Date()
                 // A host app that isn't frontmost, so the run counts as "in the background" (iTerm if installed).
-                agentEvent(AgentSessionEvent(sessionID: sid, cwd: FileManager.default.homeDirectoryForCurrentUser.appendingPathComponent("Developer/hush").path, kind: kind,
+                let project = parts.count > 3 ? parts[3] : "hush"
+                agentEvent(AgentSessionEvent(sessionID: sid, cwd: FileManager.default.homeDirectoryForCurrentUser.appendingPathComponent("Developer/\(project)").path, kind: kind,
                                              app: "com.googlecode.iterm2", at: at))
             }
         case ("seq", let spec):
@@ -132,6 +135,7 @@ extension AppController {
             renderer.react(.wave)
         case ("boxclose", _): commandPanel.close(restoreFocus: false)
         case ("askstop", _): ask.stop()
+        case ("answer", "close"): ask.card.close()
         case ("envelope", "close"): envelope.close()
         case ("rules", "show"): showRules()
         case ("panel", _): openPanel?()
@@ -149,6 +153,45 @@ extension AppController {
             } else if parts.first == "stop" {
                 recorder.stop()
             }
+        case ("video", let spec):
+            // video:start:<name> … video:stop → recordings/<name>.mp4 (the website video, scripts/record-video.sh)
+            let parts = spec.split(separator: ":").map(String.init)
+            if parts.first == "start", parts.count == 2, let s = screen {
+                let floor = NSRect(x: s.frame.minX, y: s.visibleFrame.minY, width: s.frame.width, height: s.visibleFrame.height)
+                recorder.startVideo(name: parts[1], around: homeFrame(), screen: floor)
+            } else if parts.first == "stop" {
+                recorder.stop()
+            }
+        case ("caption", let text):
+            // caption:<title>|<subtitle> over the video; caption:- clears it.
+            recorder.caption = text == "-" ? nil : text.replacingOccurrences(of: "|", with: "\n")
+        case ("stage", let v):
+            // stage:open puts a blank window of Hush's own right of Hush, for it to perch on; stage:close removes it.
+            if v == "open", stage == nil, let vf = screen?.visibleFrame {
+                let home = homeFrame()
+                let w = StageWindow(contentRect: NSRect(x: home.midX + 40, y: vf.minY + 70, width: 330, height: 200),
+                                    styleMask: [.titled], backing: .buffered, defer: false)
+                w.isReleasedWhenClosed = false
+                w.title = ""
+                applyCapturePrivacy(w)
+                w.orderFrontRegardless()
+                stage = w
+                Wanderer.stage = { [weak w] in
+                    guard let w, w.isVisible, let b = Wanderer.bounds(of: CGWindowID(w.windowNumber)) else { return nil }
+                    return (CGWindowID(w.windowNumber), b)
+                }
+            } else if v == "close" {
+                Wanderer.stage = nil
+                if wanderer.isAway { wanderer.leavePerch() }
+                stage?.close()
+                stage = nil
+            }
+        case ("home", let x):
+            // home:<0…1> walks Hush there (the video centres it); your saved spot is the script's to put back.
+            if let v = Double(x) { setHome(CGFloat(v)) }
+        case ("heldback", let spec):
+            // heldback:day|week, with the README's example numbers (never your own counts).
+            showHeldBack(spec == "week" ? .week : .day, demo: true)
         case ("look", "brand"):
             // Recordings: the brand look (lilac blob with a leaf, nothing worn). Your look is kept and restored after.
             if defaults.data(forKey: "lookBeforeRecording") == nil, let d = try? JSONEncoder().encode(look) {

@@ -5,6 +5,10 @@ Hush is pre-alpha and built from source. Notable changes, newest first. Decision
 
 ## Unreleased
 
+- **A tour video on the website:** under 3 minutes, recorded from the app itself (Hush draws every frame, so no real
+  window, tab or desktop is in it). Agent sessions, meetings and mail are simulated; Hand it to Hush and Ask Hush ran
+  for real. The landing page deploys from `site/` again.
+
 - **New character art, wired in:** Hush raises its hand when an agent needs you, holds up a "Look carefully" card for
   risky requests, shrugs over a smoking laptop when a run stops, checks a pocket watch before a meeting and holds the
   door open when it starts, pulls down a blind with a "Do not disturb" sign when you pause it, wears a nightcap in

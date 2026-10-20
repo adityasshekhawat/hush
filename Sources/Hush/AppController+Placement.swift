@@ -79,11 +79,11 @@ extension AppController {
     }
 
     /// The held-back card (design guide §5.2).
-    func showHeldBack(_ kind: HeldBackModel.Kind, list: Bool = false) {
+    func showHeldBack(_ kind: HeldBackModel.Kind, list: Bool = false, demo: Bool = false) {
         heldBack.engine = engine
         heldBack.onWhatILearned = { [weak self] in self?.showRules() }
         heldBack.vips = { [weak self] in self?.settings.vips ?? [] }
-        heldBack.show(kind, avoiding: cardAvoidRect(), list: list)
+        heldBack.show(kind, avoiding: cardAvoidRect(), list: list, demo: demo)
         if kind == .week { renderer.react(.proud) }
     }
 

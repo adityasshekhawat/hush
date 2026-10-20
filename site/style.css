@@ -345,3 +345,12 @@ footer { border-top: 1px solid #2E2A36; }
   .btn:active, .pill:active, .moment:active, .inst button:active { transform: none; }
   .ncw:hover .nc { transform: none; }
 }
+
+/* The tour video */
+.watch { background: var(--cream); color: var(--ink); transition: none; }
+.watch .wrap { padding-top: 96px; padding-bottom: 96px; gap: 20px; align-items: stretch; }
+.watch .kick { color: var(--coral-text); }
+.tour { display: block; width: 100%; max-width: 1100px; height: auto; aspect-ratio: 16 / 9; margin: 0 auto; border-radius: 18px;
+        background: var(--lilac); box-shadow: 0 18px 50px rgba(22,20,27,.18), 0 0 0 .5px rgba(22,20,27,.12); }
+.tour-note { margin: 0 auto; text-align: center; }
+@media (max-width: 640px) { .watch .wrap { padding: 64px 16px; } .tour { border-radius: 12px; } }

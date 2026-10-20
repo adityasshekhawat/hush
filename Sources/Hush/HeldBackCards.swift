@@ -150,15 +150,23 @@ final class HeldBackPresenter {
     var onGoodnight: (() -> Void)?
     var vips: () -> Set<String> = { [] }
 
-    func show(_ kind: HeldBackModel.Kind, avoiding character: NSRect, list: Bool = false) {
+    /// `demo`: the README's example numbers instead of yours (the website video; debug hooks only).
+    func show(_ kind: HeldBackModel.Kind, avoiding character: NSRect, list: Bool = false, demo: Bool = false) {
         Task {
             guard let e = engine else { return }
             model.kind = kind
             model.showList = list
-            model.day = (try? await e.daySummary()) ?? model.day
-            model.week = (try? await e.weekSummary()) ?? model.week
-            model.weekDays = (try? await e.weekDays()) ?? []
-            model.held = (try? await e.heldToday()) ?? []
+            if demo {
+                model.day = DaySummary(shown: 4, heldBack: 63)
+                model.week = DaySummary(shown: 18, heldBack: 240)
+                model.weekDays = []
+                model.held = []
+            } else {
+                model.day = (try? await e.daySummary()) ?? model.day
+                model.week = (try? await e.weekSummary()) ?? model.week
+                model.weekDays = (try? await e.weekDays()) ?? []
+                model.held = (try? await e.heldToday()) ?? []
+            }
             let vips = self.vips()
             model.vipHeld = model.held.contains { g in
                 guard g.category.hasPrefix("mail:") else { return false }
