@@ -166,3 +166,42 @@ import Testing
         #expect(TerminalScript.focusSource(bundleID: TerminalScript.terminal, tty: "/dev/ttys004\" & do shell script \"x") == nil)
     }
 }
+
+@Suite struct CodexRequests {
+    let patch = """
+    *** Begin Patch
+    *** Update File: src/app.ts
+    @@
+    -old
+    +new
+    *** Add File: src/new.ts
+    +hello
+    *** End Patch
+    """
+
+    @Test func codexBashReadsLikeClaude() {
+        // Codex sends shell commands as tool_name "Bash" with tool_input.command, like Claude Code.
+        let d = AgentRequest.detail(tool: "Bash", input: ["command": "npm test"])
+        #expect(AgentRequest(tool: "Bash", detail: d).line == "wants to run npm test")
+        #expect(AgentRisk.reason(AgentRequest(tool: "Bash", detail: "rm -rf build")) == "deletes files")
+    }
+
+    @Test func patchesNameTheirFiles() {
+        let d = AgentRequest.detail(tool: "apply_patch", input: ["command": patch])
+        #expect(d == "edit src/app.ts, add src/new.ts")
+        #expect(AgentRequest(tool: "apply_patch", detail: d).line == "wants to change 2 files (app.ts, new.ts)")
+        let one = AgentRequest.detail(tool: "apply_patch", input: ["command": "*** Begin Patch\n*** Update File: Sources/A.swift\n@@\n*** End Patch"])
+        #expect(AgentRequest(tool: "apply_patch", detail: one).line == "wants to edit A.swift")
+        #expect(AgentRequest.detail(tool: "apply_patch", input: ["command": "not a patch"]) == nil)
+    }
+
+    @Test func riskyPatchesGetACarefulLook() {
+        let del = AgentRequest(tool: "apply_patch", detail: AgentRequest.detail(tool: "apply_patch", input: ["command": "*** Delete File: build/out.js"]))
+        #expect(AgentRisk.reason(del) == "deletes files")
+        let env = AgentRequest(tool: "apply_patch", detail: "edit .env")
+        #expect(AgentRisk.reason(env) == "touches secrets")
+        let prod = AgentRequest(tool: "apply_patch", detail: "edit deploy/prod/values.yaml")
+        #expect(AgentRisk.reason(prod) == "touches production")
+        #expect(AgentRisk.reason(AgentRequest(tool: "apply_patch", detail: "edit src/app.ts")) == nil)
+    }
+}

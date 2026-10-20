@@ -592,3 +592,17 @@ Art from `docs/v1-art-brief.md`, delivered as new files only (notes: `docs/v1-ar
   weeks old; past 4.0.410 (CVE-2026-30120 and -30121 fixed); `npm audit` clean; `.npmrc` sets `ignore-scripts`.
   Remotion downloads Chrome Headless Shell on first render. Licence: free for individuals and companies of up to 3.
 - **Publishing:** nothing goes on the website or anywhere else until it's been watched and approved.
+
+## ADR-033 · Codex requests read like Claude Code's; Codex is documented, not yet live-tested (2026-10-21)
+
+- **Found:** Hush's Codex support was built from Codex's hook docs and only ever tested with simulated events. Codex
+  sends shell commands as `tool_name: "Bash"` with `tool_input.command`, like Claude Code, so "wants to run npm test"
+  and the risk rules already applied. File edits arrive as `apply_patch` with the whole patch in `command`; Hush showed
+  a slice of raw patch and ran no rules on it.
+- **Decision:** `AgentRequest` reads the `*** Add/Update/Delete File:` headers of a patch: the card names the files
+  ("wants to edit app.ts", "wants to change 2 files (…)"), and deletions, secrets and production paths read "Look
+  carefully", like Claude Code's file tools. Tested in `CodexRequests`.
+- **Known differences, not yet handled:** Codex's `Stop` fires at the end of every turn and at `/goal` continuation
+  points (openai/codex#52950), so a long goal run can show "finished" before it's done; runs under 2 minutes are
+  already ignored. `SessionEnd` exists from Codex 0.160.
+- **Truthful:** the README and features say Codex hasn't been tried with a live session yet, until it has.

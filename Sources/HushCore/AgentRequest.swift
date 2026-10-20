@@ -16,6 +16,12 @@ public struct AgentRequest: Sendable, Equatable {
 
     /// The part of a tool's input worth showing, from the hook's `tool_input`, flattened and capped. Used by hushctl.
     public static func detail(tool: String, input: [String: Any]) -> String? {
+        // Codex edits files with apply_patch, whose `command` is the whole patch: keep only what it changes.
+        if tool == "apply_patch" {
+            guard let patch = input["command"] as? String else { return nil }
+            let files = patchFiles(patch)
+            return files.isEmpty ? nil : clean(files.map { "\($0.verb) \($0.path)" }.joined(separator: ", "))
+        }
         let keys: [String]
         switch tool {
         case "Bash": keys = ["command"]
@@ -47,12 +53,39 @@ public struct AgentRequest: Sendable, Equatable {
         case "Read": return detail.map { "wants to read \(Self.fileName($0))" } ?? "wants to read a file"
         case "WebFetch": return detail.map { "wants to open \(Self.host($0))" } ?? "wants to open a web page"
         case "WebSearch": return d.map { "wants to search for \($0)" } ?? "wants to search the web"
+        case "apply_patch":
+            let files = patchEntries
+            if files.count == 1, let f = files.first {
+                return "wants to \(f.verb == "add" ? "create" : f.verb) \(Self.fileName(f.path))"
+            }
+            return files.isEmpty ? "wants to change files"
+                : "wants to change \(files.count) files (\(files.prefix(2).map { Self.fileName($0.path) }.joined(separator: ", "))\(files.count > 2 ? "…" : ""))"
         default:
             if tool.hasPrefix("mcp__") {
                 let parts = tool.split(separator: "_", omittingEmptySubsequences: true)
                 return "wants to use \(parts.dropFirst().first.map(String.init) ?? "a tool") (\(parts.last.map(String.init) ?? tool))"
             }
             return "wants to use \(tool)"
+        }
+    }
+
+    /// The files a Codex patch touches, from its `*** Add/Update/Delete File:` headers: ("add" | "edit" | "delete", path).
+    public static func patchFiles(_ patch: String) -> [(verb: String, path: String)] {
+        patch.split(whereSeparator: \.isNewline).compactMap { line in
+            let l = line.trimmingCharacters(in: .whitespaces)
+            for (head, verb) in [("*** Add File: ", "add"), ("*** Update File: ", "edit"), ("*** Delete File: ", "delete")] where l.hasPrefix(head) {
+                let path = l.dropFirst(head.count).trimmingCharacters(in: .whitespaces)
+                return path.isEmpty ? nil : (verb, path)
+            }
+            return nil
+        }
+    }
+
+    /// A patch's detail ("edit src/app.ts, delete .env") back into (verb, path) pairs.
+    var patchEntries: [(verb: String, path: String)] {
+        (detail ?? "").components(separatedBy: ", ").compactMap { e in
+            let parts = e.split(separator: " ", maxSplits: 1).map(String.init)
+            return parts.count == 2 && ["add", "edit", "delete"].contains(parts[0]) ? (parts[0], parts[1]) : nil
         }
     }
 
@@ -81,6 +114,13 @@ public enum AgentRisk {
 
     public static func reason(_ r: AgentRequest) -> String? {
         guard let d = r.detail else { return nil }
+        // A Codex patch: deleting files, or touching secrets or production paths.
+        if r.tool == "apply_patch" {
+            if r.patchEntries.contains(where: { $0.verb == "delete" }) { return "deletes files" }
+            let paths = r.patchEntries.map(\.path).joined(separator: " ")
+            return patterns.filter { $0.1 == "touches secrets" || $0.1 == "touches production" }
+                .first { paths.range(of: $0.0, options: .regularExpression) != nil }?.1
+        }
         // File tools only matter for secrets and production paths; commands get every rule.
         let rules = r.tool == "Bash" ? patterns : patterns.filter { $0.1 == "touches secrets" || $0.1 == "touches production" }
         return rules.first { d.range(of: $0.0, options: .regularExpression) != nil }?.1
