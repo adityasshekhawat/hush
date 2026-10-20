@@ -5,6 +5,10 @@ Hush is pre-alpha and built from source. Notable changes, newest first. Decision
 
 ## Unreleased
 
+- **README:** a new look with illustrated features, light and dark hero art, and a social preview image
+  (`docs/readme`). Copy checked against the app: build from source, nine colours, 5 and 1 minute meeting nudges, what
+  the hooks really send.
+
 - **Open works again:** clicking Open on a card when a Claude session finishes or needs you brings that session forward,
   in Terminal or iTerm on its exact tab, or in the app it runs in (including the Claude app). It also works after the
   session has ended.

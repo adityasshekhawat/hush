@@ -1,0 +1,170 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 380" width="600" height="380" role="img">
+<title>Hush perched on a window, and puffing its cheeks after you copy</title>
+<style>
+.bob{animation:bob 3.6s ease-in-out infinite alternate}
+@keyframes bob{from{transform:translateY(0)}to{transform:translateY(-7px)}}
+.blink [id$="-eyes-open"]{animation:blink 5s infinite;transform-box:fill-box;transform-origin:center}
+@keyframes blink{0%,94%,100%{transform:scaleY(1)}96%{transform:scaleY(0.1)}}
+.card{animation:rise 7s ease-in-out infinite}
+@keyframes rise{0%,78%{opacity:1;transform:translateY(0)}84%,90%{opacity:0;transform:translateY(10px)}96%,100%{opacity:1;transform:translateY(0)}}
+@media (prefers-reduced-motion: reduce){.bob,.blink [id$="-eyes-open"],.card{animation:none}}
+</style>
+<defs><filter id="sh" x="-20%" y="-20%" width="140%" height="150%"><feDropShadow dx="0" dy="14" stdDeviation="16" flood-color="#2D2A35" flood-opacity="0.18"/></filter><filter id="sh2" x="-20%" y="-30%" width="140%" height="170%"><feDropShadow dx="0" dy="6" stdDeviation="8" flood-color="#2D2A35" flood-opacity="0.14"/></filter></defs><rect width="600" height="380" rx="26" fill="#FDEDEA"/><svg x="36" y="70" width="300" height="273.75" viewBox="0 0 160 146" overflow="visible" class="blink">
+<g id="h4-fx-back">
+<g id="h4-prop-window">
+<rect x="4" y="116" width="152" height="44" rx="7" fill="#FFFFFF" stroke="#2D2A35" stroke-width="2.2"/>
+<line x1="5" y1="131" x2="155" y2="131" stroke="#2D2A35" stroke-width="1.4" opacity="0.25"/>
+<circle cx="16" cy="123.5" r="2.6" fill="#D9D6DE"/>
+<circle cx="25" cy="123.5" r="2.6" fill="#D9D6DE"/>
+<circle cx="34" cy="123.5" r="2.6" fill="#D9D6DE"/>
+</g>
+</g>
+
+<g>
+<g transform="translate(20 -12)" id="h4-character">
+<g transform="rotate(0 60 134)" id="h4-pose-root">
+
+<g stroke="#2D2A35" stroke-linecap="round" stroke-linejoin="round" id="h4-topper">
+<g transform="translate(60 44) scale(1)" id="h4-topper-leaf">
+<path d="M0 3 Q-1 -5 1 -11" fill="none" stroke-width="2.6"/>
+<path d="M1 -10 C5 -19 15 -21 18 -15 C13 -8 6 -7 1 -10 Z" fill="#E8876A" stroke-width="2.2"/>
+<path d="M0 -7 C-4 -13 -11 -14 -13 -9 C-9 -5 -4 -5 0 -7 Z" fill="#E8876A" stroke-width="2.2"/>
+</g>
+</g>
+
+<g id="h4-body">
+<path d="M60 44 C88 44 102 64 102 90 C102 116 86 128 60 128 C34 128 18 116 18 90 C18 64 32 44 60 44 Z" fill="#F4D9A6" stroke="#2D2A35" stroke-width="3.2" stroke-linejoin="round"/>
+<ellipse cx="60" cy="113" rx="23" ry="12" fill="#FFF5E1" id="h4-belly"/>
+</g>
+
+<g stroke-linecap="round" id="h4-legs-front-dangling">
+<line x1="50" y1="124" x2="48" y2="140" stroke="#2D2A35" stroke-width="12"/>
+<line x1="50" y1="124" x2="48" y2="140" stroke="#F4D9A6" stroke-width="7"/>
+<line x1="70" y1="124" x2="72" y2="140" stroke="#2D2A35" stroke-width="12"/>
+<line x1="70" y1="124" x2="72" y2="140" stroke="#F4D9A6" stroke-width="7"/>
+</g>
+
+<g stroke="#2D2A35" stroke-linejoin="round" stroke-linecap="round" id="h4-accessory">
+</g>
+
+<g transform="translate(60 80)" id="h4-face">
+<g fill="#E8876A" opacity="0.5" id="h4-blush">
+<ellipse cx="-21" cy="7" rx="4.2" ry="2.3"/>
+<ellipse cx="21" cy="7" rx="4.2" ry="2.3"/>
+</g>
+<g id="h4-eyes">
+<g id="h4-eyes-open">
+<ellipse cx="-15" cy="1.6" rx="5.2" ry="5.2" fill="#2D2A35"/>
+<ellipse cx="15" cy="1.6" rx="5.2" ry="5.2" fill="#2D2A35"/>
+<circle cx="-16.66" cy="-0.27" r="1.87" fill="#FFFFFF"/>
+<circle cx="13.34" cy="-0.27" r="1.87" fill="#FFFFFF"/>
+</g>
+</g>
+<g transform="translate(0 11)" stroke="#2D2A35" stroke-linecap="round" stroke-linejoin="round" id="h4-mouth">
+<path d="M-3.2 0 Q0 2.8 3.2 0" fill="none" stroke-width="2" id="h4-mouth-line"/>
+</g>
+</g>
+
+<g stroke-linecap="round" id="h4-arms">
+<g id="h4-arm-l">
+<line x1="24" y1="104" x2="20" y2="126" stroke="#2D2A35" stroke-width="11.5"/>
+<line x1="24" y1="104" x2="20" y2="126" stroke="#F4D9A6" stroke-width="6.5"/>
+</g>
+<g id="h4-arm-r">
+<line x1="96" y1="104" x2="100" y2="126" stroke="#2D2A35" stroke-width="11.5"/>
+<line x1="96" y1="104" x2="100" y2="126" stroke="#F4D9A6" stroke-width="6.5"/>
+</g>
+</g>
+
+<g stroke="#2D2A35" stroke-linejoin="round" stroke-linecap="round" id="h4-props-held">
+</g>
+
+<g stroke="#2D2A35" stroke-linecap="round" stroke-linejoin="round" id="h4-fx-character">
+</g>
+
+</g>
+</g>
+</g>
+
+</svg>
+<svg x="380" y="140" width="200" height="182.5" viewBox="0 0 160 146" overflow="visible" class="blink">
+<g id="h5-fx-back">
+</g>
+
+<g>
+<g transform="translate(20 2)" id="h5-character">
+<g transform="rotate(0 60 134)" id="h5-pose-root">
+
+<g stroke-linecap="round" id="h5-legs-back">
+<line x1="50" y1="124" x2="50" y2="134" stroke="#2D2A35" stroke-width="12" id="h5-leg-l"/>
+<line x1="50" y1="124" x2="50" y2="134" stroke="#F4D9A6" stroke-width="7"/>
+<line x1="70" y1="124" x2="70" y2="134" stroke="#2D2A35" stroke-width="12" id="h5-leg-r"/>
+<line x1="70" y1="124" x2="70" y2="134" stroke="#F4D9A6" stroke-width="7"/>
+</g>
+
+<g stroke="#2D2A35" stroke-linecap="round" stroke-linejoin="round" id="h5-topper">
+<g transform="translate(60 44) scale(1)" id="h5-topper-leaf">
+<path d="M0 3 Q-1 -5 1 -11" fill="none" stroke-width="2.6"/>
+<path d="M1 -10 C5 -19 15 -21 18 -15 C13 -8 6 -7 1 -10 Z" fill="#E8876A" stroke-width="2.2"/>
+<path d="M0 -7 C-4 -13 -11 -14 -13 -9 C-9 -5 -4 -5 0 -7 Z" fill="#E8876A" stroke-width="2.2"/>
+</g>
+</g>
+
+<g id="h5-body">
+<path d="M60 44 C88 44 102 64 102 90 C102 116 86 128 60 128 C34 128 18 116 18 90 C18 64 32 44 60 44 Z" fill="#F4D9A6" stroke="#2D2A35" stroke-width="3.2" stroke-linejoin="round"/>
+<ellipse cx="60" cy="113" rx="23" ry="12" fill="#FFF5E1" id="h5-belly"/>
+</g>
+
+<g stroke="#2D2A35" stroke-linejoin="round" stroke-linecap="round" id="h5-accessory">
+</g>
+
+<g transform="translate(60 80)" id="h5-face">
+<g fill="#E8876A" opacity="0.9" id="h5-blush">
+<ellipse cx="-21" cy="7" rx="4.2" ry="2.3"/>
+<ellipse cx="21" cy="7" rx="4.2" ry="2.3"/>
+</g>
+<g id="h5-eyes">
+<g id="h5-eyes-open">
+<ellipse cx="-15" cy="0" rx="5.2" ry="5.2" fill="#2D2A35"/>
+<ellipse cx="15" cy="0" rx="5.2" ry="5.2" fill="#2D2A35"/>
+<circle cx="-16.66" cy="-1.87" r="1.87" fill="#FFFFFF"/>
+<circle cx="13.34" cy="-1.87" r="1.87" fill="#FFFFFF"/>
+</g>
+</g>
+<g stroke="#2D2A35" stroke-width="2.2" id="h5-cheeks-puffed">
+<circle cx="-24" cy="13" r="6" fill="#F4D9A6"/>
+<circle cx="24" cy="13" r="6" fill="#F4D9A6"/>
+<circle cx="-24" cy="13.5" r="2.8" fill="#E8876A" stroke="none" opacity="0.6"/>
+<circle cx="24" cy="13.5" r="2.8" fill="#E8876A" stroke="none" opacity="0.6"/>
+</g>
+<g transform="translate(0 11)" stroke="#2D2A35" stroke-linecap="round" stroke-linejoin="round" id="h5-mouth">
+<path d="M-2.2 1.8 Q0 0.2 2.2 1.8" fill="none" stroke-width="2" id="h5-mouth-line"/>
+</g>
+</g>
+
+<g stroke-linecap="round" id="h5-arms">
+<g id="h5-arm-l">
+<line x1="24" y1="104" x2="17" y2="119" stroke="#2D2A35" stroke-width="11.5"/>
+<line x1="24" y1="104" x2="17" y2="119" stroke="#F4D9A6" stroke-width="6.5"/>
+</g>
+<g id="h5-arm-r">
+<line x1="96" y1="104" x2="103" y2="119" stroke="#2D2A35" stroke-width="11.5"/>
+<line x1="96" y1="104" x2="103" y2="119" stroke="#F4D9A6" stroke-width="6.5"/>
+</g>
+</g>
+
+<g stroke="#2D2A35" stroke-linejoin="round" stroke-linecap="round" id="h5-props-held">
+</g>
+
+<g stroke="#2D2A35" stroke-linecap="round" stroke-linejoin="round" id="h5-fx-character">
+</g>
+
+</g>
+</g>
+</g>
+
+</svg>
+<g transform="translate(486 110)"><rect x="-30" y="-20" width="60" height="38" rx="9" fill="#FFFFFF" stroke="#2D2A35" stroke-width="2.4"/><rect x="-30" y="-20" width="60" height="34" rx="9" fill="#FFFFFF" stroke="#2D2A35" stroke-width="2.4"/></g><path d="M486.45 116.24L486.45 116.24Q484.41 116.24 482.83 115.31Q481.25 114.38 480.35 112.75Q479.45 111.12 479.45 109L479.45 109Q479.45 106.88 480.35 105.25Q481.25 103.62 482.82 102.69Q484.39 101.76 486.43 101.76L486.43 101.76Q487.87 101.76 489.11 102.27Q490.35 102.78 491.28 103.69Q492.21 104.6 492.71 105.78L492.71 105.78L490.17 106.72Q489.83 105.98 489.27 105.43Q488.71 104.88 487.99 104.57Q487.27 104.26 486.43 104.26L486.43 104.26Q485.21 104.26 484.26 104.87Q483.31 105.48 482.78 106.54Q482.25 107.6 482.25 109L482.25 109Q482.25 110.4 482.79 111.47Q483.33 112.54 484.29 113.15Q485.25 113.76 486.49 113.76L486.49 113.76Q487.35 113.76 488.06 113.43Q488.77 113.1 489.32 112.52Q489.87 111.94 490.21 111.18L490.21 111.18L492.75 112.1Q492.25 113.32 491.32 114.26Q490.39 115.2 489.15 115.72Q487.91 116.24 486.45 116.24" fill="#2D2A35"><title>C</title></path>
+<g transform="translate(418 110)"><rect x="-30" y="-20" width="60" height="34" rx="9" fill="#FFFFFF" stroke="#2D2A35" stroke-width="2.4"/></g><path d="M407.45 114.18L407.45 114.18Q406.29 114.18 405.41 113.68Q404.52 113.18 404.02 112.29Q403.52 111.41 403.52 110.25L403.52 110.25Q403.52 109.1 404.02 108.21Q404.52 107.33 405.4 106.82Q406.28 106.32 407.42 106.32L407.42 106.32Q408.53 106.32 409.43 106.85Q410.33 107.39 410.76 108.38L410.76 108.38L409.2 108.98Q408.96 108.48 408.47 108.18Q407.97 107.88 407.34 107.88L407.34 107.88Q406.73 107.88 406.25 108.19Q405.77 108.5 405.5 109.03Q405.23 109.56 405.23 110.25L405.23 110.25Q405.23 110.94 405.51 111.47Q405.78 112.01 406.27 112.31Q406.76 112.62 407.37 112.62L407.37 112.62Q408 112.62 408.5 112.3Q408.99 111.98 409.23 111.42L409.23 111.42L410.79 112.02Q410.36 113.04 409.47 113.61Q408.57 114.18 407.45 114.18M413.78 114L412.1 114L412.1 106.5L413.67 106.5L413.75 107.51Q414.09 106.92 414.63 106.62Q415.17 106.32 415.86 106.32L415.86 106.32Q416.76 106.32 417.39 106.73Q418.02 107.13 418.31 107.96L418.31 107.96Q418.64 107.16 419.24 106.74Q419.84 106.32 420.65 106.32L420.65 106.32Q421.95 106.32 422.66 107.15Q423.36 107.99 423.35 109.71L423.35 109.71L423.35 114L421.68 114L421.68 110.16Q421.68 109.26 421.49 108.77Q421.29 108.29 420.96 108.09Q420.63 107.9 420.2 107.9L420.2 107.9Q419.42 107.88 418.99 108.45Q418.56 109.02 418.56 110.09L418.56 110.09L418.56 114L416.88 114L416.88 110.16Q416.88 109.26 416.7 108.77Q416.51 108.29 416.18 108.09Q415.85 107.9 415.41 107.9L415.41 107.9Q414.63 107.88 414.21 108.45Q413.78 109.02 413.78 110.09L413.78 110.09L413.78 114M428.03 114.18L428.03 114.18Q427.01 114.18 426.25 113.69Q425.49 113.21 425.07 112.32Q424.64 111.44 424.64 110.25L424.64 110.25Q424.64 109.05 425.07 108.17Q425.49 107.3 426.25 106.81Q427.01 106.32 428.03 106.32L428.03 106.32Q428.81 106.32 429.41 106.66Q430.01 107 430.4 107.61L430.4 107.61L430.4 103.5L432.06 103.5L432.06 114L430.47 114L430.41 112.86Q430.04 113.49 429.43 113.84Q428.82 114.18 428.03 114.18M428.45 112.65L428.45 112.65Q429 112.65 429.44 112.36Q429.87 112.07 430.12 111.55Q430.37 111.03 430.4 110.36L430.4 110.36L430.4 110.15Q430.37 109.47 430.12 108.95Q429.87 108.44 429.44 108.15Q429 107.87 428.43 107.87L428.43 107.87Q427.83 107.87 427.36 108.17Q426.89 108.47 426.63 109.01Q426.36 109.55 426.36 110.25L426.36 110.25Q426.36 110.96 426.63 111.5Q426.9 112.04 427.38 112.34Q427.85 112.65 428.45 112.65" fill="#2D2A35"><title>cmd</title></path>
+
+</svg>

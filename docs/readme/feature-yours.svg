@@ -1,0 +1,409 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 380" width="600" height="380" role="img">
+<title>Five Hushes in different bodies, colours and outfits, with the nine colours above them</title>
+<style>
+.bob{animation:bob 3.6s ease-in-out infinite alternate}
+@keyframes bob{from{transform:translateY(0)}to{transform:translateY(-7px)}}
+.blink [id$="-eyes-open"]{animation:blink 5s infinite;transform-box:fill-box;transform-origin:center}
+@keyframes blink{0%,94%,100%{transform:scaleY(1)}96%{transform:scaleY(0.1)}}
+.card{animation:rise 7s ease-in-out infinite}
+@keyframes rise{0%,78%{opacity:1;transform:translateY(0)}84%,90%{opacity:0;transform:translateY(10px)}96%,100%{opacity:1;transform:translateY(0)}}
+@media (prefers-reduced-motion: reduce){.bob,.blink [id$="-eyes-open"],.card{animation:none}}
+</style>
+<defs><filter id="sh" x="-20%" y="-20%" width="140%" height="150%"><feDropShadow dx="0" dy="14" stdDeviation="16" flood-color="#2D2A35" flood-opacity="0.18"/></filter><filter id="sh2" x="-20%" y="-30%" width="140%" height="170%"><feDropShadow dx="0" dy="6" stdDeviation="8" flood-color="#2D2A35" flood-opacity="0.14"/></filter></defs><rect width="600" height="380" rx="26" fill="#FFFBE8"/><circle cx="140" cy="70" r="15" fill="#F4D9A6" stroke="#2D2A35" stroke-width="2.4"/><circle cx="180" cy="70" r="15" fill="#A8DBC4" stroke="#2D2A35" stroke-width="2.4"/><circle cx="220" cy="70" r="15" fill="#C9BBEC" stroke="#2D2A35" stroke-width="2.4"/><circle cx="260" cy="70" r="15" fill="#A7CBEE" stroke="#2D2A35" stroke-width="2.4"/><circle cx="300" cy="70" r="15" fill="#F4B9B3" stroke="#2D2A35" stroke-width="2.4"/><circle cx="340" cy="70" r="15" fill="#F7C6A3" stroke="#2D2A35" stroke-width="2.4"/><circle cx="380" cy="70" r="15" fill="#CFDDA6" stroke="#2D2A35" stroke-width="2.4"/><circle cx="420" cy="70" r="15" fill="#F6E39A" stroke="#2D2A35" stroke-width="2.4"/><circle cx="460" cy="70" r="15" fill="#DDB0D6" stroke="#2D2A35" stroke-width="2.4"/><svg x="-12" y="178" width="162" height="147.825" viewBox="0 0 160 146" overflow="visible" class="blink">
+<g id="h0-fx-back">
+</g>
+
+<g>
+<g transform="translate(20 2)" id="h0-character">
+<g transform="rotate(0 60 134)" id="h0-pose-root">
+
+<g stroke-linecap="round" id="h0-legs-back">
+<line x1="50" y1="124" x2="50" y2="134" stroke="#2D2A35" stroke-width="12" id="h0-leg-l"/>
+<line x1="50" y1="124" x2="50" y2="134" stroke="#F4D9A6" stroke-width="7"/>
+<line x1="70" y1="124" x2="70" y2="134" stroke="#2D2A35" stroke-width="12" id="h0-leg-r"/>
+<line x1="70" y1="124" x2="70" y2="134" stroke="#F4D9A6" stroke-width="7"/>
+</g>
+
+<g stroke="#2D2A35" stroke-linecap="round" stroke-linejoin="round" id="h0-topper">
+<g transform="translate(60 44) scale(1)" id="h0-topper-leaf">
+<path d="M0 3 Q-1 -5 1 -11" fill="none" stroke-width="2.6"/>
+<path d="M1 -10 C5 -19 15 -21 18 -15 C13 -8 6 -7 1 -10 Z" fill="#E8876A" stroke-width="2.2"/>
+<path d="M0 -7 C-4 -13 -11 -14 -13 -9 C-9 -5 -4 -5 0 -7 Z" fill="#E8876A" stroke-width="2.2"/>
+</g>
+</g>
+
+<g id="h0-body">
+<path d="M60 44 C88 44 102 64 102 90 C102 116 86 128 60 128 C34 128 18 116 18 90 C18 64 32 44 60 44 Z" fill="#F4D9A6" stroke="#2D2A35" stroke-width="3.2" stroke-linejoin="round"/>
+<ellipse cx="60" cy="113" rx="23" ry="12" fill="#FFF5E1" id="h0-belly"/>
+</g>
+
+<g stroke="#2D2A35" stroke-linejoin="round" stroke-linecap="round" id="h0-accessory">
+<g transform="translate(60 44)" id="h0-head-beanie">
+<path d="M-28 12 C-28 -10 -12.6 -16 0 -16 C12.6 -16 28 -10 28 12 Z" fill="#E8876A" stroke-width="2.6"/>
+<rect x="-30" y="8" width="60" height="10" rx="5" fill="#E8876A" stroke-width="2.4"/>
+<path d="M-23 10 V16 M-17 10 V16 M-11 10 V16 M-5 10 V16 M1 10 V16 M7 10 V16 M13 10 V16 M19 10 V16 M25 10 V16 " fill="none" stroke-width="1.3" opacity="0.5"/>
+<circle cx="0" cy="-18" r="5.5" fill="#FFF5E1" stroke-width="2.2"/>
+</g>
+</g>
+
+<g transform="translate(60 80)" id="h0-face">
+<g fill="#E8876A" opacity="0.5" id="h0-blush">
+<ellipse cx="-21" cy="7" rx="4.2" ry="2.3"/>
+<ellipse cx="21" cy="7" rx="4.2" ry="2.3"/>
+</g>
+<g id="h0-eyes">
+<g id="h0-eyes-open">
+<ellipse cx="-15" cy="0" rx="5.2" ry="5.2" fill="#2D2A35"/>
+<ellipse cx="15" cy="0" rx="5.2" ry="5.2" fill="#2D2A35"/>
+<circle cx="-16.66" cy="-1.87" r="1.87" fill="#FFFFFF"/>
+<circle cx="13.34" cy="-1.87" r="1.87" fill="#FFFFFF"/>
+</g>
+</g>
+<g transform="translate(0 11)" stroke="#2D2A35" stroke-linecap="round" stroke-linejoin="round" id="h0-mouth">
+<path d="M-3.2 0 Q0 2.8 3.2 0" fill="none" stroke-width="2" id="h0-mouth-line"/>
+</g>
+</g>
+
+<g stroke-linecap="round" id="h0-arms">
+<g id="h0-arm-l">
+<line x1="24" y1="104" x2="17" y2="119" stroke="#2D2A35" stroke-width="11.5"/>
+<line x1="24" y1="104" x2="17" y2="119" stroke="#F4D9A6" stroke-width="6.5"/>
+</g>
+<g id="h0-arm-r">
+<line x1="96" y1="104" x2="103" y2="119" stroke="#2D2A35" stroke-width="11.5"/>
+<line x1="96" y1="104" x2="103" y2="119" stroke="#F4D9A6" stroke-width="6.5"/>
+</g>
+</g>
+
+<g stroke="#2D2A35" stroke-linejoin="round" stroke-linecap="round" id="h0-props-held">
+</g>
+
+<g stroke="#2D2A35" stroke-linecap="round" stroke-linejoin="round" id="h0-fx-character">
+</g>
+
+</g>
+</g>
+</g>
+
+</svg>
+<svg x="98" y="172" width="162" height="147.825" viewBox="0 0 160 146" overflow="visible" class="blink">
+<g id="h1-fx-back">
+</g>
+
+<g>
+<g transform="translate(20 2)" id="h1-character">
+<g transform="rotate(0 60 134)" id="h1-pose-root">
+
+<g stroke-linecap="round" id="h1-legs-back">
+<line x1="50" y1="124" x2="50" y2="134" stroke="#2D2A35" stroke-width="12" id="h1-leg-l"/>
+<line x1="50" y1="124" x2="50" y2="134" stroke="#A8DBC4" stroke-width="7"/>
+<line x1="70" y1="124" x2="70" y2="134" stroke="#2D2A35" stroke-width="12" id="h1-leg-r"/>
+<line x1="70" y1="124" x2="70" y2="134" stroke="#A8DBC4" stroke-width="7"/>
+</g>
+
+<g stroke="#2D2A35" stroke-linecap="round" stroke-linejoin="round" id="h1-topper">
+<g id="h1-topper-ears">
+<g transform="translate(43 38) rotate(-16)">
+<path d="M-8 6 C-8 -4 -4 -12 0 -12 C4 -12 8 -4 8 6 Z" fill="#A8DBC4" stroke-width="3"/>
+<path d="M-4 4 C-4 -2 -2 -7 0 -7 C2 -7 4 -2 4 4 Z" fill="#4F9C86" stroke="none" opacity="0.7"/>
+</g>
+<g transform="translate(77 38) rotate(16)">
+<path d="M-8 6 C-8 -4 -4 -12 0 -12 C4 -12 8 -4 8 6 Z" fill="#A8DBC4" stroke-width="3"/>
+<path d="M-4 4 C-4 -2 -2 -7 0 -7 C2 -7 4 -2 4 4 Z" fill="#4F9C86" stroke="none" opacity="0.7"/>
+</g>
+</g>
+</g>
+
+<g id="h1-body">
+<path d="M60 30 C82 30 92 48 92 72 L92 104 C92 120 80 128 60 128 C40 128 28 120 28 104 L28 72 C28 48 38 30 60 30 Z" fill="#A8DBC4" stroke="#2D2A35" stroke-width="3.2" stroke-linejoin="round"/>
+<ellipse cx="60" cy="107" rx="19" ry="15" fill="#EDF8F1" id="h1-belly"/>
+</g>
+
+<g stroke="#2D2A35" stroke-linejoin="round" stroke-linecap="round" id="h1-accessory">
+<g transform="translate(60 30)" id="h1-head-headphones">
+<path d="M-33 24 C-33 -32 33 -32 33 24" fill="none" stroke-width="6.5"/>
+<path d="M-33 24 C-33 -32 33 -32 33 24" fill="none" stroke="#4F9C86" stroke-width="3"/>
+<rect x="-38" y="22" width="11" height="22" rx="5" fill="#4F9C86" stroke-width="2.4"/>
+<rect x="27" y="22" width="11" height="22" rx="5" fill="#4F9C86" stroke-width="2.4"/>
+</g>
+</g>
+
+<g transform="translate(60 64)" id="h1-face">
+<g fill="#4F9C86" opacity="0.5" id="h1-blush">
+<ellipse cx="-18" cy="7" rx="4.2" ry="2.3"/>
+<ellipse cx="18" cy="7" rx="4.2" ry="2.3"/>
+</g>
+<g id="h1-eyes">
+<g id="h1-eyes-open">
+<ellipse cx="-12" cy="0" rx="5.2" ry="5.2" fill="#2D2A35"/>
+<ellipse cx="12" cy="0" rx="5.2" ry="5.2" fill="#2D2A35"/>
+<circle cx="-13.66" cy="-1.87" r="1.87" fill="#FFFFFF"/>
+<circle cx="10.34" cy="-1.87" r="1.87" fill="#FFFFFF"/>
+</g>
+</g>
+<g transform="translate(0 11)" stroke="#2D2A35" stroke-linecap="round" stroke-linejoin="round" id="h1-mouth">
+<path d="M-3.2 0 Q0 2.8 3.2 0" fill="none" stroke-width="2" id="h1-mouth-line"/>
+</g>
+</g>
+
+<g stroke-linecap="round" id="h1-arms">
+<g id="h1-arm-l">
+<line x1="34" y1="94" x2="27" y2="109" stroke="#2D2A35" stroke-width="11.5"/>
+<line x1="34" y1="94" x2="27" y2="109" stroke="#A8DBC4" stroke-width="6.5"/>
+</g>
+<g id="h1-arm-r">
+<line x1="86" y1="94" x2="93" y2="109" stroke="#2D2A35" stroke-width="11.5"/>
+<line x1="86" y1="94" x2="93" y2="109" stroke="#A8DBC4" stroke-width="6.5"/>
+</g>
+</g>
+
+<g stroke="#2D2A35" stroke-linejoin="round" stroke-linecap="round" id="h1-props-held">
+</g>
+
+<g stroke="#2D2A35" stroke-linecap="round" stroke-linejoin="round" id="h1-fx-character">
+</g>
+
+</g>
+</g>
+</g>
+
+</svg>
+<svg x="208" y="178" width="162" height="147.825" viewBox="0 0 160 146" overflow="visible" class="blink">
+<g id="h2-fx-back">
+</g>
+
+<g>
+<g transform="translate(20 2)" id="h2-character">
+<g transform="rotate(0 60 134)" id="h2-pose-root">
+
+<g stroke-linecap="round" id="h2-legs-back">
+<line x1="50" y1="124" x2="50" y2="134" stroke="#2D2A35" stroke-width="12" id="h2-leg-l"/>
+<line x1="50" y1="124" x2="50" y2="134" stroke="#C9BBEC" stroke-width="7"/>
+<line x1="70" y1="124" x2="70" y2="134" stroke="#2D2A35" stroke-width="12" id="h2-leg-r"/>
+<line x1="70" y1="124" x2="70" y2="134" stroke="#C9BBEC" stroke-width="7"/>
+</g>
+
+<g stroke="#2D2A35" stroke-linecap="round" stroke-linejoin="round" id="h2-topper">
+<g transform="translate(60 52)" id="h2-topper-antenna">
+<path d="M0 2 Q-3 -9 4 -15" fill="none" stroke-width="2.6"/>
+<circle cx="5" cy="-18" r="4.6" fill="#8C6FD0" stroke-width="2.4"/>
+</g>
+</g>
+
+<g id="h2-body">
+<path d="M40 52 L80 52 C96 52 102 58 102 74 L102 112 C102 124 96 128 84 128 L36 128 C24 128 18 124 18 112 L18 74 C18 58 24 52 40 52 Z" fill="#C9BBEC" stroke="#2D2A35" stroke-width="3.2" stroke-linejoin="round"/>
+<ellipse cx="60" cy="116" rx="25" ry="8" fill="#F3EFFC" id="h2-belly"/>
+</g>
+
+<g stroke="#2D2A35" stroke-linejoin="round" stroke-linecap="round" id="h2-accessory">
+<g transform="translate(60 101)" id="h2-neck-bowtie">
+<path d="M-2 0 L-13 -7 L-13 7 Z M2 0 L13 -7 L13 7 Z" fill="#8C6FD0" stroke-width="2.2"/>
+<rect x="-3.5" y="-4" width="7" height="8" rx="2.5" fill="#8C6FD0" stroke-width="2.2"/>
+</g>
+</g>
+
+<g transform="translate(60 84)" id="h2-face">
+<g fill="#8C6FD0" opacity="0.5" id="h2-blush">
+<ellipse cx="-22" cy="7" rx="4.2" ry="2.3"/>
+<ellipse cx="22" cy="7" rx="4.2" ry="2.3"/>
+</g>
+<g id="h2-eyes">
+<g fill="none" stroke="#2D2A35" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" id="h2-eyes-drawn">
+<path d="M-21 1.5 Q-16 -4.5 -11 1.5"/>
+<path d="M11 1.5 Q16 -4.5 21 1.5"/>
+</g>
+</g>
+<g stroke="#2D2A35" stroke-width="2" id="h2-accessory-glasses">
+<circle cx="-16" cy="0" r="9.2" fill="#FFFFFF" fill-opacity="0.22"/>
+<circle cx="16" cy="0" r="9.2" fill="#FFFFFF" fill-opacity="0.22"/>
+<path d="M-6.8 -1 Q0 -4 6.8 -1" fill="none" stroke-linecap="round"/>
+</g>
+<g transform="translate(0 11)" stroke="#2D2A35" stroke-linecap="round" stroke-linejoin="round" id="h2-mouth">
+<path d="M-4.2 -0.6 Q0 6 4.2 -0.6 Z" fill="#2D2A35" stroke-width="1.6" id="h2-mouth-smile"/>
+</g>
+</g>
+
+<g stroke-linecap="round" id="h2-arms">
+<g id="h2-arm-l">
+<line x1="24" y1="108" x2="17" y2="123" stroke="#2D2A35" stroke-width="11.5"/>
+<line x1="24" y1="108" x2="17" y2="123" stroke="#C9BBEC" stroke-width="6.5"/>
+</g>
+<g id="h2-arm-r">
+<line x1="96" y1="108" x2="108" y2="70" stroke="#2D2A35" stroke-width="11.5"/>
+<line x1="96" y1="108" x2="108" y2="70" stroke="#C9BBEC" stroke-width="6.5"/>
+</g>
+</g>
+
+<g stroke="#2D2A35" stroke-linejoin="round" stroke-linecap="round" id="h2-props-held">
+<path d="M109 70 L113 65 M111 78 L118 78 M109 86 L113 91" fill="none" stroke-width="2.2" opacity="0.65" id="h2-fx-tap-marks"/>
+</g>
+
+<g stroke="#2D2A35" stroke-linecap="round" stroke-linejoin="round" id="h2-fx-character">
+</g>
+
+</g>
+</g>
+</g>
+
+</svg>
+<svg x="318" y="172" width="162" height="147.825" viewBox="0 0 160 146" overflow="visible" class="blink">
+<g id="h3-fx-back">
+</g>
+
+<g>
+<g transform="translate(20 2)" id="h3-character">
+<g transform="rotate(0 60 134)" id="h3-pose-root">
+
+<g stroke-linecap="round" id="h3-legs-back">
+<line x1="50" y1="124" x2="50" y2="134" stroke="#2D2A35" stroke-width="12" id="h3-leg-l"/>
+<line x1="50" y1="124" x2="50" y2="134" stroke="#A7CBEE" stroke-width="7"/>
+<line x1="70" y1="124" x2="70" y2="134" stroke="#2D2A35" stroke-width="12" id="h3-leg-r"/>
+<line x1="70" y1="124" x2="70" y2="134" stroke="#A7CBEE" stroke-width="7"/>
+</g>
+
+<g stroke="#2D2A35" stroke-linecap="round" stroke-linejoin="round" id="h3-topper">
+</g>
+
+<g id="h3-body">
+<path d="M60 44 C88 44 102 64 102 90 C102 116 86 128 60 128 C34 128 18 116 18 90 C18 64 32 44 60 44 Z" fill="#A7CBEE" stroke="#2D2A35" stroke-width="3.2" stroke-linejoin="round"/>
+<ellipse cx="60" cy="113" rx="23" ry="12" fill="#EAF3FC" id="h3-belly"/>
+</g>
+
+<g stroke="#2D2A35" stroke-linejoin="round" stroke-linecap="round" id="h3-accessory">
+<g transform="translate(60 44)" id="h3-pack-head-bunny">
+<g transform="translate(-8 -1) rotate(-12)"><path d="M-5.5 2 C-6.5 -10 -4.5 -25 0 -25 C4.5 -25 6.5 -10 5.5 2 Z" fill="#FFFFFF" stroke-width="2.4"/><path d="M-2.4 -2 C-3 -10 -2 -19 0 -19 C2 -19 3 -10 2.4 -2 Z" fill="#F3A6B8" stroke="none"/></g>
+<g transform="translate(9 -1) rotate(16)"><path d="M-5.5 2 C-6.5 -10 -4.5 -25 0 -25 C4.5 -25 6.5 -10 5.5 2 Z" fill="#FFFFFF" stroke-width="2.4"/><path d="M-2.4 -2 C-3 -10 -2 -19 0 -19 C2 -19 3 -10 2.4 -2 Z" fill="#F3A6B8" stroke="none"/></g>
+<path d="M-29 12 C-29 -5 29 -5 29 12" fill="none" stroke-width="5.2"/>
+<path d="M-29 12 C-29 -5 29 -5 29 12" fill="none" stroke="#4A82C9" stroke-width="2.8"/>
+</g>
+<g transform="translate(114 133)" id="h3-pack-carry-coffee">
+<path d="M-6 -16 L6 -16 L4.6 0 L-4.6 0 Z" fill="#FFFFFF" stroke-width="2.2"/>
+<path d="M-5.6 -11.5 L5.6 -11.5 L5.1 -5 L-5.1 -5 Z" fill="#C89B6D" stroke-width="1.6"/>
+<rect x="-7.4" y="-19.5" width="14.8" height="4" rx="1.8" fill="#FFFFFF" stroke-width="2"/>
+<path d="M-1.5 -8.4 h3" fill="none" stroke="#FFFFFF" stroke-width="1.6"/>
+</g>
+</g>
+
+<g transform="translate(60 80)" id="h3-face">
+<g fill="#4A82C9" opacity="0.5" id="h3-blush">
+<ellipse cx="-21" cy="7" rx="4.2" ry="2.3"/>
+<ellipse cx="21" cy="7" rx="4.2" ry="2.3"/>
+</g>
+<g id="h3-eyes">
+<g id="h3-eyes-open">
+<ellipse cx="-15" cy="0" rx="5.2" ry="5.2" fill="#2D2A35"/>
+<ellipse cx="15" cy="0" rx="5.2" ry="5.2" fill="#2D2A35"/>
+<circle cx="-16.66" cy="-1.87" r="1.87" fill="#FFFFFF"/>
+<circle cx="13.34" cy="-1.87" r="1.87" fill="#FFFFFF"/>
+</g>
+</g>
+<g transform="translate(0 11)" stroke="#2D2A35" stroke-linecap="round" stroke-linejoin="round" id="h3-mouth">
+<path d="M-3.2 0 Q0 2.8 3.2 0" fill="none" stroke-width="2" id="h3-mouth-line"/>
+</g>
+</g>
+
+<g stroke-linecap="round" id="h3-arms">
+<g id="h3-arm-l">
+<line x1="24" y1="104" x2="17" y2="119" stroke="#2D2A35" stroke-width="11.5"/>
+<line x1="24" y1="104" x2="17" y2="119" stroke="#A7CBEE" stroke-width="6.5"/>
+</g>
+<g id="h3-arm-r">
+<line x1="96" y1="104" x2="103" y2="119" stroke="#2D2A35" stroke-width="11.5"/>
+<line x1="96" y1="104" x2="103" y2="119" stroke="#A7CBEE" stroke-width="6.5"/>
+</g>
+</g>
+
+<g stroke="#2D2A35" stroke-linejoin="round" stroke-linecap="round" id="h3-props-held">
+</g>
+
+<g stroke="#2D2A35" stroke-linecap="round" stroke-linejoin="round" id="h3-fx-character">
+</g>
+
+</g>
+</g>
+</g>
+
+</svg>
+<svg x="428" y="178" width="162" height="147.825" viewBox="0 0 160 146" overflow="visible" class="blink">
+<g id="h4-fx-back">
+</g>
+
+<g>
+<g transform="translate(20 2)" id="h4-character">
+<g transform="rotate(0 60 134)" id="h4-pose-root">
+
+<g stroke-linecap="round" id="h4-legs-back">
+<line x1="50" y1="124" x2="50" y2="134" stroke="#2D2A35" stroke-width="12" id="h4-leg-l"/>
+<line x1="50" y1="124" x2="50" y2="134" stroke="#F4B9B3" stroke-width="7"/>
+<line x1="70" y1="124" x2="70" y2="134" stroke="#2D2A35" stroke-width="12" id="h4-leg-r"/>
+<line x1="70" y1="124" x2="70" y2="134" stroke="#F4B9B3" stroke-width="7"/>
+</g>
+
+<g stroke="#2D2A35" stroke-linecap="round" stroke-linejoin="round" id="h4-topper">
+<g transform="translate(60 30) scale(1)" id="h4-topper-leaf">
+<path d="M0 3 Q-1 -5 1 -11" fill="none" stroke-width="2.6"/>
+<path d="M1 -10 C5 -19 15 -21 18 -15 C13 -8 6 -7 1 -10 Z" fill="#C95F68" stroke-width="2.2"/>
+<path d="M0 -7 C-4 -13 -11 -14 -13 -9 C-9 -5 -4 -5 0 -7 Z" fill="#C95F68" stroke-width="2.2"/>
+</g>
+</g>
+
+<g id="h4-body">
+<path d="M60 30 C82 30 92 48 92 72 L92 104 C92 120 80 128 60 128 C40 128 28 120 28 104 L28 72 C28 48 38 30 60 30 Z" fill="#F4B9B3" stroke="#2D2A35" stroke-width="3.2" stroke-linejoin="round"/>
+<ellipse cx="60" cy="107" rx="19" ry="15" fill="#FDEDEA" id="h4-belly"/>
+</g>
+
+<g stroke="#2D2A35" stroke-linejoin="round" stroke-linecap="round" id="h4-accessory">
+<g transform="translate(60 84)" id="h4-accessory-scarf">
+<path d="M17 2 L27 2 L30 18 L26 15.5 L22 18.5 L19 16 Z" fill="#C95F68" stroke-width="2.4"/>
+<rect x="-33" y="-4.5" width="66" height="9" rx="4.5" fill="#C95F68" stroke-width="2.6"/>
+</g>
+<g transform="translate(60 32)" id="h4-pack-head-straw">
+<ellipse cx="0" cy="6" rx="34" ry="5.5" fill="#EBCB7E" stroke-width="2.4"/>
+<path d="M-14 6 C-14 -14 14 -14 14 6 Z" fill="#EBCB7E" stroke-width="2.4"/>
+<path d="M-14 0.5 Q0 -2 14 0.5 L14 5.5 Q0 3 -14 5.5 Z" fill="#C95F68" stroke-width="1.6"/>
+<path d="M-4 -4 L-3 -1 M3 -5 L3.5 -1.5" fill="none" stroke-width="1.1" opacity="0.4"/>
+</g>
+</g>
+
+<g transform="translate(60 64)" id="h4-face">
+<g fill="#C95F68" opacity="0.5" id="h4-blush">
+<ellipse cx="-18" cy="7" rx="4.2" ry="2.3"/>
+<ellipse cx="18" cy="7" rx="4.2" ry="2.3"/>
+</g>
+<g id="h4-eyes">
+<g id="h4-eyes-open">
+<ellipse cx="-12" cy="0" rx="5.2" ry="5.2" fill="#2D2A35"/>
+<ellipse cx="12" cy="0" rx="5.2" ry="5.2" fill="#2D2A35"/>
+<circle cx="-13.66" cy="-1.87" r="1.87" fill="#FFFFFF"/>
+<circle cx="10.34" cy="-1.87" r="1.87" fill="#FFFFFF"/>
+</g>
+</g>
+<g transform="translate(0 11)" stroke="#2D2A35" stroke-linecap="round" stroke-linejoin="round" id="h4-mouth">
+<path d="M-3.2 0 Q0 2.8 3.2 0" fill="none" stroke-width="2" id="h4-mouth-line"/>
+</g>
+</g>
+
+<g stroke-linecap="round" id="h4-arms">
+<g id="h4-arm-l">
+<line x1="34" y1="94" x2="27" y2="109" stroke="#2D2A35" stroke-width="11.5"/>
+<line x1="34" y1="94" x2="27" y2="109" stroke="#F4B9B3" stroke-width="6.5"/>
+</g>
+<g id="h4-arm-r">
+<line x1="86" y1="94" x2="93" y2="109" stroke="#2D2A35" stroke-width="11.5"/>
+<line x1="86" y1="94" x2="93" y2="109" stroke="#F4B9B3" stroke-width="6.5"/>
+</g>
+</g>
+
+<g stroke="#2D2A35" stroke-linejoin="round" stroke-linecap="round" id="h4-props-held">
+</g>
+
+<g stroke="#2D2A35" stroke-linecap="round" stroke-linejoin="round" id="h4-fx-character">
+</g>
+
+</g>
+</g>
+</g>
+
+</svg>
+<line x1="24" y1="326" x2="576" y2="326" stroke="#2D2A35" stroke-width="3" stroke-linecap="round" opacity="0.28"/>
+</svg>
