@@ -7,3 +7,9 @@ The Hush character, the name "Hush", the logo, the app icon and the menu bar gly
 Wardrobe pieces, props, effects and edge pieces (assets/character/swag, assets/character/edge) are licensed under
 Creative Commons Attribution-ShareAlike 4.0 International (assets/character/swag/LICENSE).
 See LICENSE-ASSETS.md for exactly what is reserved and what is open.
+
+Third-party material:
+- The website's fonts, Bricolage Grotesque and Figtree, are under the SIL Open Font License 1.1 (site/fonts/OFL-*.txt).
+- video/ (the tool that makes the website's videos, not part of the app) uses Remotion, under the Remotion License:
+  free for individuals and companies of up to 3 people (https://www.remotion.dev/docs/license). App icons in the
+  videos are taken from apps installed on the machine at render time, are never committed, and belong to their owners.
