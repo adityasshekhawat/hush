@@ -34,7 +34,8 @@ Floor anchors: edge poses y=112, perches y=116, others y=138. Sequences come fro
   (`--no-install` to only build). `./scripts/swift.sh run hush-eval` runs `evals/asks.json` against a real model (costs money); `--lane mail` / `--lane pouch` run `evals/mail.json` / `evals/pouch.json` on the on-device model (free). Hush repoints its Claude Code hooks to wherever it runs from, on launch.
 - Logs (renderer errors, paste, agent, hooks): `~/Library/Application Support/Hush/diagnostics.log`
 - README media: `swift scripts/render-media.swift` renders `docs/media` GIFs/PNGs from the pack (after new art); `./scripts/record-media.sh` records the feature GIFs from the running app (debug hooks; leaves no trace, ADR-028);
-  `./scripts/record-video.sh` records the website's tour video the same way (`site/media/hush-demo.mp4`, ADR-031)
+  `./scripts/record-video.sh` records the website's tour video the same way (`site/media/hush-demo.mp4`, ADR-031);
+  `video/` makes the playful videos with Remotion from the same pack (`npm run studio`, `npm run render` → `video/out`, ADR-032)
 - Cost: `./scripts/measure.sh 40` (CPU and memory of Hush + WebKit helpers; results in `docs/performance.md`)
 - Debug hooks: `defaults write dev.hush.Hush HushDebugHooks -bool YES`, then post distributed notification
   `dev.hush.debug` with a command; the list is the `switch` in `AppController+Debug.swift`. Turn it off after, then relaunch Hush

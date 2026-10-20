@@ -1,0 +1,16 @@
+{
+  "name": "hush-videos",
+  "private": true,
+  "description": "Hush's playful videos, made with Remotion from the app's own character pack (ADR-032).",
+  "scripts": {
+    "sync": "node scripts/sync-art.mjs",
+    "studio": "npm run sync && remotion studio",
+    "render": "npm run sync && node scripts/render.mjs"
+  },
+  "dependencies": {
+    "@remotion/cli": "4.0.533",
+    "react": "19.3.0",
+    "react-dom": "19.3.0",
+    "remotion": "4.0.533"
+  }
+}

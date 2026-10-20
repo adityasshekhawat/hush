@@ -578,3 +578,17 @@ Art from `docs/v1-art-brief.md`, delivered as new files only (notes: `docs/v1-ar
 - **Deploys:** Vercel is connected to the GitHub repo and deploys `main`; the project's root directory is `site`
   (it was the repo root, which served the repository's files at the site's address for about two hours on
   2026-10-20; those deployments were deleted).
+
+## ADR-032 · Playful videos are made with Remotion from the app's own pack (2026-10-21)
+
+- **Why:** the tour (ADR-031) shows the app as it is; short social videos need camera moves, beats and big type,
+  which a recording of the app can't give.
+- **How:** `video/` is a small Remotion project. Hush is drawn by `site/hush.js` from `site/hush-data.js`, the
+  same composer the website uses, so every pose, face, colour and wearable is the real pack; fonts and edge art are
+  copied in by `npm run sync`. Each video renders in 16:9, 1:1 and 9:16 (`npm run render` → `video/out/`, ignored).
+- **Truthful:** stories only show what Hush does today (the first, "The flood", is agent updates, not general
+  notifications or mail); example numbers match the README's.
+- **Supply chain:** `remotion`, `@remotion/cli` 4.0.533 and `react`, `react-dom` 19.3.0, pinned exactly, chosen
+  weeks old; past 4.0.410 (CVE-2026-30120 and -30121 fixed); `npm audit` clean; `.npmrc` sets `ignore-scripts`.
+  Remotion downloads Chrome Headless Shell on first render. Licence: free for individuals and companies of up to 3.
+- **Publishing:** nothing goes on the website or anywhere else until it's been watched and approved.
