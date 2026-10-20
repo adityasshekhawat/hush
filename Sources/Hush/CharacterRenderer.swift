@@ -57,7 +57,9 @@ struct CharacterLook: Codable, Equatable {
 
     /// What the renderer page reads (`hush.setLook`).
     var rendererJSON: String {
-        let o: [String: Any] = ["body": body, "palette": palette, "eyes": eyes, "topper": topper, "wear": wearLayers]
+        // headWear: the hat's layers, which the energy saver's nightcap takes the place of.
+        let hat = wearing(.head).flatMap { Wardrobe.piece($0)?.layers } ?? []
+        let o: [String: Any] = ["body": body, "palette": palette, "eyes": eyes, "topper": topper, "wear": wearLayers, "headWear": hat]
         return (try? JSONSerialization.data(withJSONObject: o)).map { String(decoding: $0, as: UTF8.self) } ?? "{}"
     }
 }

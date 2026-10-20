@@ -242,20 +242,27 @@ enum HushMotion {
 /// Card chrome (design guide §2, "Material"). macOS 15: material, a 0.5 pt hairline and the guide's shadow
 /// (0 12 32 at 18 %). macOS 26 and later: Liquid Glass, which draws its own edge highlight and shadow, so both go
 /// (v1 art notes). Status never tints the glass; only the command box takes a faint lilac to mark it as Hush's.
+enum SurfaceStyle {
+    /// README recordings (MediaRecorder) snapshot windows through AppKit's view cache, which can't see glass (the
+    /// window server draws it), so surfaces fall back to material while one runs.
+    @MainActor static var recording = false
+}
+
 struct HushSurface: ViewModifier {
     var radius: CGFloat
     var interactive = false
     var tint: Color?
     var shadow = true
+    var hairline = true
 
     func body(content: Content) -> some View {
         let shape = RoundedRectangle(cornerRadius: radius, style: .continuous)
-        if #available(macOS 26, *) {
+        if #available(macOS 26, *), !SurfaceStyle.recording {
             content.glassEffect(Self.glass(tint: tint, interactive: interactive), in: shape)
         } else {
             content
                 .background(.regularMaterial, in: shape)
-                .overlay(shape.strokeBorder(HushColor.hairline, lineWidth: 0.5))
+                .overlay(shape.strokeBorder(HushColor.hairline, lineWidth: hairline ? 0.5 : 0))
                 .shadow(color: .black.opacity(shadow ? 0.18 : 0), radius: 16, x: 0, y: 12)
         }
     }
@@ -269,7 +276,8 @@ struct HushSurface: ViewModifier {
 }
 
 extension View {
-    func hushSurface(radius: CGFloat, interactive: Bool = false, tint: Color? = nil, shadow: Bool = true) -> some View {
-        modifier(HushSurface(radius: radius, interactive: interactive, tint: tint, shadow: shadow))
+    func hushSurface(radius: CGFloat, interactive: Bool = false, tint: Color? = nil, shadow: Bool = true,
+                     hairline: Bool = true) -> some View {
+        modifier(HushSurface(radius: radius, interactive: interactive, tint: tint, shadow: shadow, hairline: hairline))
     }
 }

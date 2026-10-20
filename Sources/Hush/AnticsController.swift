@@ -286,7 +286,8 @@ private struct BubbleView: View {
             .frame(width: textWidth)
             .padding(.horizontal, 14)
             .padding(.vertical, 10)
-            .background(.regularMaterial, in: RoundedRectangle(cornerRadius: 14, style: .continuous))
+            // Glass on macOS 26 and later; plain material before, as it always was.
+            .hushSurface(radius: 14, shadow: false, hairline: false)
             .padding(6)
     }
 }

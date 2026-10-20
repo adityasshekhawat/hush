@@ -55,7 +55,7 @@ const getPose = n => { const k = s.body + "/" + n; return poseDocs[k] || (poseDo
 const getRig = () => { const k = s.body + "/" + s.eyes; return rigDocs[k] || (rigDocs[k] = parse((D.rigs[s.body] || D.rigs.blob)[s.eyes])); };
 const getFace = n => { const k = s.body + "/" + n; return faceDocs[k] || (faceDocs[k] = parse(bodyFaces()[n]).querySelector("#face")); };
 const extraDocs = {};
-// Swag files the rig doesn't carry (nightcap, satchel sizes): the group with that id, from this body's file.
+// Swag files the rig doesn't carry (satchel sizes): the group with that id, from this body's file.
 const getExtra = id => {
   const k = s.body + "/" + id, src = (D.extras[s.body] || D.extras.blob || {})[id];
   if (!(k in extraDocs)) extraDocs[k] = src ? parse(src).querySelector("#" + id) : null;
@@ -142,9 +142,10 @@ function compose(pose, expr, extraWear) {
     });
   }
   const grounded = !EDGE_POSES.has(pose) && !/perch/i.test(pose);
-  // Energy saver wears the nightcap (v1 art); a sequence frame can add its own pieces. A hat replaces the topper.
+  // Energy saver wears the nightcap (v1 art; also a free head piece); a sequence frame can add its own pieces.
+  // The nightcap replaces the topper.
   let wear = (s.wear || []).concat(extraWear || []);
-  if (live.saver) wear = wear.filter(id => !/^head-/.test(id)).concat("head-nightcap");
+  if (live.saver) wear = wear.filter(id => !(s.headWear || []).includes(id)).concat("head-nightcap");
   if (wear.some(id => /^head-nightcap$/.test(id)) && topper) topper.replaceChildren();
   for (const id of wear) {
     const part = rig.querySelector("#" + id) || getExtra(id);

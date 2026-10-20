@@ -35,6 +35,7 @@ final class MediaRecorder {
         rect = NSRect(x: x, y: screen.minY, width: w, height: h)
         appearanceBefore = NSApp.appearance
         NSApp.appearance = NSAppearance(named: .aqua)
+        SurfaceStyle.recording = true
         timer = Timer.scheduledTimer(withTimeInterval: 1 / Self.fps, repeats: true) { [weak self] _ in
             MainActor.assumeIsolated { self?.capture() }
         }
@@ -44,6 +45,7 @@ final class MediaRecorder {
     func stop() {
         stopTimer()
         NSApp.appearance = appearanceBefore
+        SurfaceStyle.recording = false
         let out = FileManager.default.homeDirectoryForCurrentUser
             .appendingPathComponent("Library/Application Support/Hush/recordings/\(name).gif")
         try? FileManager.default.createDirectory(at: out.deletingLastPathComponent(), withIntermediateDirectories: true)

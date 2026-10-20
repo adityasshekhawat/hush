@@ -35,7 +35,7 @@ data = {
     "palettes": json.loads((CHAR / "palettes.json").read_text(encoding="utf-8")),
     "wear": wardrobe(),
 }
-assert len(data["wear"]) == 45, f"expected 45 wearables, read {len(data['wear'])}"
+assert len(data["wear"]) == 46, f"expected 46 wearables, read {len(data['wear'])}"
 
 out = ROOT / "site/hush-data.js"
 out.parent.mkdir(exist_ok=True)

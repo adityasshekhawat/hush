@@ -12,6 +12,7 @@ Hush is pre-alpha and built from source. Notable changes, newest first. Decision
   the mail digest. All of it is still poses, so it costs nothing while it waits.
 - **The flag rail:** agent sessions waiting behind the one Hush holds stand as small flags on the bottom edge, with
   the project's name. Click one to open its card. Up to 5, then "+N more".
+- **Nightcap** in the wardrobe (free, all bodies and colours). Speech bubbles are glass on macOS 26 too.
 - **A paused glyph** in the menu bar, the notebook cover in What Hush saw, Liquid Glass cards on macOS 26 and later,
   and a layered app icon for macOS 26 (built with Xcode; the flat icon otherwise). README GIFs re-recorded.
 

@@ -547,12 +547,14 @@ Art from `docs/v1-art-brief.md`, delivered as new files only (notes: `docs/v1-ar
 - **Menu bar:** a paused glyph while paused. **Journal:** the notebook cover in the empty state, words drawn by the app.
   Hush holds the notebook when the journal opens.
 - **Liquid Glass** (`hushSurface`): on macOS 26 and later the envelope, answer, rules and held-back cards, the command
-  box (interactive, faint lilac) and the menu panel use glass and drop the hairline and shadow; macOS 15 keeps material.
-  The speech bubble and task pill are unchanged.
+  box (interactive, faint lilac), the menu panel and the speech bubble use glass and drop the hairline and shadow;
+  macOS 15 keeps material. The task pill is unchanged. README recordings fall back to material (`SurfaceStyle`): the
+  recorder reads AppKit's view cache, which can't see glass.
 - **App icon:** `assets/brand/Hush.icon` (Icon Composer: lilac fill, body and face groups). `bundle.sh` compiles it with
   `actool` when Xcode is present (Assets.car + a flattened `Hush.icns`) and falls back to the PNG iconset otherwise.
 - **Licence:** poses, expressions and sequences of Hush are reserved with the character; edge props, the nightcap and
   satchels, and `assets/ui` are CC BY-SA 4.0 (ADR-023). The art notes' blanket CC BY-SA line is narrowed accordingly.
 - **Verified:** every sequence played in the app with no renderer errors; snapshots checked for the card, sign, flag
   and door; the rail shown with two flags and opened from a flag; pause and resume run end to end; 180 tests pass.
-  Not done: Wardrobe doesn't list the nightcap as a piece; the speech bubble stays on material.
+  The nightcap is also a free head piece (46 wearables): its layer is in every rig file at opacity 0, so the app, the
+  landing page and Rive read it like any other; in energy saver it takes the place of whatever hat you wear.

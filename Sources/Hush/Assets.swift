@@ -51,11 +51,11 @@ enum Assets {
             }
             rigs[body] = r
         }
-        // Swag the rig doesn't carry (v1 art): the nightcap and the three satchel sizes, keyed by their layer id.
+        // Swag the rig doesn't carry (v1 art): the three satchel sizes, keyed by their layer id.
         var extras: [String: [String: String]] = [:]
         for body in CharacterLook.bodies {
             var e: [String: String] = [:]
-            for (id, file) in [("head-nightcap", "head/\(body)-nightcap"), ("prop-satchel-s", "carry/\(body)-satchel-s"),
+            for (id, file) in [("prop-satchel-s", "carry/\(body)-satchel-s"),
                                ("prop-satchel-m", "carry/\(body)-satchel-m"), ("prop-satchel-l", "carry/\(body)-satchel-l")] {
                 e[id] = try? String(contentsOf: character.appendingPathComponent("swag/\(file).svg"), encoding: .utf8)
             }

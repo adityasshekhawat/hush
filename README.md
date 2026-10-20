@@ -100,7 +100,7 @@ models you already use, so it gets more capable as they do. It is not another ch
     <td width="50%" valign="top">
       <img src="docs/readme/feature-yours.svg" width="100%" alt="Five Hushes in different bodies, colours and outfits, with the nine colours above them">
       <h3>Make it yours</h3>
-      Three bodies, nine colours, eyes, toppers and a wardrobe of 45 pieces, all free. Now and then Hush finds
+      Three bodies, nine colours, eyes, toppers and a wardrobe of 46 pieces, all free. Now and then Hush finds
       something rare.
     </td>
   </tr>

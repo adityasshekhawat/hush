@@ -56,6 +56,7 @@ public enum Wardrobe {
         .init(id: "headphones", name: "Headphones", slot: .head, source: .free, layers: ["head-headphones"]),
         .init(id: "crown", name: "Crown", slot: .head, source: .free, layers: ["head-crown"]),
         .init(id: "sweatband", name: "Sweatband", slot: .head, source: .free, layers: ["head-sweatband"]),
+        .init(id: "nightcap", name: "Nightcap", slot: .head, source: .free, layers: ["head-nightcap"]),
         .init(id: "glasses", name: "Glasses", slot: .face, source: .free, layers: ["accessory-glasses"]),
         .init(id: "shades", name: "Shades", slot: .face, source: .free, layers: ["face-shades"]),
         .init(id: "scarf", name: "Scarf", slot: .neck, source: .free, layers: ["accessory-scarf"]),

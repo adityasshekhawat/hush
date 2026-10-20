@@ -55,8 +55,8 @@ import Testing
 
 @Suite struct WardrobeCatalogue {
     @Test func everySlotHasPiecesAndCapeHasTwoLayers() {
-        #expect(Wardrobe.pieces.count == 45)
-        #expect(Wardrobe.free.count == 14)
+        #expect(Wardrobe.pieces.count == 46)
+        #expect(Wardrobe.free.count == 15)
         #expect(Wardrobe.piece("cape")?.layers == ["pack-cape-back", "pack-neck-cape-clasp"])
         #expect(Set(Wardrobe.pieces.map(\.id)).count == Wardrobe.pieces.count)
         #expect(Wardrobe.layers(for: [.head: "beanie", .face: "shades"]) == ["head-beanie", "face-shades"])
