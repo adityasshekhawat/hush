@@ -80,6 +80,8 @@ final class AppController {
     var hushKey: GlobalHotKey?
     var agentAppObserver: Any?
     var meetingSnoozes = 0
+    /// Debug hooks only: records README GIFs from Hush's own windows.
+    let recorder = MediaRecorder()
     /// For the mail digest's natural breaks (ADR-027).
     var awayStartedAt: Date?
     var wasInCall = false
@@ -302,6 +304,7 @@ final class AppController {
 
         focus.onChange = { [weak self] f in self?.focusChanged(f) }
         restorePause()
+        recorder.characterSVG = { [weak self] in await (self?.renderer as? WebCharacterRenderer)?.snapshotSVG() }
         journal.engine = engine
         Task { try? await engine.pruneJournal() }   // the journal keeps 7 days (ADR-026)
         applyFullScreenPreference()

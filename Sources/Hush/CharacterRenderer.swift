@@ -164,6 +164,17 @@ final class WebCharacterRenderer: NSObject, CharacterRenderer, WKScriptMessageHa
         }
     }
 
+    /// README recordings: the character right now as standalone SVG, and where it is in the web view (top-left
+    /// origin, points). nil while hidden or not ready.
+    func snapshotSVG() async -> (svg: String, rect: CGRect, opacity: CGFloat)? {
+        guard let result = try? await webView.evaluateJavaScript("hush.snapshot()") as? String,
+              let data = result.data(using: .utf8),
+              let o = try? JSONSerialization.jsonObject(with: data) as? [String: Any],
+              let svg = o["svg"] as? String, let x = o["x"] as? Double, let y = o["y"] as? Double,
+              let w = o["w"] as? Double, let h = o["h"] as? Double else { return nil }
+        return (svg, CGRect(x: x, y: y, width: w, height: h), CGFloat(o["o"] as? Double ?? 1))
+    }
+
     private func js(_ source: String) {
         guard ready else { pending.append(source); return }
         webView.evaluateJavaScript(source, completionHandler: nil)

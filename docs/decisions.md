@@ -492,3 +492,21 @@ Milestone 5 of the v1 spec (ADR-021, feature 3), built against the engine with s
 **Not done: the mail source.** A MailKit extension is an app-extension target (Xcode project), sandboxed, so it
 needs proper signing and an app group to reach Hush, and the user has to enable it in Mail ▸ Settings ▸ Extensions.
 It can't be finished or verified unattended. Until then the Developer menu's simulated mail exercises all of the above.
+
+## ADR-028 · README media recorded by Hush itself; simulations leave no trace (2026-10-20)
+
+- **Recorder** (`MediaRecorder`, debug hooks only): Hush snapshots its own windows into a GIF, so no Screen Recording
+  permission is needed and the GIFs show exactly what the app draws. Cards and bubbles come from AppKit's view cache;
+  the character from `hush.snapshot()`, which serialises the live SVG with each part's on-screen transform
+  (`getScreenCTM`, so hops and squashes survive), its opacity, and without anything the page's CSS hides. WebKit's
+  own snapshot was tried first and drew stale, doubled poses. Windows are picked by `orderedIndex` (`orderedWindows`
+  skips panels) and not by `alphaValue` (a bubble faded in through the animator reads 0 while visible). Recordings
+  use the light appearance and the brand look (your look and rare finds are restored after).
+- **`scripts/record-media.sh`** plays six scenarios through debug hooks and the real agent socket, saves and restores
+  the clipboard, and ends by removing every simulated record (`forgetDemoData`: demo item ids, scripted session ids).
+- **Lesson:** the first script reset scenes with "shoo", and shoos teach Hush to lower that kind of item; test runs
+  had lowered real meeting reminders on this Mac. The 51 simulated decisions and 6 test shoos were removed (5 real
+  entries kept, backup taken first). Resets now dismiss without a learning signal.
+- Found while reviewing frames and fixed: card times were 12-hour without AM/PM (21:07 showed "09:07"; now the
+  locale's short time), model text could contain an em dash (cleaned to a comma), the digest card repeated its title,
+  and the Hand it to Hush card clipped "Bullets".

@@ -34,9 +34,12 @@ its own, and a daily cap (5 by default) keeps even those rare.
 
 ## What it does
 
+<sub>The animations below are recorded from the app itself (`scripts/record-media.sh`), with simulated meetings, mail and
+agent sessions.</sub>
+
 <table>
 <tr>
-<td width="180"><img src="docs/media/holds-envelope.png" alt="Hush holding an envelope" width="170"></td>
+<td width="300"><img src="docs/media/demo-agents.gif" alt="Hush perks up; its card says Claude wants to run rm -rf build and flags it: look carefully" width="300"></td>
 <td><strong>Watches your AI agents.</strong> Claude Code and Codex sessions, through hooks you approve. Hush thinks
 while an agent works where you aren't looking, holds up an envelope when a long run finishes ("Claude finished in
 hush · ran for 4m"), and perks up when one needs your OK, saying what it wants ("Claude wants to run npm test").
@@ -45,7 +48,7 @@ are judged by rules, not a model. Open takes you to the exact Terminal or iTerm 
 runs you're watching stay quiet.</td>
 </tr>
 <tr>
-<td><img src="docs/media/holds-clock.png" alt="Hush holding a clock" width="170"></td>
+<td><img src="docs/media/demo-meeting.gif" alt="Hush holds up a clock; its card shows the meeting, who is coming, one line about it, and Join" width="300"></td>
 <td><strong>Remembers your meetings.</strong> From the Mac's Calendar (Google, Outlook and iCloud calendars you've
 added work too): it holds up a clock 5 minutes before, with one line about what the meeting is for, and hurries in a
 minute before and waits. With a Zoom, Meet, Teams or similar link, <strong>one click on Hush joins</strong>. "1 more
@@ -53,35 +56,38 @@ min" snoozes it, and it leaves on its own once your microphone turns on. It's it
 Focus and Do Not Disturb don't hide it.</td>
 </tr>
 <tr>
-<td><img src="docs/media/ask-hush.gif" alt="Hush listening while you type a question" width="170"></td>
+<td><img src="docs/media/ask-hush.gif" alt="Hush listening while you type a question" width="200"></td>
 <td><strong>Answers in place (⌘⇧H).</strong> One quick question, one answer card shaped to it (a formula, a command,
 steps) with buttons that send it where you're working, like Excel or your terminal. Bigger questions open in
 ChatGPT, Claude or Perplexity. Answers use your own Claude Code login (see below).</td>
 </tr>
 <tr>
-<td><img src="docs/media/poke.gif" alt="Hush" width="170"></td>
+<td><img src="docs/media/demo-pouch.gif" alt="Hush offers Simpler, Shorter or Bullets for copied text, chews, and hands back a simpler version" width="300"></td>
 <td><strong>Hand it to Hush.</strong> Copy some text and Hush's cheeks fill up. Click it, pick <em>Simpler</em>,
 <em>Shorter</em> or <em>Bullets</em>, and it chews, then hands the result back on your clipboard. Paste, and the
 cheeks blow out. Runs on your Mac with Apple Intelligence.</td>
 </tr>
 <tr>
-<td><img src="docs/media/hides.gif" alt="Hush ducking out of sight" width="170"></td>
+<td><img src="docs/media/demo-pause.gif" alt="Paused until a time; Hush leaves and comes back" width="300"></td>
 <td><strong>Stays out of your way.</strong> It ducks while you type, disappears during calls, and is left out of
 screen shares and screenshots. Pause it for 15 minutes, an hour or until tomorrow from the menu bar, or press
 ⌥⇧⌘H to put away whatever it's showing. Clicks pass straight through everywhere except Hush itself.</td>
 </tr>
 <tr>
-<td><img src="docs/media/dizzy.gif" alt="Hush dizzy after being flung" width="170"></td>
+<td><img src="docs/media/demo-play.gif" alt="Hush waves on hover, gets dizzy after fast clicks, and leans into a pat" width="300"></td>
 <td><strong>Plays, but only when you're idle.</strong> Drag and fling it and it gets dizzy. It perches on your window
 after a couple of quiet minutes, stretches in the morning, bobs along to music. Play never interrupts and never
 counts toward the daily cap.</td>
 </tr>
 <tr>
-<td><img src="docs/media/perch.gif" alt="Hush perched on a window" width="170"></td>
+<td><img src="docs/media/perch.gif" alt="Hush perched on a window" width="200"></td>
 <td><strong>Make it yours.</strong> Three bodies, five colours, eyes, toppers and a wardrobe of 45 pieces, all free.
 Some rare pieces turn up on their own.</td>
 </tr>
 </table>
+
+<p align="center"><img src="docs/media/demo-digest.gif" alt="A digest card: 4 mails while you were busy, 3 could wait, 1 newsletter" width="360"><br>
+<sub>The mail digest, with simulated mail: the real source isn't connected yet.</sub></p>
 
 **Not yet:** a real mail source. Hush's mail judging is built and measured, but the Apple Mail extension that feeds it
 isn't done, so mail is only simulated for now (Settings ▸ Developer). When it lands: your VIPs and your rules

@@ -52,7 +52,9 @@ public enum MailTriage {
 
     /// One tidy line, or nil when there's nothing worth showing (the card then falls back to the plain gist).
     public static func cleanGist(_ raw: String) -> String? {
+        // Copy rules: no em or en dashes in what Hush shows, even when a model writes one.
         var s = raw.replacingOccurrences(of: "\n", with: " ")
+            .replacingOccurrences(of: #"\s*[—–]\s*"#, with: ", ", options: .regularExpression)
             .trimmingCharacters(in: .whitespacesAndNewlines.union(CharacterSet(charactersIn: "\"'“”‘’")))
         while s.contains("  ") { s = s.replacingOccurrences(of: "  ", with: " ") }
         guard s.count >= 3 else { return nil }

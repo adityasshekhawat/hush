@@ -295,6 +295,42 @@ window.hush = {
     if (live.alwaysCalm) el.classList.add("calm");
   },
   setVisible(on) { el.classList.toggle("hidden", !on); if (on) markActive(); },
+  // README recordings (MediaRecorder): the character as it is right now, as standalone SVG. Each visible part gets its
+  // live on-screen transform (every CSS and Web Animations transform, via getScreenCTM) and opacity baked in, and the
+  // wrappers' own transforms are dropped, so hops and squashes survive outside the browser.
+  snapshot() {
+    if (el.classList.contains("hidden")) return JSON.stringify({ hidden: true });
+    const clone = svg.cloneNode(true);
+    // Whatever the page's CSS hides right now (display, visibility, opacity 0) must not appear in the copy, which has
+    // no stylesheet. Elements pair up by document order before anything is moved.
+    const live = [...svg.querySelectorAll("*")], copy = [...clone.querySelectorAll("*")];
+    const twin = new Map(live.map((n, i) => [n, copy[i]]));
+    const gone = [];
+    live.forEach((n, i) => {
+      const cs = getComputedStyle(n);
+      if (cs.display === "none" || cs.visibility === "hidden" || parseFloat(cs.opacity) === 0) gone.push(copy[i]);
+    });
+    gone.forEach(n => n.remove());
+    const inv = svg.getScreenCTM().inverse();
+    const ids = ["life", "breath", "rise", "puff", "groove", "lean", "character", "clipper"];
+    ids.forEach(id => clone.querySelector("#" + id)?.removeAttribute("transform"));
+    const parts = [...svg.querySelector("#life").children, ...["slot-fx-back", "slot-props", "slot-hands", "slot-overlay", "slot-box"].map(id => svg.querySelector("#" + id))];
+    parts.forEach((n) => {
+      const c = n && twin.get(n);
+      if (!c || !clone.contains(c)) return;   // hidden right now: already dropped
+      const m = inv.multiply(n.getScreenCTM());
+      c.setAttribute("transform", `matrix(${m.a} ${m.b} ${m.c} ${m.d} ${m.e} ${m.f})`);
+      let o = 1;
+      for (let p = n; p && p !== svg; p = p.parentNode) o *= parseFloat(getComputedStyle(p).opacity || "1");
+      if (o < 0.999) c.setAttribute("opacity", o.toFixed(3));
+    });
+    // Parts inside #life are positioned in the svg's own space now; lift them out of the clipped, transformed chain.
+    const root = clone.querySelector("#clipper");
+    clone.querySelectorAll("#life > *").forEach(n => root.appendChild(n));
+    const r = svg.getBoundingClientRect();
+    return JSON.stringify({ svg: new XMLSerializer().serializeToString(clone), x: r.left, y: r.top, w: r.width, h: r.height,
+                            o: parseFloat(getComputedStyle(el).opacity || "1") });
+  },
   // Energy saver (ADR-022): always calm, no idle fidgets. Reactions and alerts still play.
   setSaver(on) { live.saver = on; live.alwaysCalm = on; if (on) el.classList.add("calm"); post({ type: "log", message: "saver " + on }); },
 };

@@ -171,7 +171,7 @@ struct HistoryRow: View {
 }
 
 private extension AgentTask {
-    var time: String { startedAt.formatted(.dateTime.hour(.twoDigits(amPM: .omitted)).minute()) }
+    var time: String { startedAt.formatted(date: .omitted, time: .shortened) }
 }
 
 @MainActor

@@ -24,7 +24,7 @@ extension AskController {
         m.text = t.result
         m.actions = []
         m.receipt = nil
-        m.context = t.startedAt.formatted(.dateTime.day().month().hour(.twoDigits(amPM: .omitted)).minute())
+        m.context = t.startedAt.formatted(.dateTime.day().month().hour().minute())
         m.footer = ""
         m.phase = t.status == .done ? .done : t.status == .failed ? .failed(t.result) : .cancelled
         card.show(above: host.anchor())

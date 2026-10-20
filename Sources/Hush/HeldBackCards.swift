@@ -34,7 +34,7 @@ struct HeldBackView: View {
                 IconTile(symbol: "moon.fill", tone: .lilac)
                 Text(model.kind == .day ? "Tonight" : "This week").font(HushFont.footer).foregroundStyle(.secondary)
                 Spacer()
-                Text(Date().formatted(.dateTime.hour(.twoDigits(amPM: .omitted)).minute()))
+                Text(Date().formatted(date: .omitted, time: .shortened))
                     .font(HushFont.footer.monospacedDigit()).foregroundStyle(.tertiary)
             }
             if model.kind == .day { day } else { week }

@@ -40,7 +40,7 @@ struct EnvelopeView: View {
                     IconTile(symbol: model.savedRule == nil ? v.symbol : "pencil.line", tone: model.savedRule == nil ? v.tone : .lilac)
                     Text(v.source).font(HushFont.footer).foregroundStyle(.secondary).lineLimit(1)
                     Spacer()
-                    Text(d.item.receivedAt.formatted(.dateTime.hour(.twoDigits(amPM: .omitted)).minute()))
+                    Text(d.item.receivedAt.formatted(date: .omitted, time: .shortened))
                         .font(HushFont.footer.monospacedDigit()).foregroundStyle(.tertiary)
                 }
                 if let rule = model.savedRule {
@@ -209,7 +209,7 @@ struct EnvelopeVariant {
     /// "15:00 to 15:30" (24 h).
     static func timeRange(_ item: InboxItem) -> String {
         guard let start = item.startsAt else { return "" }
-        let f = Date.FormatStyle.dateTime.hour(.twoDigits(amPM: .omitted)).minute()
+        let f = Date.FormatStyle(date: .omitted, time: .shortened)
         return start.formatted(f)
     }
 }

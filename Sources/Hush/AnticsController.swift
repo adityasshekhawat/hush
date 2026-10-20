@@ -268,7 +268,7 @@ final class Bubble {
         guard let p = panel else { return }
         panel = nil
         NSAnimationContext.runAnimationGroup({ $0.duration = 0.3; p.animator().alphaValue = 0 },
-                                             completionHandler: { p.orderOut(nil) })
+                                             completionHandler: { MainActor.assumeIsolated { p.orderOut(nil) } })
     }
 }
 

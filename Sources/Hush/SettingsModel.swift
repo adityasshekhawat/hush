@@ -19,7 +19,7 @@ final class SettingsModel: ObservableObject {
         app.onRefresh?()
     }
 
-    func binding<T>(_ get: @escaping () -> T, _ put: @escaping (T) -> Void) -> Binding<T> {
+    func binding<T>(_ get: @escaping @MainActor @Sendable () -> T, _ put: @escaping (T) -> Void) -> Binding<T> {
         Binding(get: get, set: { v in self.set { put(v) } })
     }
 

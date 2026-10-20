@@ -126,6 +126,58 @@ extension AppController {
             Task { let ok = await requestCalendarAccess(); DiagnosticsLog.write("calendar: request returned \(ok)") }
         case ("history", _): ask.showHistory()
         case ("journal", _): journal.show()
+        case ("record", let spec):
+            // record:start:<name> … record:stop → ~/Library/Application Support/Hush/recordings/<name>.gif (README media)
+            let parts = spec.split(separator: ":").map(String.init)
+            if parts.first == "start", parts.count == 2 {
+                recorder.start(name: parts[1], around: panel.frame, screen: screen?.frame ?? panel.frame)
+            } else if parts.first == "stop" {
+                recorder.stop()
+            }
+        case ("look", "brand"):
+            // Recordings: the brand look (lilac blob with a leaf, nothing worn). Your look is kept and restored after.
+            if defaults.data(forKey: "lookBeforeRecording") == nil, let d = try? JSONEncoder().encode(look) {
+                defaults.set(d, forKey: "lookBeforeRecording")
+            }
+            rare?.suppressed = true
+            setLook { l in l = CharacterLook(); l.palette = "lilac" }
+        case ("look", "restore"):
+            if let d = defaults.data(forKey: "lookBeforeRecording"), let saved = try? JSONDecoder().decode(CharacterLook.self, from: d) {
+                setLook { $0 = saved }
+                defaults.removeObject(forKey: "lookBeforeRecording")
+            }
+            rare?.suppressed = false
+        case ("svgdump", _):
+            // The character exactly as a recording frame sees it (for checking what's drawn).
+            Task { @MainActor in
+                guard let snap = await (renderer as? WebCharacterRenderer)?.snapshotSVG() else { return }
+                let url = FileManager.default.homeDirectoryForCurrentUser
+                    .appendingPathComponent("Library/Application Support/Hush/recordings/snapshot.svg")
+                try? snap.svg.write(to: url, atomically: true, encoding: .utf8)
+                DiagnosticsLog.write("record: svg dumped")
+            }
+        case ("dismiss", _):
+            // Put everything away without teaching Hush anything (a shoo would lower that kind of item).
+            envelope.close()
+            while active != nil { resolveActive(.ignored) }
+            previewOverride = nil
+        case ("cleandemo", _):
+            Task {
+                let n = (try? await engine.forgetDemoData()) ?? 0
+                DiagnosticsLog.write("debug: removed \(n) simulated item(s) from the log")
+            }
+        case ("bubbles", _):
+            // Put away any speech bubble (between recordings).
+            bubble.hide()
+            tipBubble.hide()
+        case ("pile", let n):
+            // pile:0 clears the held-mail stack beside Hush without opening Mail (recordings).
+            ambientPile = Int(n) ?? 0
+            refresh()
+        case ("pouchopen", _):
+            // Opens the verb card as a click on full cheeks would (for recordings).
+            if !antics.cheeksFull { antics.refillCheeks() }
+            _ = pouch.clicked()
         case ("maildigest", _):
             // The digest now, as if at a natural break (ignores the hourly limit).
             defaults.removeObject(forKey: "lastMailDigest")

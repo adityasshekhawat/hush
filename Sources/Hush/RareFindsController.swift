@@ -95,10 +95,15 @@ final class RareFindsController {
 
     // MARK: wearing
 
+    /// Recordings show the plain brand look (debug hooks): rare pieces aren't worn meanwhile.
+    var suppressed = false { didSet { apply() } }
+
     /// Today's rare pieces replace the same slot; your own piece comes back afterwards.
     private func apply() {
         var today: [String: String] = [:]
-        for id in state.wearing.keys { if let slot = Wardrobe.piece(id)?.slot { today[slot.rawValue] = id } }
+        if !suppressed {
+            for id in state.wearing.keys { if let slot = Wardrobe.piece(id)?.slot { today[slot.rawValue] = id } }
+        }
         guard today != app.look.todayOutfit else { return }
         app.look.todayOutfit = today
         app.renderer.apply(app.look)

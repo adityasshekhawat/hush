@@ -82,7 +82,7 @@ private struct JournalRow: View {
                 HStack {
                     Text(e.title?.isEmpty == false ? e.title! : Journal.source(e)).font(HushFont.body.weight(.medium)).lineLimit(1)
                     Spacer()
-                    Text(e.at.formatted(.dateTime.hour(.twoDigits(amPM: .omitted)).minute()))
+                    Text(e.at.formatted(date: .omitted, time: .shortened))
                         .font(HushFont.footer.monospacedDigit()).foregroundStyle(.tertiary)
                 }
                 Text(Journal.source(e)).font(HushFont.footer).foregroundStyle(.secondary).lineLimit(1)

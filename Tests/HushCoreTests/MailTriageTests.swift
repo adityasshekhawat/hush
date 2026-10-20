@@ -34,6 +34,7 @@ import Testing
         #expect(MailTriage.cleanGist("\"asks if you're free for lunch\"\n") == "Asks if you're free for lunch")
         #expect(MailTriage.cleanGist("  needs   your\nsign-off  ") == "Needs your sign-off")
         #expect(MailTriage.cleanGist("Needs your signature by Friday.") == "Needs your signature by Friday")
+        #expect(MailTriage.cleanGist("Q4 roadmap demo—bring the hiring plan") == "Q4 roadmap demo, bring the hiring plan")
         #expect(MailTriage.cleanGist("ok") == nil)
         #expect(MailTriage.cleanGist("   ") == nil)
         let long = MailTriage.cleanGist(String(repeating: "approve the budget ", count: 10))!

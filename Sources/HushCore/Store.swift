@@ -83,6 +83,21 @@ public final class HushStore: @unchecked Sendable {
         try run("DELETE FROM decisions WHERE at < ?", [cutoff.timeIntervalSince1970])
     }
 
+    /// Session ids that scripts/record-media.sh uses for its scripted agent sessions.
+    public static let demoSessionPrefix = "0193aaaa-0000-0000-0000-"
+
+    /// Developer simulations and recordings (Developer menu, debug hooks): their items never belong in your journal,
+    /// counts or learning. Simulated items have their own ids; scripted agent sessions use `demoSessionPrefix`.
+    public func deleteDemoData() throws -> Int {
+        try run("""
+            DELETE FROM decisions WHERE item_id LIKE 'demo:%' OR item_id LIKE 'meeting:demo-%'
+              OR item_id LIKE 'maildigest:%' OR item_id LIKE ?
+            """, ["agent:" + Self.demoSessionPrefix + "%"])
+        let removed = Int(sqlite3_changes(db))
+        try run("DELETE FROM shoos WHERE category = 'mail:digest@hush.local'", [])
+        return removed
+    }
+
     /// "Forget": the whole log. Rules and what Hush learned from shoos stay (they live in What I've learned).
     public func deleteDecisions() throws { try exec("DELETE FROM decisions;") }
 

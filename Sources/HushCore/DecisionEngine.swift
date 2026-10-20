@@ -257,6 +257,10 @@ public actor DecisionEngine {
 
     public func forgetJournal() throws { try store.deleteDecisions() }
 
+    /// Removes what simulations and recordings logged, so they never skew your counts, journal or learning.
+    @discardableResult
+    public func forgetDemoData() throws -> Int { try store.deleteDemoData() }
+
     public func recentDecisions(limit: Int = 50) throws -> [LoggedDecision] {
         try store.recentDecisions(limit: limit)
     }

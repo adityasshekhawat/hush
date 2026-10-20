@@ -21,7 +21,7 @@ final class PouchController {
     private let rewriter = OnDeviceRewriter()
     private let defaults = UserDefaults.standard
     private let model = PouchCardModel()
-    private lazy var card = CardWindow(width: 300) { PouchCard(model: self.model) }
+    private lazy var card = CardWindow(width: 360) { PouchCard(model: self.model) }
     private var clickAway: Any?
     /// What you copied before the last rework, and that rework, so "Original" can put it back.
     private var original: String?

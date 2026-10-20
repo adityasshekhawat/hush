@@ -35,3 +35,16 @@ import Testing
         #expect(try await engine.journal(now: tenAM).isEmpty)
     }
 }
+
+@Suite struct DemoCleanup {
+    @Test func simulationsLeaveNoTrace() async throws {
+        let store = try HushStore(path: ":memory:")
+        let e = DecisionEngine(store: store, classifier: FixedClassifier(level: .ambient, confidence: 0.9))
+        _ = try await e.evaluate(InboxItem(id: "demo:1", kind: .mail, senderAddress: "sam@example.com", subject: "s", receivedAt: tenAM), now: tenAM)
+        _ = try await e.evaluate(InboxItem(id: "agent:\(HushStore.demoSessionPrefix)00000000a001:approval:1", kind: .agent,
+                                           subject: "s", receivedAt: tenAM, project: "web"), preset: .gentle, now: tenAM)
+        _ = try await e.evaluate(mail("real", subject: "Quarterly plan"), now: tenAM)
+        #expect(try await e.forgetDemoData() == 2)
+        #expect(try await e.journal(now: tenAM).map(\.title) == ["Quarterly plan"])
+    }
+}

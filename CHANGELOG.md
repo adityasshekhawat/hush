@@ -5,6 +5,10 @@ Hush is pre-alpha and built from source. Notable changes, newest first. Decision
 
 ## Unreleased
 
+- **Fixes:** times on cards follow your Mac's clock format (an evening meeting no longer reads as morning); model-written
+  lines never contain dashes; the mail digest card no longer repeats its title; the Hand it to Hush card fits all three
+  verbs. The README shows each feature recorded from the app.
+
 - **Mail, ready for a source:** rules for words in the subject ("always tap the glass for mail about outage"), which
   also win over the bulk-mail filter; judging by sender and subject only unless you allow the first lines (measured:
   22/24 vs 23/24); "Always show them" on a mail the model brought forward; and a digest at natural breaks instead of
