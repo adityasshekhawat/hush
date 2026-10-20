@@ -257,22 +257,33 @@ struct HushSurface: ViewModifier {
 
     func body(content: Content) -> some View {
         let shape = RoundedRectangle(cornerRadius: radius, style: .continuous)
+        // Glass needs the macOS 26 SDK (Swift 6.2, Xcode 26); older toolchains build with material (README: Swift 6.1+).
+        #if compiler(>=6.2)
         if #available(macOS 26, *), !SurfaceStyle.recording {
             content.glassEffect(Self.glass(tint: tint, interactive: interactive), in: shape)
         } else {
-            content
-                .background(.regularMaterial, in: shape)
-                .overlay(shape.strokeBorder(HushColor.hairline, lineWidth: hairline ? 0.5 : 0))
-                .shadow(color: .black.opacity(shadow ? 0.18 : 0), radius: 16, x: 0, y: 12)
+            material(content, shape)
         }
+        #else
+        material(content, shape)
+        #endif
     }
 
+    private func material(_ content: Content, _ shape: RoundedRectangle) -> some View {
+        content
+            .background(.regularMaterial, in: shape)
+            .overlay(shape.strokeBorder(HushColor.hairline, lineWidth: hairline ? 0.5 : 0))
+            .shadow(color: .black.opacity(shadow ? 0.18 : 0), radius: 16, x: 0, y: 12)
+    }
+
+    #if compiler(>=6.2)
     @available(macOS 26, *)
     static func glass(tint: Color?, interactive: Bool) -> Glass {
         var g = Glass.regular
         if let tint { g = g.tint(tint) }
         return interactive ? g.interactive() : g
     }
+    #endif
 }
 
 extension View {

@@ -286,7 +286,8 @@ final class VideoWriter {
     func finish(_ done: @escaping @MainActor (Bool, Int) -> Void) {
         input.markAsFinished()
         let n = count
-        let w = writer
+        // The writer is done with by the time this runs; the closure only reads its status.
+        nonisolated(unsafe) let w = writer
         w.finishWriting {
             let ok = w.status == .completed
             DispatchQueue.main.async { MainActor.assumeIsolated { done(ok, n) } }

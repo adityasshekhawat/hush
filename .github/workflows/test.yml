@@ -3,12 +3,27 @@ name: Test
 on:
   push:
   pull_request:
+  workflow_dispatch:
+
+# Read-only by default (OpenSSF Scorecard: Token-Permissions).
+permissions:
+  contents: read
+
+# A newer push to the same branch replaces a run still waiting for a Mac.
+concurrency:
+  group: test-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
   test:
+    # Xcode 16 here: the oldest toolchain the README promises (Swift 6.1+). Newer SDK features are guarded.
     runs-on: macos-15
+    timeout-minutes: 30
     steps:
-      - uses: actions/checkout@v4
+      # Pinned to a commit (Scorecard: Pinned-Dependencies); Dependabot keeps it current.
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
       - name: Swift version
         run: swift --version
       - name: Build

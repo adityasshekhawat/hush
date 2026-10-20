@@ -1,0 +1,14 @@
+# Keeps the CI action and the video tool's npm packages current; Hush itself has no dependencies.
+version: 2
+updates:
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: monthly
+  - package-ecosystem: npm
+    directory: /video
+    schedule:
+      interval: monthly
+    # Weeks-old releases only, and the advisory check from CONTRIBUTING before merging.
+    cooldown:
+      default-days: 14

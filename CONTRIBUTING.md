@@ -16,7 +16,9 @@ kinder or more useful, never louder.
    in-memory store).
 2. Build and try it: `./scripts/bundle.sh`.
 3. Keep idle CPU around 2 to 3 % (ADR-011): no persistent animations, no fast timers while nothing changes.
-4. If you add a dependency, say why in the pull request. Hush has none today, and that's on purpose.
+4. If you add a dependency, say why in the pull request. The app has none today, and that's on purpose. (`video/`,
+   the tool that makes the website's videos, uses pinned npm packages; it isn't part of the app.) Check any new
+   package for known advisories first, and pin an exact version.
 5. Anything that reads more of the user's data, or sends anything off the Mac, needs to be opt-in and named on
    screen. Mention it in the pull request.
 
@@ -33,3 +35,11 @@ it. See [`LICENSE-ASSETS.md`](LICENSE-ASSETS.md).
 Code you contribute is under the [Apache License 2.0](LICENSE). New art in `swag/` or `edge/` is under
 [CC BY-SA 4.0](assets/character/swag/LICENSE). You keep your copyright. The Hush character, name and logo stay
 reserved ([`LICENSE-ASSETS.md`](LICENSE-ASSETS.md)).
+
+## Licensing your contribution
+By sending a pull request you agree that your code is licensed under the [Apache License 2.0](LICENSE) (section 5),
+and new art under [CC BY-SA 4.0](assets/character/swag/LICENSE). You keep your copyright. Only send work you made or
+have the right to share, and nothing traced from other characters or brands.
+
+## Be kind
+Treat everyone here the way Hush treats your attention: with care. Harassment or personal attacks aren't welcome.
