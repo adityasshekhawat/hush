@@ -8,6 +8,7 @@ extension AppController {
     func setLook(_ change: (inout CharacterLook) -> Void) {
         change(&look)
         renderer.apply(look)
+        flagRail?.setAccent(Assets.accent(of: look.palette))
         Self.save(look, key: "look")
     }
 

@@ -117,11 +117,15 @@ function play(frames, opts) {
   clearTimeout(seqTimer);
   if (live.seq) live.seq.done?.();
   return new Promise(done => {
-    live.seq = { frames: frames.slice(), i: 0, cur: null, done };
+    // `hold`: the last frame stays until something cancels it (the pause blind, until the window is put away).
+    live.seq = { frames: frames.slice(), i: 0, cur: null, done, name: opts.name, hold: opts.hold };
     const step = () => {
       const q = live.seq;
       if (!q) return;
-      if (q.i >= q.frames.length) { live.seq = null; refresh({ settle: true }); done(); return; }
+      if (q.i >= q.frames.length) {
+        if (q.hold) return;
+        live.seq = null; refresh({ settle: true }); done(); return;
+      }
       q.cur = q.frames[q.i++];
       refresh();
       q.cur.fx && q.cur.fx();
@@ -149,13 +153,15 @@ function fidgetLoop() {
       && !el.classList.contains("hidden");
     if (quiet && !reduced) {
       const yawny = live.modes.has("late") || live.modes.has("droopy");
-      const f = frame();
-      if (yawny && Math.random() < .5) lockFace("yawn", 1300);
+      const f = frame(), holding = !!VARIANT[s.state + ":" + s.variant];
+      if (yawny && !holding && Math.random() < .5) lockFace("yawn", 1300);
       else if (f.pose === "doze") { if (Math.random() < .35) lockFace("yawn", 1100); }
       else if (s.duck) anim(life, [{ transform: "translateY(0)" }, { transform: "translateY(-7px)", offset: .3 },
                                    { transform: "translateY(-7px)", offset: .7 }, { transform: "translateY(0)" }], { duration: 1100, easing: "ease-in-out" });
       else if (isEdgeState()) pick([lookAround, () => hop(5, 600), lookAround, () => anim(life, [{ transform: "translateY(0)" },
                                    { transform: "translateY(-3px)" }, { transform: "translateY(0)" }], { duration: 2400, easing: "ease-in-out" })])();
+      // Holding something up (a card, the door, a raised hand): only the eyes wander, so it never puts it down.
+      else if (holding) lookAround();
       else pick([lookAround, () => wave(2), () => hop(6, 560), lookAround])();
     }
     fidgetLoop();

@@ -520,3 +520,39 @@ It can't be finished or verified unattended. Until then the Developer menu's sim
   with `activates = true`. `AppController.sessionTTYs` keeps the tty after a session ends, for the envelope and digest.
   Every attempt is logged (`session focus:`). Debug hook `focus:<bundle>|<tty>`.
 - **Verified:** from Finder, Open brought the Claude app forward, and Terminal forward on tab `/dev/ttys000`.
+
+## ADR-030 · The v1 character art: variants, edge props, the flag rail (2026-10-20)
+
+Art from `docs/v1-art-brief.md`, delivered as new files only (notes: `docs/v1-art-notes.md`).
+- **Renderer:** `timing.json` sequences 11–29 load by name; frames may carry `wear` (rig piece or the extra nightcap and
+  satchel files), `dx` (walk in or off) and `edge` (blind, door, flag, bin, drawn in `#slot-edge` with a rim; the blind
+  goes between face and arms while the sign is clipped on). Words on cards, signs, flags and bins are drawn by the app
+  as plain `<text>`, one element per line, so the README recorder's Core SVG rasteriser places them too.
+- **Variants, not flags:** held states take a variant from the app (`CharacterVariant`, HushCore, tested), part of the
+  base state in the one frame owner. The entrance plays once; the held pose is still. Idle fidgets only move the eyes
+  while Hush holds something up, so it never puts the card down.
+- **Where each plays:** approvals raise a hand (risky: worried, "Look carefully" card); errors shrug; meetings check the
+  watch (T-5) then hold the door (T-1), ajar when late, with an occasional foot tap instead of knocks; snooze shows
+  one finger; shoo and "Not this kind again" tumble out; pause pulls the blind (Hush hides 2.2 s later, off screen
+  still means off); resume rolls it up; energy saver yawns once and keeps the nightcap on; a finished run behind
+  something else is planted as a flag, a third within 15 minutes gets a cheer (at most hourly); rule suggestions put
+  the glasses on; the mail digest walks in with a satchel sized by count and tosses what could wait into the bin;
+  onboarding arrives walking in and holds up "Found Claude Code"; Hand it to Hush chews, then hands back a note.
+  Mail urgent (hurry in, hold out the envelope) is wired for when real mail lands. All of it is delight: none of it
+  interrupts or counts.
+- **The flag rail** (`FlagRailController`, `FlagRail` in HushCore): agent sessions waiting behind the one Hush holds,
+  newest nearest Hush, 64 pt apart, at most 5, then a "+N more" bundle. Its own borderless panel at Hush's home spot,
+  click-through except over a flag (the pointer poll), hidden with Hush, left out of screen shares like every Hush
+  window. A click moves that item to the front and opens its card. It replaces nothing: "Also waiting" stays on cards.
+- **Menu bar:** a paused glyph while paused. **Journal:** the notebook cover in the empty state, words drawn by the app.
+  Hush holds the notebook when the journal opens.
+- **Liquid Glass** (`hushSurface`): on macOS 26 and later the envelope, answer, rules and held-back cards, the command
+  box (interactive, faint lilac) and the menu panel use glass and drop the hairline and shadow; macOS 15 keeps material.
+  The speech bubble and task pill are unchanged.
+- **App icon:** `assets/brand/Hush.icon` (Icon Composer: lilac fill, body and face groups). `bundle.sh` compiles it with
+  `actool` when Xcode is present (Assets.car + a flattened `Hush.icns`) and falls back to the PNG iconset otherwise.
+- **Licence:** poses, expressions and sequences of Hush are reserved with the character; edge props, the nightcap and
+  satchels, and `assets/ui` are CC BY-SA 4.0 (ADR-023). The art notes' blanket CC BY-SA line is narrowed accordingly.
+- **Verified:** every sequence played in the app with no renderer errors; snapshots checked for the card, sign, flag
+  and door; the rail shown with two flags and opened from a flag; pause and resume run end to end; 180 tests pass.
+  Not done: Wardrobe doesn't list the nightcap as a piece; the speech bubble stays on material.

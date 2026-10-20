@@ -28,6 +28,7 @@ extension AppController {
         let draggingWindow = wanderer?.place == .perched && CGEventSource.buttonState(.combinedSessionState, button: .left)
         let active = Date().timeIntervalSince(lastMouseMove) < 1 || gestureView.isTracking || draggingWindow
         schedulePointerTimer(fast: active)
+        flagRail?.pointer(m)
         guard panel.isVisible else { return }
         wanderer?.follow()
         let f = panel.frame

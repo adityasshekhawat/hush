@@ -454,5 +454,793 @@
         "caption": "Down"
       }
     ]
+  },
+  {
+    "animation": "Pause",
+    "folder": "animations/11-pause",
+    "trigger": "menu ▸ Pause, or ⌘⇧H then \"pause\"",
+    "note": "Hush pulls a small blind down over its spot. The blind and sign stay put while paused; nothing animates. Order changed from the brief: the blind comes down first because Hush cannot reach the hem while it is rolled up. In frame 2 the blind sits between Hush's face and arms so the hands can clip the sign onto the hem.",
+    "frames": [
+      {
+        "frame": 1,
+        "file": "01-reaches-up-and-pulls-the-cord.svg",
+        "ms": 600,
+        "pose": "pullBlind",
+        "expr": "auto",
+        "caption": "Reaches up and pulls the cord",
+        "edge": {
+          "prop": "blind",
+          "state": "half",
+          "hem": 47
+        }
+      },
+      {
+        "frame": 2,
+        "file": "02-clips-the-sign-onto-the-hem.svg",
+        "ms": 700,
+        "pose": "hangSign",
+        "expr": "auto",
+        "caption": "Clips the sign onto the hem",
+        "edge": {
+          "prop": "blind",
+          "state": "low",
+          "hem": 76,
+          "z": "between face and arms"
+        }
+      },
+      {
+        "frame": 3,
+        "file": "03-blind-down-only-the-sign-shows.svg",
+        "ms": 900,
+        "pose": "hide",
+        "expr": "sleepy",
+        "caption": "Blind down; only the sign shows",
+        "edge": {
+          "prop": "blind",
+          "state": "down",
+          "hem": 110
+        }
+      }
+    ]
+  },
+  {
+    "animation": "Unpause",
+    "folder": "animations/12-unpause",
+    "trigger": "menu ▸ Resume, or the pause ends",
+    "note": "The blind rolls up, Hush stretches, then it is back to normal. The blind disappears once it is up.",
+    "frames": [
+      {
+        "frame": 1,
+        "file": "01-blind-rolls-up.svg",
+        "ms": 500,
+        "pose": "peek",
+        "expr": "auto",
+        "caption": "Blind rolls up",
+        "edge": {
+          "prop": "blind",
+          "state": "half",
+          "hem": 66
+        }
+      },
+      {
+        "frame": 2,
+        "file": "02-stretches.svg",
+        "ms": 800,
+        "pose": "stretch",
+        "expr": "auto",
+        "caption": "Stretches",
+        "edge": {
+          "prop": "blind",
+          "state": "up",
+          "hem": 20
+        }
+      },
+      {
+        "frame": 3,
+        "file": "03-back-to-normal.svg",
+        "ms": 600,
+        "pose": "stand",
+        "expr": "auto",
+        "caption": "Back to normal"
+      }
+    ]
+  },
+  {
+    "animation": "Dismiss",
+    "folder": "animations/13-dismiss",
+    "trigger": "flick Hush away",
+    "note": "Tips backwards out of the edge and is gone with a little bounce of dust. It comes back on its own after the usual shoo rules.",
+    "frames": [
+      {
+        "frame": 1,
+        "file": "01-tips-backwards.svg",
+        "ms": 260,
+        "pose": "tumble",
+        "expr": "auto",
+        "caption": "Tips backwards"
+      },
+      {
+        "frame": 2,
+        "file": "02-gone-a-small-bounce.svg",
+        "ms": 420,
+        "pose": "tumbleGone",
+        "expr": "auto",
+        "caption": "Gone, a small bounce"
+      }
+    ]
+  },
+  {
+    "animation": "Battery mode on",
+    "folder": "animations/14-battery-on",
+    "trigger": "battery saver on, or battery under 20 %",
+    "note": "Slower than usual. The nightcap stays on while battery mode is on; Hush then uses only still poses.",
+    "frames": [
+      {
+        "frame": 1,
+        "file": "01-big-yawn.svg",
+        "ms": 1200,
+        "pose": "yawn",
+        "expr": "auto",
+        "caption": "Big yawn"
+      },
+      {
+        "frame": 2,
+        "file": "02-nightcap-on.svg",
+        "ms": 1000,
+        "pose": "yawn",
+        "expr": "sleepy",
+        "caption": "Nightcap on",
+        "wear": {
+          "head": "nightcap"
+        }
+      },
+      {
+        "frame": 3,
+        "file": "03-settles-down-drowsy.svg",
+        "ms": 1400,
+        "pose": "stand",
+        "expr": "droopy",
+        "caption": "Settles down, drowsy",
+        "wear": {
+          "head": "nightcap"
+        }
+      }
+    ]
+  },
+  {
+    "animation": "Agent finished",
+    "folder": "animations/15-agent-finished",
+    "trigger": "a watched agent finishes",
+    "note": "Hush plants a flag for the project on the rail, then walks off. The planted flag stays (edge/flag-done).",
+    "frames": [
+      {
+        "frame": 1,
+        "file": "01-hops-in.svg",
+        "ms": 300,
+        "pose": "hop",
+        "expr": "auto",
+        "caption": "Hops in"
+      },
+      {
+        "frame": 2,
+        "file": "02-plants-the-flag.svg",
+        "ms": 700,
+        "pose": "plantFlag",
+        "expr": "auto",
+        "caption": "Plants the flag"
+      },
+      {
+        "frame": 3,
+        "file": "03-walks-off.svg",
+        "ms": 400,
+        "pose": "walk3",
+        "expr": "auto",
+        "caption": "Walks off",
+        "dx": -44,
+        "edge": {
+          "prop": "flag",
+          "state": "done",
+          "anchor": [
+            104,
+            140
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "animation": "Agent needs you",
+    "folder": "animations/16-agent-needs-you",
+    "trigger": "an agent waits on a permission prompt",
+    "note": "Knocks twice on the glass, then raises a hand and holds it. The hold is a still pose.",
+    "frames": [
+      {
+        "frame": 1,
+        "file": "01-fist-up.svg",
+        "ms": 180,
+        "pose": "knockUp",
+        "expr": "auto",
+        "caption": "Fist up"
+      },
+      {
+        "frame": 2,
+        "file": "02-knock.svg",
+        "ms": 160,
+        "pose": "knock",
+        "expr": "auto",
+        "caption": "Knock"
+      },
+      {
+        "frame": 3,
+        "file": "03-fist-up.svg",
+        "ms": 180,
+        "pose": "knockUp",
+        "expr": "auto",
+        "caption": "Fist up"
+      },
+      {
+        "frame": 4,
+        "file": "04-knock.svg",
+        "ms": 160,
+        "pose": "knock",
+        "expr": "auto",
+        "caption": "Knock"
+      },
+      {
+        "frame": 5,
+        "file": "05-hand-up-waits-politely.svg",
+        "ms": 1500,
+        "pose": "raiseHand",
+        "expr": "auto",
+        "caption": "Hand up, waits politely"
+      }
+    ]
+  },
+  {
+    "animation": "Look carefully",
+    "folder": "animations/17-look-carefully",
+    "trigger": "an agent asks for something risky",
+    "note": "Holds a card up, worried, and keeps holding it. The card shows six words or fewer, drawn by the app.",
+    "frames": [
+      {
+        "frame": 1,
+        "file": "01-holds-up-the-card.svg",
+        "ms": 1500,
+        "pose": "holdCardBoth",
+        "expr": "worried",
+        "caption": "Holds up the card"
+      }
+    ]
+  },
+  {
+    "animation": "Agent error",
+    "folder": "animations/18-agent-error",
+    "trigger": "an agent run fails",
+    "note": "A sheepish shrug with a smoking laptop.",
+    "frames": [
+      {
+        "frame": 1,
+        "file": "01-shrugs-laptop-smoking.svg",
+        "ms": 1400,
+        "pose": "shrugLaptop",
+        "expr": "auto",
+        "caption": "Shrugs, laptop smoking"
+      }
+    ]
+  },
+  {
+    "animation": "Streak",
+    "folder": "animations/19-streak",
+    "trigger": "several agent runs finish in a row",
+    "note": "Tosses confetti once.",
+    "frames": [
+      {
+        "frame": 1,
+        "file": "01-winds-up.svg",
+        "ms": 220,
+        "pose": "crouch",
+        "expr": "auto",
+        "caption": "Winds up"
+      },
+      {
+        "frame": 2,
+        "file": "02-confetti.svg",
+        "ms": 900,
+        "pose": "cheer",
+        "expr": "auto",
+        "caption": "Confetti"
+      }
+    ]
+  },
+  {
+    "animation": "Thinking on device",
+    "folder": "animations/20-thinking-on-device",
+    "trigger": "the on-device model is working",
+    "note": "Under one second in total. Glasses go on, Hush reads closely.",
+    "frames": [
+      {
+        "frame": 1,
+        "file": "01-glasses-on.svg",
+        "ms": 250,
+        "pose": "stand",
+        "expr": "auto",
+        "caption": "Glasses on",
+        "wear": {
+          "face": "glasses"
+        }
+      },
+      {
+        "frame": 2,
+        "file": "02-reads-closely.svg",
+        "ms": 600,
+        "pose": "read",
+        "expr": "auto",
+        "caption": "Reads closely",
+        "wear": {
+          "face": "glasses"
+        }
+      }
+    ]
+  },
+  {
+    "animation": "Meeting in 5 minutes",
+    "folder": "animations/21-meeting-t5",
+    "trigger": "5 minutes before a meeting",
+    "note": "Walks in, checks the pocket watch, taps it, holds up a card (meeting name and time), walks off.",
+    "frames": [
+      {
+        "frame": 1,
+        "file": "01-walks-in.svg",
+        "ms": 260,
+        "pose": "walk1",
+        "expr": "auto",
+        "caption": "Walks in",
+        "dx": -30
+      },
+      {
+        "frame": 2,
+        "file": "02-walks-in.svg",
+        "ms": 260,
+        "pose": "walk2",
+        "expr": "auto",
+        "caption": "Walks in",
+        "dx": -12
+      },
+      {
+        "frame": 3,
+        "file": "03-checks-the-watch.svg",
+        "ms": 700,
+        "pose": "checkWatch",
+        "expr": "auto",
+        "caption": "Checks the watch"
+      },
+      {
+        "frame": 4,
+        "file": "04-taps-it.svg",
+        "ms": 500,
+        "pose": "checkWatchTap",
+        "expr": "auto",
+        "caption": "Taps it"
+      },
+      {
+        "frame": 5,
+        "file": "05-holds-up-the-card.svg",
+        "ms": 1400,
+        "pose": "holdCardBoth",
+        "expr": "auto",
+        "caption": "Holds up the card"
+      },
+      {
+        "frame": 6,
+        "file": "06-walks-off.svg",
+        "ms": 300,
+        "pose": "walk3",
+        "expr": "auto",
+        "caption": "Walks off",
+        "dx": 22
+      }
+    ]
+  },
+  {
+    "animation": "Meeting in 1 minute",
+    "folder": "animations/22-meeting-t1",
+    "trigger": "1 minute before a meeting",
+    "note": "Hurries over and holds the door open, beckoning. Holds there, with a foot tap now and then (every 6 to 8 s).",
+    "frames": [
+      {
+        "frame": 1,
+        "file": "01-hurries-over.svg",
+        "ms": 300,
+        "pose": "hurry",
+        "expr": "auto",
+        "caption": "Hurries over"
+      },
+      {
+        "frame": 2,
+        "file": "02-holds-the-door-open.svg",
+        "ms": 500,
+        "pose": "holdDoor",
+        "expr": "auto",
+        "caption": "Holds the door open",
+        "edge": {
+          "prop": "door",
+          "state": "open",
+          "anchor": [
+            24,
+            140
+          ]
+        }
+      },
+      {
+        "frame": 3,
+        "file": "03-beckons.svg",
+        "ms": 400,
+        "pose": "holdDoor2",
+        "expr": "auto",
+        "caption": "Beckons",
+        "edge": {
+          "prop": "door",
+          "state": "open",
+          "anchor": [
+            24,
+            140
+          ]
+        }
+      },
+      {
+        "frame": 4,
+        "file": "04-taps-a-foot-occasional.svg",
+        "ms": 600,
+        "pose": "tapfoot",
+        "expr": "auto",
+        "caption": "Taps a foot (occasional)",
+        "dx": 20,
+        "edge": {
+          "prop": "door",
+          "state": "open",
+          "anchor": [
+            24,
+            140
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "animation": "Meeting snoozed",
+    "folder": "animations/23-meeting-snooze",
+    "trigger": "you snooze the reminder",
+    "note": "The door swings half closed and Hush holds up one finger: one more minute.",
+    "frames": [
+      {
+        "frame": 1,
+        "file": "01-door-swings-half-closed.svg",
+        "ms": 300,
+        "pose": "beckon2",
+        "expr": "auto",
+        "caption": "Door swings half closed",
+        "edge": {
+          "prop": "door",
+          "state": "half",
+          "anchor": [
+            24,
+            140
+          ]
+        }
+      },
+      {
+        "frame": 2,
+        "file": "02-one-more-minute.svg",
+        "ms": 1200,
+        "pose": "oneFinger",
+        "expr": "auto",
+        "caption": "One more minute",
+        "dx": 20,
+        "edge": {
+          "prop": "door",
+          "state": "half",
+          "anchor": [
+            24,
+            140
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "animation": "Running late",
+    "folder": "animations/24-meeting-late",
+    "trigger": "the meeting has started",
+    "note": "Door ajar with warm light. Beckons faster; loops at most 4 times, then holds the first frame.",
+    "frames": [
+      {
+        "frame": 1,
+        "file": "01-beckons.svg",
+        "ms": 180,
+        "pose": "beckon",
+        "expr": "auto",
+        "caption": "Beckons",
+        "edge": {
+          "prop": "door",
+          "state": "ajar",
+          "anchor": [
+            24,
+            140
+          ]
+        }
+      },
+      {
+        "frame": 2,
+        "file": "02-beckons.svg",
+        "ms": 180,
+        "pose": "beckon2",
+        "expr": "auto",
+        "caption": "Beckons",
+        "edge": {
+          "prop": "door",
+          "state": "ajar",
+          "anchor": [
+            24,
+            140
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "animation": "Arrival",
+    "folder": "animations/25-arrival",
+    "trigger": "first run",
+    "note": "Walks in from the side, looks around, waves.",
+    "frames": [
+      {
+        "frame": 1,
+        "file": "01-walks-in.svg",
+        "ms": 260,
+        "pose": "walk1",
+        "expr": "auto",
+        "caption": "Walks in",
+        "dx": -44
+      },
+      {
+        "frame": 2,
+        "file": "02-walks-in.svg",
+        "ms": 260,
+        "pose": "walk2",
+        "expr": "auto",
+        "caption": "Walks in",
+        "dx": -28
+      },
+      {
+        "frame": 3,
+        "file": "03-walks-in.svg",
+        "ms": 260,
+        "pose": "walk3",
+        "expr": "auto",
+        "caption": "Walks in",
+        "dx": -12
+      },
+      {
+        "frame": 4,
+        "file": "04-arrives.svg",
+        "ms": 260,
+        "pose": "walk4",
+        "expr": "auto",
+        "caption": "Arrives"
+      },
+      {
+        "frame": 5,
+        "file": "05-looks-left.svg",
+        "ms": 500,
+        "pose": "stand",
+        "expr": "auto",
+        "caption": "Looks left"
+      },
+      {
+        "frame": 6,
+        "file": "06-looks-right.svg",
+        "ms": 500,
+        "pose": "stand",
+        "expr": "auto",
+        "caption": "Looks right"
+      },
+      {
+        "frame": 7,
+        "file": "07-waves.svg",
+        "ms": 900,
+        "pose": "wave",
+        "expr": "auto",
+        "caption": "Waves"
+      }
+    ]
+  },
+  {
+    "animation": "Found your agents",
+    "folder": "animations/26-found-agents",
+    "trigger": "first run finds Claude Code or Codex sessions",
+    "note": "Sniffs toward the terminal, then holds up a card (\"Found 2 agents\"). Mirror the sniff when the terminal is to the left.",
+    "frames": [
+      {
+        "frame": 1,
+        "file": "01-sniffs-toward-the-terminal.svg",
+        "ms": 700,
+        "pose": "sniff",
+        "expr": "auto",
+        "caption": "Sniffs toward the terminal"
+      },
+      {
+        "frame": 2,
+        "file": "02-holds-up-the-card.svg",
+        "ms": 1400,
+        "pose": "holdCardBoth",
+        "expr": "happy",
+        "caption": "Holds up the card"
+      }
+    ]
+  },
+  {
+    "animation": "Urgent mail",
+    "folder": "animations/27-mail-urgent",
+    "trigger": "a VIP or rule match",
+    "note": "Slides in and holds the envelope out toward the cursor.",
+    "frames": [
+      {
+        "frame": 1,
+        "file": "01-slides-in.svg",
+        "ms": 300,
+        "pose": "hurry",
+        "expr": "auto",
+        "caption": "Slides in",
+        "dx": -20
+      },
+      {
+        "frame": 2,
+        "file": "02-holds-the-envelope-out.svg",
+        "ms": 1200,
+        "pose": "hold",
+        "expr": "auto",
+        "caption": "Holds the envelope out"
+      }
+    ]
+  },
+  {
+    "animation": "Mail digest",
+    "folder": "animations/28-mail-digest",
+    "trigger": "the digest time arrives",
+    "note": "Walks in with the satchel (size from the count: s 1 to 5, m 6 to 20, l 21+), pulls out two, shrugs, tosses the rest into the bin, walks off. The bin label shows the count.",
+    "frames": [
+      {
+        "frame": 1,
+        "file": "01-walks-in-with-the-satchel.svg",
+        "ms": 260,
+        "pose": "walk1",
+        "expr": "auto",
+        "caption": "Walks in with the satchel",
+        "wear": {
+          "carry": "satchel-m"
+        },
+        "dx": -30
+      },
+      {
+        "frame": 2,
+        "file": "02-walks-in.svg",
+        "ms": 260,
+        "pose": "walk2",
+        "expr": "auto",
+        "caption": "Walks in",
+        "wear": {
+          "carry": "satchel-m"
+        },
+        "dx": -12
+      },
+      {
+        "frame": 3,
+        "file": "03-pulls-one-out.svg",
+        "ms": 600,
+        "pose": "pullOut",
+        "expr": "auto",
+        "caption": "Pulls one out"
+      },
+      {
+        "frame": 4,
+        "file": "04-and-another.svg",
+        "ms": 600,
+        "pose": "pullOut",
+        "expr": "auto",
+        "caption": "And another"
+      },
+      {
+        "frame": 5,
+        "file": "05-shrugs.svg",
+        "ms": 500,
+        "pose": "shrug",
+        "expr": "auto",
+        "caption": "Shrugs",
+        "wear": {
+          "carry": "satchel-m"
+        }
+      },
+      {
+        "frame": 6,
+        "file": "06-tosses-the-rest.svg",
+        "ms": 500,
+        "pose": "toss",
+        "expr": "auto",
+        "caption": "Tosses the rest",
+        "edge": {
+          "prop": "bin",
+          "state": "full",
+          "anchor": [
+            16,
+            140
+          ]
+        }
+      },
+      {
+        "frame": 7,
+        "file": "07-walks-off.svg",
+        "ms": 300,
+        "pose": "walk3",
+        "expr": "auto",
+        "caption": "Walks off",
+        "dx": 24,
+        "edge": {
+          "prop": "bin",
+          "state": "full",
+          "anchor": [
+            16,
+            140
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "animation": "Hand it to Hush",
+    "folder": "animations/29-hand-it-to-hush",
+    "trigger": "you drop text or a file on Hush",
+    "note": "Replaces today's puff + squash. Chews twice while the model works (loop chewOpen/chewClosed at 220 ms), then hands back a small folded paper.",
+    "frames": [
+      {
+        "frame": 1,
+        "file": "01-chews.svg",
+        "ms": 220,
+        "pose": "chewOpen",
+        "expr": "auto",
+        "caption": "Chews"
+      },
+      {
+        "frame": 2,
+        "file": "02-chews.svg",
+        "ms": 220,
+        "pose": "chewClosed",
+        "expr": "auto",
+        "caption": "Chews"
+      },
+      {
+        "frame": 3,
+        "file": "03-chews.svg",
+        "ms": 220,
+        "pose": "chewOpen",
+        "expr": "auto",
+        "caption": "Chews"
+      },
+      {
+        "frame": 4,
+        "file": "04-chews.svg",
+        "ms": 220,
+        "pose": "chewClosed",
+        "expr": "auto",
+        "caption": "Chews"
+      },
+      {
+        "frame": 5,
+        "file": "05-hands-back-a-folded-note.svg",
+        "ms": 900,
+        "pose": "spitOut",
+        "expr": "auto",
+        "caption": "Hands back a folded note"
+      }
+    ]
   }
 ]

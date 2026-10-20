@@ -67,6 +67,21 @@ extension AppController {
                 agentEvent(AgentSessionEvent(sessionID: sid, cwd: FileManager.default.homeDirectoryForCurrentUser.appendingPathComponent("Developer/hush").path, kind: kind,
                                              app: "com.googlecode.iterm2", at: at))
             }
+        case ("seq", let spec):
+            // seq:<name>[|key=value,...] plays a designer sequence (v1 art), e.g. seq:agentDone|flag=hush
+            let parts = spec.split(separator: "|", maxSplits: 1).map(String.init)
+            renderer.react(.sequence(parts[0], Self.labels(parts.count > 1 ? parts[1] : "")))
+        case ("variant", let spec):
+            // variant:<NN-state>|<variant>[|key=value,...] shows a state's variant, e.g. variant:11-notice|careful|card=Look carefully
+            let parts = spec.split(separator: "|", maxSplits: 2).map(String.init)
+            if let st = CharacterState(rawValue: parts[0]) {
+                renderer.show(st, fromEdge: false, duck: false, variant: parts.count > 1 ? parts[1] : nil,
+                              labels: Self.labels(parts.count > 2 ? parts[2] : ""))
+            }
+        case ("flag", let n):
+            // flag:<i> clicks the i-th flag on the rail (0: nearest Hush).
+            let flags = FlagRail.layout(waiting: waiting).flags
+            if let i = Int(n), flags.indices.contains(i) { openFlag(flags[i].decisionID) }
         case ("command", "open"): toggleCommandBox()
         case ("digest", "now"): digest.showNow()
         case ("digest", "away"):
@@ -300,5 +315,13 @@ extension AppController {
             return (d.map { "Today: \($0.shown) shown · \($0.heldBack) held back" } ?? "Today: no data",
                     w.map { "This week: \($0.shown) shown · \($0.heldBack) held back" } ?? "This week: no data")
         }
+    }
+
+    /// "flag=hush,bin=3" → ["flag": "hush", "bin": "3"]
+    static func labels(_ spec: String) -> [String: String] {
+        Dictionary(spec.split(separator: ",").compactMap { kv -> (String, String)? in
+            let p = kv.split(separator: "=", maxSplits: 1).map(String.init)
+            return p.count == 2 ? (p[0], p[1]) : nil
+        }, uniquingKeysWith: { $1 })
     }
 }

@@ -236,3 +236,40 @@ enum HushMotion {
     static var cardOut: Animation { reduceMotion ? .easeOut(duration: 0.15) : .easeIn(duration: 0.2) }
     static var resize: Animation? { reduceMotion ? nil : .smooth(duration: 0.3) }
 }
+
+// MARK: surfaces
+
+/// Card chrome (design guide §2, "Material"). macOS 15: material, a 0.5 pt hairline and the guide's shadow
+/// (0 12 32 at 18 %). macOS 26 and later: Liquid Glass, which draws its own edge highlight and shadow, so both go
+/// (v1 art notes). Status never tints the glass; only the command box takes a faint lilac to mark it as Hush's.
+struct HushSurface: ViewModifier {
+    var radius: CGFloat
+    var interactive = false
+    var tint: Color?
+    var shadow = true
+
+    func body(content: Content) -> some View {
+        let shape = RoundedRectangle(cornerRadius: radius, style: .continuous)
+        if #available(macOS 26, *) {
+            content.glassEffect(Self.glass(tint: tint, interactive: interactive), in: shape)
+        } else {
+            content
+                .background(.regularMaterial, in: shape)
+                .overlay(shape.strokeBorder(HushColor.hairline, lineWidth: 0.5))
+                .shadow(color: .black.opacity(shadow ? 0.18 : 0), radius: 16, x: 0, y: 12)
+        }
+    }
+
+    @available(macOS 26, *)
+    static func glass(tint: Color?, interactive: Bool) -> Glass {
+        var g = Glass.regular
+        if let tint { g = g.tint(tint) }
+        return interactive ? g.interactive() : g
+    }
+}
+
+extension View {
+    func hushSurface(radius: CGFloat, interactive: Bool = false, tint: Color? = nil, shadow: Bool = true) -> some View {
+        modifier(HushSurface(radius: radius, interactive: interactive, tint: tint, shadow: shadow))
+    }
+}

@@ -44,7 +44,7 @@ final class MenuBar: NSObject {
                 if app.digest.enabled { app.digest.showNow() } else { app.digest.toggleWithConsent() }
             },
             history: { [weak app] in app?.ask.showHistory() },
-            journal: { [weak app] in app?.journal.show() },
+            journal: { [weak app] in app?.journal.show(); app?.renderer.react(.sequence("journal")) },
             sessions: { [weak app] in app?.ask.showSessions() },
             settings: { [weak self] s in self?.settingsWindow.show(s) },
             pause: { [weak app] l in app?.pause(l) },
@@ -71,8 +71,8 @@ final class MenuBar: NSObject {
         let badge = MenuBarBadge(waiting: count, showCount: showsCount,
                                  meetingWaiting: app.waiting.contains { $0.item.kind == .meeting },
                                  focused: app.focus.state.hidesCharacter && !app.focus.state.paused,
-                                 asleep: (app.settings.quietHours?.contains(now, calendar: .current) ?? false) || tuckedIn
-                                    || app.focus.state.paused)
+                                 asleep: (app.settings.quietHours?.contains(now, calendar: .current) ?? false) || tuckedIn,
+                                 paused: app.focus.state.paused)
         guard badge != shown, let button = item.button else { return }
         shown = badge
         button.image = glyphs[badge.glyph]

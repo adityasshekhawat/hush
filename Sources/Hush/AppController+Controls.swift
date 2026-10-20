@@ -15,9 +15,15 @@ extension AppController {
         defaults.set(until, forKey: "pausedUntil")
         envelope.close()
         bubble.show(PauseText.status(until: until, now: Date()) + ". ⌥⇧⌘H brings me back.", above: cardAvoidRect(), for: 4)
-        focus.pausedUntil = until
         DiagnosticsLog.write("pause: until \(until)")
-        onRefresh?()
+        // The blind comes down, the sign goes up, then Hush goes (v1 art, 2.2 s).
+        let shown = !panelHidden
+        if shown { renderer.react(.sequence("pause")) }
+        DispatchQueue.main.asyncAfter(deadline: .now() + (shown ? 2.2 : 0)) { [weak self] in
+            guard let self, self.defaults.object(forKey: "pausedUntil") as? Date == until else { return }
+            self.focus.pausedUntil = until
+            self.onRefresh?()
+        }
     }
 
     func resume() {
@@ -25,6 +31,15 @@ extension AppController {
         focus.pausedUntil = nil
         DiagnosticsLog.write("pause: resumed")
         onRefresh?()
+        cameBack()
+    }
+
+    /// The blind rolls up and Hush stretches (v1 art).
+    func cameBack() {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) { [weak self] in
+            guard let self, !self.panelHidden else { return }
+            self.renderer.react(.sequence("unpause"))
+        }
     }
 
     /// A pause that outlived a quit or restart.
@@ -33,6 +48,7 @@ extension AppController {
             self?.defaults.removeObject(forKey: "pausedUntil")
             DiagnosticsLog.write("pause: ended")
             self?.onRefresh?()
+            self?.cameBack()
         }
         if let until = defaults.object(forKey: "pausedUntil") as? Date, until > Date() {
             focus.pausedUntil = until

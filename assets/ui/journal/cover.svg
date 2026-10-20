@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 480" width="360" height="480">
+<title>What Hush saw: cover</title>
+<rect width="360" height="480" fill="#F4D9A6"/>
+<rect x="0" y="0" width="22" height="480" fill="#2D2A35" opacity="0.08"/>
+<line x1="22" y1="0" x2="22" y2="480" stroke="#2D2A35" stroke-width="1" opacity="0.15"/>
+<rect id="title-plate" x="74" y="132" width="212" height="96" rx="14" fill="#FFFDF7" stroke="#2D2A35" stroke-width="2.5"/>
+<rect x="84" y="142" width="192" height="76" rx="9" fill="none" stroke="#2D2A35" stroke-width="1" opacity="0.18"/>
+<rect id="elastic" x="304" y="0" width="14" height="480" fill="#E8876A"/>
+<line x1="304" y1="0" x2="304" y2="480" stroke="#2D2A35" stroke-width="1.5" opacity="0.25"/><line x1="318" y1="0" x2="318" y2="480" stroke="#2D2A35" stroke-width="1.5" opacity="0.25"/>
+<g transform="translate(228 432) scale(1.9)"><g transform="translate(8 8) rotate(-45)"><path d="M0 -16 Q-1 -22 1 -27" fill="none" stroke="#2D2A35" stroke-width="4"/><path d="M1 -25 C4 -32 12 -33 15 -28 C11 -23 6 -22 1 -25 Z" fill="#E8876A" stroke="#2D2A35" stroke-width="3.2"/><path d="M-23 34 V16 C-23 -6 -12 -17 0 -17 C12 -17 23 -6 23 16 V34 Z" fill="#FFF5E1" stroke="none"/><path d="M-23 34 V16 C-23 -6 -12 -17 0 -17 C12 -17 23 -6 23 16 V34" fill="none" stroke="#2D2A35" stroke-width="5"/></g>
+<g transform="translate(5 6.5)"><path d="M-9 0 Q-5.6 3.6 -2.2 0 M2.2 0 Q5.6 3.6 9 0" fill="none" stroke="#2D2A35" stroke-width="2.4" stroke-linecap="round"/></g></g>
+</svg>

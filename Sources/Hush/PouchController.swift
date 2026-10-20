@@ -178,7 +178,7 @@ final class PouchController {
                     pb.clearContents()
                     pb.setString(out, forType: .string)
                     PlaySensors.ownCopyChangeCount = pb.changeCount   // our copy: no gulp
-                    self.host.react(.handOver)
+                    self.host.react(.handedBack)
                     self.host.bubble("\(verb.done). Press ⌘V.")
                 }
             } catch OnDeviceRewriter.Failure.unavailable {

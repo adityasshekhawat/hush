@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="-56 -112 112 116" width="224" height="232">
+<title>Hush edge — blind, down</title>
+<desc>Anchor (0,0) = centre of Hush's spot on the bottom screen edge (canvas 80, 112). Units match the 160 x 146 character canvas.</desc>
+<g id="edge-blind" stroke="#2D2A35" stroke-linecap="round" stroke-linejoin="round">
+<rect x="-54" y="-110" width="6" height="13" rx="2" fill="#2D2A35" stroke="none"/>
+<rect x="48" y="-110" width="6" height="13" rx="2" fill="#2D2A35" stroke="none"/>
+<rect id="blind-fabric" x="-48" y="-101" width="96" height="99" fill="#F6EEDF" stroke-width="2.2"/>
+<path d="M-46 -86 H46 M-46 -72 H46 M-46 -58 H46 M-46 -44 H46 M-46 -30 H46 M-46 -16 H46 " fill="none" stroke-width="1.4" opacity="0.14"/>
+<rect id="blind-roller" x="-52" y="-109" width="104" height="10" rx="5" fill="#FFFDF7" stroke-width="2.2"/>
+<circle cx="-46" cy="-104" r="2.2" fill="#E8876A" stroke="none"/><circle cx="46" cy="-104" r="2.2" fill="#E8876A" stroke="none"/>
+<rect id="blind-hem" x="-51" y="-5" width="102" height="6" rx="3" fill="#E8876A" stroke-width="2.2"/>
+<g id="edge-sign"><path d="M-4 -6 V-1.5 Q-4 2.5 0 2.5 Q4 2.5 4 -1.5 V-3" fill="none" stroke-width="2.2"/><rect x="-32" y="-37" width="64" height="32" rx="7" fill="#FFFDF7" stroke-width="2.2"/><circle cx="-20" cy="-21" r="6.4" fill="#E8876A" stroke="none"/><circle cx="-17" cy="-23.400000000000006" r="5.4" fill="#FFFDF7" stroke="none"/></g>
+</g>
+<circle id="anchor" cx="0" cy="0" r="0.01" fill="none"/>
+</svg>

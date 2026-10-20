@@ -5,7 +5,7 @@ import Foundation
 public struct MenuBarBadge: Equatable, Sendable {
     /// The designer's template glyphs (assets/brand/menu-bar): one per state. Never shows the held-back number.
     public enum Glyph: String, Sendable, CaseIterable {
-        case idle, mail, meeting, focus, sleep
+        case idle, mail, meeting, focus, sleep, paused
     }
 
     public let holding: Bool
@@ -17,9 +17,11 @@ public struct MenuBarBadge: Equatable, Sendable {
     ///   - meetingWaiting: one of the waiting items is a meeting.
     ///   - focused: you're on a call, sharing, or in full screen (Hush is hidden).
     ///   - asleep: quiet hours, or Hush has been tucked in for the night.
-    public init(waiting: Int, showCount: Bool, meetingWaiting: Bool = false, focused: Bool = false, asleep: Bool = false) {
+    ///   - paused: you paused Hush; that's what the bar shows until it ends (v1 art).
+    public init(waiting: Int, showCount: Bool, meetingWaiting: Bool = false, focused: Bool = false, asleep: Bool = false,
+                paused: Bool = false) {
         holding = waiting > 0
         count = holding && showCount ? (waiting > 9 ? "9+" : "\(waiting)") : nil
-        glyph = meetingWaiting ? .meeting : holding ? .mail : focused ? .focus : asleep ? .sleep : .idle
+        glyph = paused ? .paused : meetingWaiting ? .meeting : holding ? .mail : focused ? .focus : asleep ? .sleep : .idle
     }
 }

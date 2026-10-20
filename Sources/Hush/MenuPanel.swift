@@ -247,8 +247,7 @@ final class MenuPanel {
             .padding(.horizontal, HushSpace.cardH).padding(.vertical, HushSpace.cardV)
             .frame(width: 320, alignment: .leading)
             .fixedSize(horizontal: false, vertical: true)
-            .background(.regularMaterial, in: RoundedRectangle(cornerRadius: 12, style: .continuous))
-            .overlay(RoundedRectangle(cornerRadius: 12, style: .continuous).strokeBorder(HushColor.hairline, lineWidth: 0.5))
+            .hushSurface(radius: 12, shadow: false)
         p.contentView = NSHostingView(rootView: view)
         return p
     }

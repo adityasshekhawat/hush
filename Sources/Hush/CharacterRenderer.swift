@@ -71,7 +71,9 @@ protocol CharacterRenderer: AnyObject {
     /// On-screen height of the character in points (PRD minimum 64).
     var characterHeight: CGFloat { get }
     /// `duck`: the hide pose because you're typing (lowered peek, eyes showing), not a call (gone).
-    func show(_ state: CharacterState, fromEdge: Bool, duck: Bool)
+    /// `variant`: what kind of thing the state is about (v1 art: "needs", "careful", "error", "meeting", "door",
+    /// "late", "mail"), with the words the art shows (`card`, `flag`, …).
+    func show(_ state: CharacterState, fromEdge: Bool, duck: Bool, variant: String?, labels: [String: String])
     func apply(_ look: CharacterLook)
     func setDarkDesktop(_ dark: Bool)
     /// Cursor position in the view's top-left-origin coordinates.
@@ -108,8 +110,13 @@ final class WebCharacterRenderer: NSObject, CharacterRenderer, WKScriptMessageHa
         js("hush.setLook({height: \(Int(characterHeight))})")
     }
 
-    func show(_ state: CharacterState, fromEdge: Bool, duck: Bool) {
-        js("hush.setState('\(state.rawValue)', {fromEdge: \(fromEdge), duck: \(duck)})")
+    func show(_ state: CharacterState, fromEdge: Bool, duck: Bool, variant: String?, labels: [String: String]) {
+        let o: [String: Any] = ["fromEdge": fromEdge, "duck": duck, "variant": variant ?? "", "labels": labels]
+        js("hush.setState('\(state.rawValue)', \(Self.json(o)))")
+    }
+
+    static func json(_ o: Any) -> String {
+        (try? JSONSerialization.data(withJSONObject: o)).map { String(decoding: $0, as: UTF8.self) } ?? "{}"
     }
 
     func apply(_ look: CharacterLook) {
@@ -137,6 +144,8 @@ final class WebCharacterRenderer: NSObject, CharacterRenderer, WKScriptMessageHa
         case .cheeks: js("hush.cheeks()")
         case .blow: js("hush.blow()")
         case .chew(let on): js("hush.chew(\(on))")
+        case .handedBack: js("hush.handedBack()")
+        case .sequence(let name, let labels): js("hush.sequence(\(Self.json([name]))[0], \(Self.json(labels)))")
         case .saver(let on): js("hush.setSaver(\(on))")
         case .askPat(let a): js("hush.askPat('\(a.rawValue)')")
         case .proud: js("hush.proud()")

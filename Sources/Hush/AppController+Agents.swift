@@ -29,6 +29,37 @@ extension AppController {
         refresh()
     }
 
+    /// A finished run that has to wait behind something else gets planted as a flag (v1 art); a third finished run within
+    /// 15 minutes gets a small cheer instead, at most hourly. Both are delight: they never interrupt or count.
+    func agentArrived(_ d: Decision) {
+        guard d.item.kind == .agent, !panelHidden, FlagRail.kind(of: d.item) == .done else { return }
+        let now = Date()
+        finishedRuns = finishedRuns.filter { now.timeIntervalSince($0) < 15 * 60 } + [now]
+        if finishedRuns.count >= 3, lastStreak.map({ now.timeIntervalSince($0) > 3600 }) ?? true {
+            lastStreak = now
+            renderer.react(.sequence("streak"))
+        } else if waiting.first?.id != d.id {
+            renderer.react(.sequence("agentDone", ["flag": d.item.project ?? "session"]))
+        }
+    }
+
+    /// A flag on the rail: bring that session forward in the line and open its card (ADR-030).
+    func openFlag(_ id: String) {
+        guard let i = waiting.firstIndex(where: { $0.id == id }) else { return }
+        envelope.close()
+        waiting.insert(waiting.remove(at: i), at: 0)
+        DiagnosticsLog.write("flags: opened \(waiting[0].item.project ?? "a session")")
+        armIgnoreTimer()
+        refresh()
+        showCard()
+    }
+
+    /// The rail stands at Hush's home spot on the screen's bottom edge, and goes away with Hush (calls, pause, lock).
+    func placeFlagRail() {
+        guard let rail = flagRail, let vf = screen?.visibleFrame else { return }
+        rail.place(home: homeFrame(), floor: vf.minY, hidden: panelHidden || previewOverride != nil)
+    }
+
     /// "Also waiting: api (needs you), web (finished)": the other agent sessions in line behind this card (ADR-024).
     func alsoWaiting(besides a: Decision) -> String {
         let others = waiting.filter { $0.id != a.id && AgentSessionTracker.sessionID(ofItem: $0.item.id) != nil }
@@ -64,6 +95,7 @@ extension AppController {
         var item = d.item
         item.id = d.item.id + ":snooze:\(meetingSnoozes)"
         DiagnosticsLog.write("meeting: snoozed a minute")
+        renderer.react(.sequence("snooze"))
         DispatchQueue.main.asyncAfter(deadline: .now() + 60) { [weak self] in
             guard let self, !MeetingReminderPlanner.isOver(item, now: Date()) else { return }
             item.receivedAt = Date()
@@ -127,6 +159,10 @@ extension AppController {
                                      receivedAt: now, openURL: URL(fileURLWithPath: "/System/Applications/Mail.app"),
                                      notes: digest.lines.isEmpty ? nil : digest.lines)
                 DiagnosticsLog.write("mail: digest of \(digest.total)")
+                if !self.panelHidden {
+                    let size = digest.total <= 5 ? "s" : digest.total <= 20 ? "m" : "l"
+                    self.renderer.react(.sequence("mailDigest", ["satchel": size, "bin": "\(digest.couldWait + digest.bulk)"]))
+                }
                 self.submit(item, preset: .gentle)
             }
         }

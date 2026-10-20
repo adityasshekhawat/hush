@@ -52,9 +52,10 @@ models you already use, so it gets more capable as they do. It is not another ch
       <img src="docs/readme/feature-agents.svg" width="100%" alt="Hush noticing that Claude Code needs you, next to a terminal window">
       <h3>Knows when your agents need you</h3>
       Hush watches your Claude Code and Codex sessions through hooks you approve. It looks thoughtful while they work,
-      perks up when one waits on you and says what it wants ("Claude wants to run npm test"), and holds an envelope
-      when a long run finishes. Risky requests, like deleting files or force-pushing, are flagged by rules, not a
-      model. Open takes you to the exact Terminal or iTerm tab.
+      raises its hand when one waits on you and says what it wants ("Claude wants to run npm test"), and holds an
+      envelope when a long run finishes. Risky requests, like deleting files or force-pushing, get a worried "Look
+      carefully" card, judged by rules, not a model. Other sessions waiting stand as little flags beside it. Open
+      takes you to the exact Terminal or iTerm tab.
     </td>
   </tr>
   <tr>
@@ -62,7 +63,7 @@ models you already use, so it gets more capable as they do. It is not another ch
       <img src="docs/media/demo-meeting.gif" width="100%" alt="Hush holds up a clock; its card shows the meeting, who is coming, one line about it, and Join">
       <h3>Remembers your meetings</h3>
       From your Mac's Calendar (Google, Outlook and iCloud calendars you've added work too). Hush holds up a clock 5
-      minutes before, then hurries in a minute before and waits. With a Zoom, Meet, Teams or similar link, one click
+      minutes before and checks its pocket watch, then holds a little door open a minute before and waits. With a Zoom, Meet, Teams or similar link, one click
       on Hush joins. It's its own window, not a notification, so Focus doesn't hide it.
     </td>
     <td width="50%" valign="top">
@@ -85,7 +86,7 @@ models you already use, so it gets more capable as they do. It is not another ch
       <img src="docs/readme/feature-focus.svg" width="100%" alt="Hush hiding during a video call, and missing from a screenshot">
       <h3>Stays out of your way</h3>
       Hush ducks while you type, vanishes when you join a call, and follows or hides in full-screen apps. It's left out
-      of screen shares and screenshots. Pause it from the menu bar, or press <kbd>⌥</kbd> <kbd>⇧</kbd> <kbd>⌘</kbd>
+      of screen shares and screenshots. Pause it from the menu bar and it pulls down a "Do not disturb" blind, or press <kbd>⌥</kbd> <kbd>⇧</kbd> <kbd>⌘</kbd>
       <kbd>H</kbd> to put away whatever it's showing.
     </td>
   </tr>
@@ -127,7 +128,8 @@ models you already use, so it gets more capable as they do. It is not another ch
   tuck-in card says the same, and on Fridays you get the week.
 - **Rare finds.** Now and then Hush turns up wearing something you've never seen, at most once a day and never while
   you're busy. Found pieces are yours to wear.
-- **Kind to your battery.** In Low Power Mode or on low battery, Hush moves less, and alerts still arrive. Paused, locked or in a call, it
+- **Kind to your battery.** In Low Power Mode or on low battery, Hush puts on a nightcap and moves less, and alerts
+  still arrive. Paused, locked or in a call, it
   runs nothing.
 
 <details>
@@ -188,7 +190,7 @@ connection is optional, and you can skip setup at any time. If Hush quits, open 
 | Press and hold | A pat. It leans into your hand |
 | Click four times, fast | Dizzy, then a little grumpy |
 | Drag it somewhere | Swings along, lands with a puff of dust, and lives there now |
-| Flick it away | Bows and backs off, and learns that sender can wait |
+| Flick it away | Tumbles backwards out of sight, and learns that sender can wait |
 | Copy something | Cheeks puff up like a hamster. Paste lets the air out |
 | Copy a paragraph, then click it | Pick *Shorter*, and paste |
 | <kbd>⌘</kbd> <kbd>⇧</kbd> <kbd>H</kbd> | Ask "XLOOKUP in Google Sheets" |
@@ -250,7 +252,7 @@ Planned: quick answers and Summarise move to Apple's on-device model.
 
 - [x] Character, moods, antics and the wardrobe
 - [x] Calendar meetings with one-click join
-- [x] Claude Code and Codex: what an agent asks for, risk by rules, Open to the exact tab
+- [x] Claude Code and Codex: what an agent asks for, risk by rules, Open to the exact tab, the flag rail
 - [x] Ask Hush: quick, repo and hand-off lanes, follow-ups, history
 - [x] Hand it to Hush, on your Mac
 - [x] "While you were away" digest, tuck-in card and weekly card

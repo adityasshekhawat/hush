@@ -22,6 +22,11 @@ enum Reaction {
     case blow               // let the air out
     /// Hand it to Hush: chewing what you copied while the on-device model reworks it (ADR-019).
     case chew(Bool)
+    /// …and it worked: hands back a folded note (v1 art).
+    case handedBack
+    /// A designer sequence by name (timing.json 11–29: pause, unpause, battery, agentDone, streak, readOnDevice,
+    /// snooze, arrival, foundAgents, mailDigest), with the words its art shows (`flag`, `card`, `bin`).
+    case sequence(String, [String: String] = [:])
     case askPat(PatAsk)
     case flash              // screenshot
     case woozy              // cursor shaken

@@ -5,6 +5,16 @@ Hush is pre-alpha and built from source. Notable changes, newest first. Decision
 
 ## Unreleased
 
+- **New character art, wired in:** Hush raises its hand when an agent needs you, holds up a "Look carefully" card for
+  risky requests, shrugs over a smoking laptop when a run stops, checks a pocket watch before a meeting and holds the
+  door open when it starts, pulls down a blind with a "Do not disturb" sign when you pause it, wears a nightcap in
+  energy saver, tumbles away when you flick it, chews properly and hands back a folded note, and carries a satchel for
+  the mail digest. All of it is still poses, so it costs nothing while it waits.
+- **The flag rail:** agent sessions waiting behind the one Hush holds stand as small flags on the bottom edge, with
+  the project's name. Click one to open its card. Up to 5, then "+N more".
+- **A paused glyph** in the menu bar, the notebook cover in What Hush saw, Liquid Glass cards on macOS 26 and later,
+  and a layered app icon for macOS 26 (built with Xcode; the flat icon otherwise). README GIFs re-recorded.
+
 - **README:** a new look with illustrated features, light and dark hero art, and a social preview image
   (`docs/readme`). Copy checked against the app: build from source, nine colours, 5 and 1 minute meeting nudges, what
   the hooks really send. It now lists every feature, including the journal, rule suggestions, the sessions lane,

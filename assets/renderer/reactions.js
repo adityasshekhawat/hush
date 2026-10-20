@@ -93,21 +93,21 @@ function cheeks() {
   el.classList.add("full");
   refresh(); hop(4, 380);
 }
-// Hand it to Hush (ADR-019): chew, cheeks full, while the on-device model works. A squash loop on the HTML wrapper
-// (no SVG repaint, ADR-011), only while chewing, and never longer than 25 s.
-let chewAnim = null, chewStop = null;
+// Hand it to Hush (ADR-019): chews (v1 art: chewOpen / chewClosed) while the on-device model works, never longer than
+// 25 s, then hands back a folded note when it worked. Pose swaps only, no running animation in the SVG (ADR-011).
+let chewStop = null;
 function chew(on) {
-  chewAnim?.cancel(); chewAnim = null; clearTimeout(chewStop);
-  if (!on) { if (live.chewing) { live.chewing = false; cancelSeq(); refresh({ settle: true }); } return; }
+  clearTimeout(chewStop);
+  if (!on) {
+    if (!live.chewing) return;
+    live.chewing = false; cancelSeq(); refresh({ settle: true });
+    return;
+  }
   live.chewing = true;
   markActive("chew");
   const frames = [];
-  for (let i = 0; i < 70; i++) frames.push(F("puff", "puff", 170), F("stand", "puff", 170));
+  for (let i = 0; i < 55; i++) frames.push(...SEQ.handIt.slice(0, 2));
   play(frames);
-  if (!reduced) {
-    chewAnim = anim(life, [{ transform: "scale(1, 1)" }, { transform: "scale(1.05, .93) translateY(3px)", offset: .5 },
-                           { transform: "scale(1, 1)" }], { duration: 340, iterations: Infinity, easing: "ease-in-out" });
-  }
   chewStop = setTimeout(() => chew(false), 25000);
 }
 // Paste: cheeks deflate through the small "o" while puffs stream out, then a little recoil.
@@ -226,6 +226,13 @@ let knockTimer = null;
 function knockBursts() {
   clearTimeout(knockTimer);
   if (s.state !== "07-tap") { el.classList.remove("knock"); return; }
+  // Holding the door for a meeting: an occasional tap of the foot, not knocks on the glass. Running late: beckons only.
+  if (s.variant === "door" || s.variant === "late") {
+    el.classList.remove("knock");
+    if (s.variant === "door" && !live.seq && !live.lifted) play([SEQ.meetingNow[3]]);
+    knockTimer = setTimeout(knockBursts, 9000);
+    return;
+  }
   el.classList.remove("knock"); void el.offsetWidth;   // restart the two-iteration animation
   el.classList.add("knock");
   knockTimer = setTimeout(knockBursts, 6000);
@@ -235,13 +242,18 @@ function wakeFromHandNap() { if (!live.handNap) return; live.handNap = false; lo
 window.hush = {
   setLook(o) { Object.assign(s, o); cache.clear(); shown.key = null; refresh(); },
   setState(k, o) {
-    const prev = s.state, prevDuck = s.duck;
+    o = o || {};
+    const prev = s.state, prevDuck = s.duck, prevVariant = s.variant;
     if (prev !== k) markActive("state " + k);
-    s.state = k; s.duck = !!(o && o.duck);
-    if (prev !== k && (k === "07-tap" || prev === "07-tap")) knockBursts();
-    if (k === "09-hide" && !s.duck && (prev !== k || prevDuck)) { focusDive(); return; }
+    s.state = k; s.duck = !!o.duck; s.variant = o.variant || "";
+    if (o.labels) Object.assign(live.labels, o.labels);
+    if ((prev !== k || prevVariant !== s.variant) && (k === "07-tap" || prev === "07-tap")) knockBursts();
+    // Going away behind the pause blind: it stays down until the window is put away.
+    if (k === "09-hide" && !s.duck && (prev !== k || prevDuck)) { if (live.seq?.name !== "pause") focusDive(); return; }
     if (!isEdgeState()) live.risen = false;
-    if (live.lifted || live.seq) return;  // applied when the lift / sequence ends
+    const entrance = (prev !== k || prevVariant !== s.variant) && ENTRANCE[k + ":" + s.variant];
+    if (entrance && !live.lifted && !reduced) { live.risen = false; play(entrance(), { name: "entrance" }); return; }
+    if (live.lifted || live.seq) { if (live.seq?.name === "entrance" && !entrance) cancelSeq(); else return; }
     if (o && o.fromEdge && prev !== k) {
       el.classList.add("from-edge"); refresh();
       requestAnimationFrame(() => requestAnimationFrame(() => { el.classList.add("slide"); el.classList.remove("from-edge"); setTimeout(() => el.classList.remove("slide"), 600); }));
@@ -268,6 +280,7 @@ window.hush = {
   hover: setHover, press, pat, poke, lift, swing, land,
   cheeks, blow, chew, askPat, flash, woozy, flinch, perk, morning, dance, tuckIn, setMode, setMood,
   inboxZero, commandWindow, jump, perchLand, waveOff, handOver, sorry,
+  handedBack: () => play([SEQ.handIt[SEQ.handIt.length - 1], F("stand", "", 300)]),
   proud: () => play([F("cheer", "happy", 500), F("proud", "happy", 1600)]),
   // First rare find: the bird gets a surprised look up, then bliss; birthday a cheer; halo pride; lei a wave.
   rareFirst(id) {
@@ -294,7 +307,23 @@ window.hush = {
     if (live.neverCalm) markActive("debug");
     if (live.alwaysCalm) el.classList.add("calm");
   },
-  setVisible(on) { el.classList.toggle("hidden", !on); if (on) markActive(); },
+  setVisible(on) {
+    el.classList.toggle("hidden", !on);
+    if (on) { markActive(); if (live.seq?.name === "pause") { cancelSeq(); refresh(); } }
+  },
+  // A named designer sequence (timing.json 11–29) with the words it shows: {flag, card, bin, more}.
+  sequence(name, labels) {
+    // Small ones that aren't in timing.json: Hush shows you its notebook when the journal opens.
+    const frames = SEQ[name] || { journal: [F("holdJournal", "happy", 1800)] }[name];
+    if (!frames || live.lifted) return;
+    if (labels) Object.assign(live.labels, labels);
+    if (name === "pause") { play(frames, { name, hold: true }); return; }
+    // The satchel's size says how much mail it carries (s 1–5, m 6–20, l 21+).
+    const size = labels && labels.satchel;
+    const seq = size ? frames.map(f => f.wear ? Object.assign({}, f, { wear: f.wear.map(w => w.replace(/^prop-satchel-.$/, "prop-satchel-" + size)) }) : f) : frames;
+    if (reduced) return;
+    play(seq, { name });
+  },
   // README recordings (MediaRecorder): the character as it is right now, as standalone SVG. Each visible part gets its
   // live on-screen transform (every CSS and Web Animations transform, via getScreenCTM) and opacity baked in, and the
   // wrappers' own transforms are dropped, so hops and squashes survive outside the browser.
@@ -314,7 +343,7 @@ window.hush = {
     const inv = svg.getScreenCTM().inverse();
     const ids = ["life", "breath", "rise", "puff", "groove", "lean", "character", "clipper"];
     ids.forEach(id => clone.querySelector("#" + id)?.removeAttribute("transform"));
-    const parts = [...svg.querySelector("#life").children, ...["slot-fx-back", "slot-props", "slot-hands", "slot-overlay", "slot-box"].map(id => svg.querySelector("#" + id))];
+    const parts = [...svg.querySelector("#life").children, ...["slot-fx-back", "slot-props", "slot-edge", "slot-hands", "slot-overlay", "slot-labels", "slot-box"].map(id => svg.querySelector("#" + id))];
     parts.forEach((n) => {
       const c = n && twin.get(n);
       if (!c || !clone.contains(c)) return;   // hidden right now: already dropped
@@ -332,7 +361,14 @@ window.hush = {
                             o: parseFloat(getComputedStyle(el).opacity || "1") });
   },
   // Energy saver (ADR-022): always calm, no idle fidgets. Reactions and alerts still play.
-  setSaver(on) { live.saver = on; live.alwaysCalm = on; if (on) el.classList.add("calm"); post({ type: "log", message: "saver " + on }); },
+  // The nightcap stays on while it lasts (v1 art); turning it on plays the yawn once.
+  setSaver(on) {
+    const was = !!live.saver;
+    live.saver = on; live.alwaysCalm = on; if (on) el.classList.add("calm");
+    cache.clear(); shown.key = null;
+    if (on && !was && !reduced && !live.lifted && !el.classList.contains("hidden")) play(SEQ.battery, { name: "battery" }); else refresh();
+    post({ type: "log", message: "saver " + on });
+  },
 };
 refresh();
 blinkLoop();

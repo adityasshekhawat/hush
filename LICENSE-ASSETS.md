@@ -18,8 +18,8 @@ what makes it Hush, so it stays reserved, the way an open-source app keeps its l
 ## Open: everything that isn't Hush's original shape
 
 **Wardrobe pieces, props, effects and edge pieces** are open under
-[Creative Commons Attribution-ShareAlike 4.0](assets/character/swag/LICENSE). Files: `assets/character/swag/` (and
-`assets/character/edge/` once it exists). Remix them, reuse them, and **contribute new ones:** hats, outfits,
+[Creative Commons Attribution-ShareAlike 4.0](assets/character/swag/LICENSE). Files: `assets/character/swag/`,
+`assets/character/edge/` and `assets/ui/`. Remix them, reuse them, and **contribute new ones:** hats, outfits,
 held props, buddies, seasonal pieces, flags, doors, signs. Draw them to fit Hush's bodies (the rig is there to
 draw against), but don't change the bodies, faces or poses themselves. Contributions here are under CC BY-SA 4.0
 too, and you keep your copyright.

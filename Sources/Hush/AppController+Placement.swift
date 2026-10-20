@@ -91,6 +91,7 @@ extension AppController {
     func showRules() {
         rulesCard.engine = engine
         rulesCard.triage = triage
+        rulesCard.react = { [weak self] r in self?.renderer.react(r) }
         rulesCard.show(avoiding: cardAvoidRect())
     }
 

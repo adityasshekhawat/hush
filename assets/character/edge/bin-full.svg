@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="-22 -48 44 52" width="88" height="104">
+<title>Hush edge — bin, full</title>
+<desc>Anchor (0,0) = bottom centre of the bin, on the bottom screen edge. Units match the 160 x 146 character canvas.</desc>
+<g id="edge-bin-full" stroke="#2D2A35" stroke-linecap="round" stroke-linejoin="round">
+<g fill="#FFFDF7" stroke-width="1.8"><rect x="-13" y="-41" width="15" height="10" rx="1.5" transform="rotate(-16 -5 -36)"/><rect x="-2" y="-43" width="15" height="10" rx="1.5" transform="rotate(14 5 -38)"/><rect x="-7" y="-40" width="15" height="10" rx="1.5"/></g>
+<path d="M-5 -39 L0.5 -35 L6 -39" fill="none" stroke-width="1.2"/>
+<path d="M-15 -30 L-13 -2 Q-13 0 -11 0 H11 Q13 0 13 -2 L15 -30 Z" fill="#FFFDF7" stroke-width="2.2"/>
+<path d="M-8 -26 V-4 M8 -26 V-4" fill="none" stroke-width="1.4" opacity="0.2"/>
+<rect x="-18" y="-34" width="36" height="6" rx="3" fill="#E8876A" stroke-width="2.2"/>
+<rect x="-9" y="-22" width="18" height="11" rx="2.5" fill="#FFFDF7" stroke-width="1.6"/>
+</g>
+<circle id="anchor" cx="0" cy="0" r="0.01" fill="none"/>
+</svg>

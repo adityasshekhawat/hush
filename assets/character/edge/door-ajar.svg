@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="-48 -92 86 96" width="172" height="192">
+<title>Hush edge — door, ajar</title>
+<desc>Anchor (0,0) = bottom centre of the doorway, on the bottom screen edge. Units match the 160 x 146 character canvas.</desc>
+<g id="edge-door-ajar" stroke="#2D2A35" stroke-linecap="round" stroke-linejoin="round">
+<path d="M-23 0 V-65 Q-23 -87 0 -87 Q23 -87 23 -65 V0 Z" fill="#FFFDF7" stroke-width="2.2"/>
+<path d="M-17 -4 L-40 -2 L-44 0 L-16 0 Z" fill="#FFE2A8" stroke="none" opacity="0.7"/>
+<g fill="none" stroke="#FFE2A8" stroke-width="2.2" opacity="0.9"><path d="M-26 -30 L-34 -33 M-26 -46 L-34 -52 M-26 -14 L-35 -14"/></g>
+<path d="M-18 0 V-64 Q-18 -82 0 -82 Q18 -82 18 -64 V0 Z" fill="#FFE2A8" stroke-width="2.2"/>
+<polygon points="18,0 18,-66 -12,-79 -12,0" fill="#E8876A" stroke-width="2.2"/>
+<circle cx="-8" cy="-38" r="2.4" fill="#2D2A35" stroke="none"/>
+<line x1="-28" y1="0" x2="28" y2="0" stroke-width="2.4" opacity="0.35"/>
+</g>
+<circle id="anchor" cx="0" cy="0" r="0.01" fill="none"/>
+</svg>

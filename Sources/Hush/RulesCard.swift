@@ -168,6 +168,8 @@ final class RulesPresenter {
     var engine: DecisionEngine?
     /// Apple's on-device model, for "tell Hush what matters" (ADR-026). nil when it isn't available.
     var triage: OnDeviceTriage?
+    /// Hush puts its glasses on and reads while the on-device model works (v1 art).
+    var react: ((Reaction) -> Void)?
 
     func show(avoiding character: NSRect) {
         let c = card ?? CardWindow(width: 420, keyable: true) { [unowned self] in
@@ -178,6 +180,7 @@ final class RulesPresenter {
                 close: { [weak self] in self?.card?.close() },
                 suggest: OnDeviceTriage.systemStatus == .on ? { [weak self] text in
                     guard let triage = self?.triage else { return [] }
+                    self?.react?(.sequence("readOnDevice"))
                     return RuleSuggestions.rules(from: await triage.suggestRules(from: text), now: Date())
                 } : nil))
         }

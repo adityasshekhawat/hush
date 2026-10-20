@@ -42,6 +42,10 @@ final class AppController {
     var gistByDecision: [String: String] = [:]
     var ambientPile = 0
     var justShooed = false
+    var currentVariant = CharacterVariant()
+    /// When agent runs finished lately (the streak cheer), and when the last cheer was.
+    var finishedRuns: [Date] = []
+    var lastStreak: Date?
     var hurrySince: Date?
     var currentState: CharacterState?
     var currentDuck = false
@@ -71,6 +75,8 @@ final class AppController {
     var ask: AskController!
     var onboarding: OnboardingController!
     var digest: DigestController!
+    /// Agent sessions waiting behind the one Hush holds, as flags on the bottom edge (ADR-030).
+    var flagRail: FlagRailController?
     /// Which app each Claude Code session ran in (from the hooks), for the digest's Open button.
     var sessionApps: [String: String] = [:]
     /// Which terminal device each session ran on, kept after it ends (Open on its card).
@@ -160,6 +166,12 @@ final class AppController {
 
         placeAtHome()
         panel.orderFrontRegardless()
+
+        let rail = FlagRailController(characterHeight: renderer.characterHeight)
+        rail.onOpen = { [weak self] id in self?.openFlag(id) }
+        rail.setAccent(Assets.accent(of: look.palette))
+        applyCapturePrivacy(rail.window)
+        flagRail = rail
 
         schedulePointerTimer(fast: false)
 
@@ -380,13 +392,17 @@ final class AppController {
         }
 
         let duck = state == .hide && !focus.state.hidesCharacter && !previewAway
-        if state != currentState || duck != currentDuck {
+        let variant = previewOverride == nil ? CharacterVariant.of(state: state, active: active, now: now) : CharacterVariant()
+        if state != currentState || duck != currentDuck || variant != currentVariant {
             currentDuck = duck
-            showFirstTip(for: state, duck: duck)
-            renderer.show(state, fromEdge: state == .hurry, duck: duck)
+            if state != currentState { showFirstTip(for: state, duck: duck) }
+            renderer.show(state, fromEdge: state == .hurry, duck: duck, variant: variant.name, labels: variant.labels)
             currentState = state
+            currentVariant = variant
         }
+        flagRail?.update(FlagRail.layout(waiting: waiting))
         setHidden(previewOverride == nil && focus.state.hidesCharacter)
+        placeFlagRail()
     }
 
     /// Principle 3: during calls the character disappears completely (it'd show up in a screen share).

@@ -1,0 +1,81 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 146" width="320" height="292">
+<title>Hush — 03-blind-down-only-the-sign-shows</title><defs>
+<clipPath id="screen-clip"><rect x="0" y="0" width="160" height="112"/></clipPath>
+</defs>
+
+<g id="fx-back">
+</g>
+
+<g clip-path="url(#screen-clip)">
+<g transform="translate(20 56)" id="character">
+<g transform="rotate(0 60 134)" id="pose-root">
+
+<g stroke-linecap="round" id="legs-back">
+<line x1="50" y1="124" x2="50" y2="134" stroke="#2D2A35" stroke-width="12" id="leg-l"/>
+<line x1="50" y1="124" x2="50" y2="134" stroke="#F4D9A6" stroke-width="7"/>
+<line x1="70" y1="124" x2="70" y2="134" stroke="#2D2A35" stroke-width="12" id="leg-r"/>
+<line x1="70" y1="124" x2="70" y2="134" stroke="#F4D9A6" stroke-width="7"/>
+</g>
+
+<g stroke="#2D2A35" stroke-linecap="round" stroke-linejoin="round" id="topper">
+<g transform="translate(60 44) scale(1)" id="topper-leaf">
+<path d="M0 3 Q-1 -5 1 -11" fill="none" stroke-width="2.6"/>
+<path d="M1 -10 C5 -19 15 -21 18 -15 C13 -8 6 -7 1 -10 Z" fill="#E8876A" stroke-width="2.2"/>
+<path d="M0 -7 C-4 -13 -11 -14 -13 -9 C-9 -5 -4 -5 0 -7 Z" fill="#E8876A" stroke-width="2.2"/>
+</g>
+</g>
+
+<g id="body">
+<path d="M60 44 C88 44 102 64 102 90 C102 116 86 128 60 128 C34 128 18 116 18 90 C18 64 32 44 60 44 Z" fill="#F4D9A6" stroke="#2D2A35" stroke-width="3.2" stroke-linejoin="round"/>
+<ellipse cx="60" cy="113" rx="23" ry="12" fill="#FFF5E1" id="belly"/>
+</g>
+
+<g stroke="#2D2A35" stroke-linejoin="round" stroke-linecap="round" id="accessory">
+</g>
+
+<g transform="translate(60 80)" id="face">
+<g fill="#E8876A" opacity="0.5" id="blush">
+<ellipse cx="-21" cy="7" rx="4.2" ry="2.3"/>
+<ellipse cx="21" cy="7" rx="4.2" ry="2.3"/>
+</g>
+<g id="eyes">
+<g fill="none" stroke="#2D2A35" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" id="eyes-drawn">
+<path d="M-20 0 Q-15 4.5 -10 0"/>
+<path d="M10 0 Q15 4.5 20 0"/>
+</g>
+</g>
+<g transform="translate(0 11)" stroke="#2D2A35" stroke-linecap="round" stroke-linejoin="round" id="mouth">
+<circle cx="0" cy="1" r="1.7" fill="none" stroke-width="1.8" id="mouth-small-o"/>
+</g>
+</g>
+
+<g stroke-linecap="round" id="arms">
+</g>
+
+<g stroke="#2D2A35" stroke-linejoin="round" stroke-linecap="round" id="props-held">
+</g>
+
+<g stroke="#2D2A35" stroke-linecap="round" stroke-linejoin="round" id="fx-character">
+</g>
+
+</g>
+</g>
+</g>
+
+<g id="screen-edge">
+<line x1="4" y1="112" x2="156" y2="112" stroke="#2D2A35" stroke-width="2.4" stroke-linecap="round" opacity="0.35"/>
+</g>
+<g id="edge" transform="translate(80 112)">
+<g id="edge-blind" stroke="#2D2A35" stroke-linecap="round" stroke-linejoin="round">
+<rect x="-54" y="-110" width="6" height="13" rx="2" fill="#2D2A35" stroke="none"/>
+<rect x="48" y="-110" width="6" height="13" rx="2" fill="#2D2A35" stroke="none"/>
+<rect id="blind-fabric" x="-48" y="-101" width="96" height="99" fill="#F6EEDF" stroke-width="2.2"/>
+<path d="M-46 -86 H46 M-46 -72 H46 M-46 -58 H46 M-46 -44 H46 M-46 -30 H46 M-46 -16 H46 " fill="none" stroke-width="1.4" opacity="0.14"/>
+<rect id="blind-roller" x="-52" y="-109" width="104" height="10" rx="5" fill="#FFFDF7" stroke-width="2.2"/>
+<circle cx="-46" cy="-104" r="2.2" fill="#E8876A" stroke="none"/><circle cx="46" cy="-104" r="2.2" fill="#E8876A" stroke="none"/>
+<rect id="blind-hem" x="-51" y="-5" width="102" height="6" rx="3" fill="#E8876A" stroke-width="2.2"/>
+<g id="edge-sign"><path d="M-4 -6 V-1.5 Q-4 2.5 0 2.5 Q4 2.5 4 -1.5 V-3" fill="none" stroke-width="2.2"/><rect x="-32" y="-37" width="64" height="32" rx="7" fill="#FFFDF7" stroke-width="2.2"/><circle cx="-20" cy="-21" r="6.4" fill="#E8876A" stroke="none"/><circle cx="-17" cy="-23.400000000000006" r="5.4" fill="#FFFDF7" stroke="none"/></g>
+</g>
+</g>
+</svg>

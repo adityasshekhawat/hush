@@ -74,3 +74,70 @@ public enum Presence {
         return .peek
     }
 }
+
+/// What Hush holds up for the thing it's showing (v1 art, ADR-030): the renderer's variant of a state, and the words
+/// its art shows (the art never bakes text in). nil `name`: the state's own pose.
+public struct CharacterVariant: Equatable, Sendable {
+    public var name: String?
+    public var labels: [String: String]
+
+    public init(_ name: String? = nil, labels: [String: String] = [:]) {
+        self.name = name
+        self.labels = labels
+    }
+
+    public static func of(state: CharacterState, active: Decision?, now: Date) -> CharacterVariant {
+        guard let a = active, a.outcome == .shown else { return .init() }
+        let item = a.item
+        switch item.kind {
+        case .agent:
+            if item.id.contains(":approval:") {
+                return item.id.hasSuffix(":risky") ? .init("careful", labels: ["card": "Look carefully"]) : .init("needs")
+            }
+            return item.id.contains(":error:") ? .init("error") : .init()
+        case .meeting:
+            switch state {
+            case .clock: return .init("meeting", labels: ["card": short(item.subject)])
+            case .hurry, .tap: return .init(item.startsAt.map { $0 <= now } == true ? "late" : "door")
+            default: return .init()
+            }
+        case .mail:
+            return state == .hurry || state == .tap ? .init("mail") : .init()
+        }
+    }
+
+    /// Six words or fewer fit the card.
+    static func short(_ s: String) -> String {
+        let words = s.split(whereSeparator: \.isWhitespace)
+        return words.prefix(6).joined(separator: " ") + (words.count > 6 ? "…" : "")
+    }
+}
+
+/// The flag rail (v1 art, ADR-030): agent sessions waiting behind the one Hush holds, as flags planted on the bottom
+/// edge, newest nearest Hush. At most 5; from the 6th, the oldest ones fold into one "+N more" bundle.
+public enum FlagRail {
+    public enum Kind: String, Sendable { case done, needs, careful, error }
+
+    public struct Flag: Equatable, Sendable {
+        public var decisionID: String
+        public var project: String
+        public var kind: Kind
+    }
+
+    public static let maxFlags = 5
+
+    public static func kind(of item: InboxItem) -> Kind {
+        if item.id.contains(":approval:") { return item.id.hasSuffix(":risky") ? .careful : .needs }
+        return item.id.contains(":error:") ? .error : .done
+    }
+
+    /// `waiting`: the app's queue (the first one is what Hush holds). Returns flags nearest Hush first, and how many
+    /// more the bundle stands for (0: no bundle).
+    public static func layout(waiting: [Decision]) -> (flags: [Flag], more: Int) {
+        let rest = waiting.dropFirst().filter { $0.item.kind == .agent && AgentSessionTracker.sessionID(ofItem: $0.item.id) != nil }
+            .sorted { $0.at > $1.at }
+        let all = rest.map { Flag(decisionID: $0.id, project: $0.item.project ?? "session", kind: kind(of: $0.item)) }
+        guard all.count > maxFlags else { return (all, 0) }
+        return (Array(all.prefix(maxFlags - 1)), all.count - (maxFlags - 1))
+    }
+}

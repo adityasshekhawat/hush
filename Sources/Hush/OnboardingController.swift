@@ -88,7 +88,7 @@ final class OnboardingController: ObservableObject {
         switch s {
         case .arrival:
             host.pose(.stand)
-            host.react(.wave)
+            host.react(.sequence("arrival"))
         case .look, .question, .connect, .quiet:
             host.pose(.stand)
         case .sayHi:
@@ -176,7 +176,11 @@ final class OnboardingController: ObservableObject {
             }
         case .claudeCode:
             host.installHooks()
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) { [weak self] in self?.refreshConnected() }
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) { [weak self] in
+                guard let self else { return }
+                self.refreshConnected()
+                if self.progress.connected.contains(.claudeCode) { self.host.react(.sequence("foundAgents", ["card": "Found Claude Code"])) }
+            }
         case .askHotkey:
             break   // completes when you actually press ⌘⇧H (observedHotkey)
         }

@@ -72,6 +72,7 @@ extension AppController {
                     > ($1.finalLevel ?? .ambient, AgentSessionTracker.rank($1.item), $0.at)
             }
             if waiting.first?.id == d.id { armIgnoreTimer() }
+            agentArrived(d)
         case .ambient:
             if d.item.kind == .mail { ambientPile += 1 }
         case .queued, .dropped:

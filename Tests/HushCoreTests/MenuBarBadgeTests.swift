@@ -30,4 +30,9 @@ import Testing
         #expect(MenuBarBadge(waiting: 0, showCount: false, asleep: true).glyph == .sleep)
         #expect(MenuBarBadge(waiting: 1, showCount: false, focused: true).glyph == .mail)
     }
+
+    @Test func pausedShowsThePausedGlyph() {
+        #expect(MenuBarBadge(waiting: 2, showCount: true, meetingWaiting: true, paused: true).glyph == .paused)
+        #expect(MenuBarBadge(waiting: 2, showCount: true, paused: true).count == "2")
+    }
 }

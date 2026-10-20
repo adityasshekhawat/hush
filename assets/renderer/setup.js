@@ -19,10 +19,12 @@ const parse = src => parser.parseFromString(src, "image/svg+xml").documentElemen
 
 // look + app state
 const s = { body: "blob", palette: "oat", eyes: "round", topper: "leaf", wear: [],
-            state: "01-peek", duck: false, dark: false, height: 104 };
+            state: "01-peek", variant: "", duck: false, dark: false, height: 104 };
 const live = {
   hovered: false, pressed: false, patting: false, lifted: false, swingFast: false, near: false,
   pointer: null, pointerMovedAt: 0, clicks: [], lock: null, gazeOverride: null,
   modes: new Set(), full: false, asking: false, handNap: false, risen: false,
   seq: null, mode: null, modeFrame: 0, perchDoze: false, mood: 0, boxPose: null,
+  // Words the app gives the art: card, flag, sign, bin, more (v1 art; the art never bakes text in).
+  labels: { sign: "Do not disturb" },
 };

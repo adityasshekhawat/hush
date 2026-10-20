@@ -45,6 +45,7 @@ struct JournalView: View {
             Divider()
             if model.shown.isEmpty {
                 VStack(spacing: 6) {
+                    JournalCover().padding(.bottom, 10)
                     Text("Nothing here yet").font(HushFont.cardTitle)
                     Text("Everything I look at shows up here, with what I did and why.")
                         .font(HushFont.subtitle).foregroundStyle(.secondary)
@@ -69,6 +70,25 @@ struct JournalView: View {
             }
             .padding(10)
         }
+    }
+}
+
+/// The notebook's cover (v1 art), with the words the app draws on its plate: half size, 180 × 240 pt.
+private struct JournalCover: View {
+    static let art = NSImage(contentsOf: Assets.root.appendingPathComponent("ui/journal/cover.svg"))
+
+    var body: some View {
+        ZStack(alignment: .topLeading) {
+            if let art = Self.art { Image(nsImage: art).resizable().frame(width: 180, height: 240) }
+            Text("What Hush saw").font(.system(size: 15, weight: .semibold)).foregroundStyle(HushColor.ink)
+                .frame(width: 90, height: 32).offset(x: 45, y: 74)
+            Text("Stays on this Mac").font(.system(size: 8)).foregroundStyle(HushColor.ink.opacity(0.7))
+                .frame(width: 106, height: 10).offset(x: 37, y: 122)
+        }
+        .frame(width: 180, height: 240)
+        .clipShape(RoundedRectangle(cornerRadius: 6, style: .continuous))
+        .shadow(color: .black.opacity(0.12), radius: 8, y: 4)
+        .accessibilityHidden(true)
     }
 }
 

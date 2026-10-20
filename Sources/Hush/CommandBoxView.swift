@@ -120,9 +120,7 @@ struct CommandBoxView: View {
         }
         .padding(.horizontal, 14)
         .frame(height: 46)
-        .background(.regularMaterial, in: RoundedRectangle(cornerRadius: 14, style: .continuous))
-        .overlay(RoundedRectangle(cornerRadius: 14, style: .continuous).strokeBorder(HushColor.hairline, lineWidth: 0.5))
-        .shadow(color: .black.opacity(0.18), radius: 16, x: 0, y: 12)
+        .hushSurface(radius: 14, interactive: true, tint: HushColor.lilac.opacity(0.12))
     }
 
     private var placeholder: String { model.followUp != nil ? "Ask a follow-up…" : "Ask Hush…" }
@@ -242,9 +240,7 @@ struct RouteMenu: View {
         }
         .padding(6)
         .frame(width: 260)
-        .background(.regularMaterial, in: RoundedRectangle(cornerRadius: 12, style: .continuous))
-        .overlay(RoundedRectangle(cornerRadius: 12, style: .continuous).strokeBorder(HushColor.hairline, lineWidth: 0.5))
-        .shadow(color: .black.opacity(0.18), radius: 16, x: 0, y: 12)
+        .hushSurface(radius: 12)
         .frame(maxWidth: .infinity, alignment: .trailing)
     }
 

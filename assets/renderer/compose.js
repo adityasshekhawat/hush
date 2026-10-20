@@ -6,14 +6,24 @@
 // ---------- sequences from timing.json ----------
 const SEQ = {};
 const SEQ_NAMES = { "01": "command", "02": "drag", "03": "grumpy", "04": "poke", "05": "inboxZero",
-                    "06": "perch", "07": "walk", "08": "morning", "09": "focus", "10": "eyes" };
+                    "06": "perch", "07": "walk", "08": "morning", "09": "focus", "10": "eyes",
+                    // v1 art (docs/v1-art-notes.md)
+                    "11": "pause", "12": "unpause", "13": "dismiss", "14": "battery", "15": "agentDone",
+                    "16": "agentNeeds", "17": "careful", "18": "agentError", "19": "streak", "20": "readOnDevice",
+                    "21": "meetingSoon", "22": "meetingNow", "23": "snooze", "24": "late", "25": "arrival",
+                    "26": "foundAgents", "27": "mailUrgent", "28": "mailDigest", "29": "handIt" };
+// timing.json's `wear` ({head: "nightcap"}) → layer ids: rig pieces or the extra swag files (D.extras).
+const WEAR_IDS = { head: v => "head-" + v, face: v => v === "glasses" ? "accessory-glasses" : "face-" + v, carry: v => "prop-" + v };
+const wearIds = w => w ? Object.entries(w).map(([slot, v]) => (WEAR_IDS[slot] || (x => x))(v)) : null;
 for (const a of D.timing) {
   const folder = a.folder.split("/").pop();
   // The keyframe files are blob-only; rebuild each frame from its pose + expression so it works on every body.
+  // "auto" means the pose's own face. `dx` walks in or off; `edge` draws an edge prop (blind, door, flag, bin).
   SEQ[SEQ_NAMES[folder.slice(0, 2)] || folder] = a.frames.map(f => {
     const frameKey = f.file.replace(/\.svg$/, "");
     const box = folder.startsWith("01-") && D.commandFrames && /prop-command-box"[^>]*>\s*<rect/.test(D.commandFrames[frameKey] || "") ? frameKey : null;
-    return { pose: f.pose, expr: f.expr, ms: f.ms, caption: f.caption, box };
+    return { pose: f.pose, expr: f.expr === "auto" ? "" : f.expr, ms: f.ms, caption: f.caption, box,
+             wear: wearIds(f.wear), dx: f.dx || 0, edge: f.edge || null };
   });
 }
 // Short custom sequences built from poses (pose, expression, ms).
@@ -30,7 +40,7 @@ svg.innerHTML = `
       <g id="rim"></g><g id="pose-root"></g>
     </g></g></g></g></g></g>
   </g></g>
-  <g id="slot-hands"></g><g id="slot-overlay"></g><g id="slot-box"></g>`;
+  <g id="slot-edge"></g><g id="slot-hands"></g><g id="slot-overlay"></g><g id="slot-labels"></g><g id="slot-box"></g>`;
 const groovewrap = document.createElement("div"), breathwrap = document.createElement("div");
 groovewrap.id = "groovewrap"; breathwrap.id = "breathwrap";
 breathwrap.appendChild(svg); groovewrap.appendChild(breathwrap); el.appendChild(groovewrap);
@@ -44,9 +54,16 @@ const bodyFaces = () => D.expressions[s.body] || D.expressions.blob;
 const getPose = n => { const k = s.body + "/" + n; return poseDocs[k] || (poseDocs[k] = parse(bodyPoses()[n] || bodyPoses().stand)); };
 const getRig = () => { const k = s.body + "/" + s.eyes; return rigDocs[k] || (rigDocs[k] = parse((D.rigs[s.body] || D.rigs.blob)[s.eyes])); };
 const getFace = n => { const k = s.body + "/" + n; return faceDocs[k] || (faceDocs[k] = parse(bodyFaces()[n]).querySelector("#face")); };
+const extraDocs = {};
+// Swag files the rig doesn't carry (nightcap, satchel sizes): the group with that id, from this body's file.
+const getExtra = id => {
+  const k = s.body + "/" + id, src = (D.extras[s.body] || D.extras.blob || {})[id];
+  if (!(k in extraDocs)) extraDocs[k] = src ? parse(src).querySelector("#" + id) : null;
+  return extraDocs[k];
+};
 const boxDocs = {};
 const getBox = k => boxDocs[k] || (boxDocs[k] = parse(D.commandFrames[k]).querySelector("#prop-command-box"));
-const lookKey = () => [s.body, s.palette, s.eyes, s.topper, (s.wear || []).join("+"), s.dark].join(",");
+const lookKey = () => [s.body, s.palette, s.eyes, s.topper, (s.wear || []).join("+"), s.dark, !!live.saver].join(",");
 // Wearables (docs/design-guide.md §6a): face pieces ride on the face, the cape's back layer goes behind
 // everything, the rest sit in #accessory. Ground pieces stay off edge and perch poses (no ground there).
 const FACE_WEAR = /^(accessory-glasses|face-shades|rare-heart-glasses|rare-monocle|pack-face-)/;
@@ -95,8 +112,8 @@ function recolor(root) {
   if (s.dark) root.querySelectorAll("[id^='fx-']").forEach(n => { if ((n.getAttribute("stroke") || "").toUpperCase() === INK) n.setAttribute("stroke", PAPER); });
 }
 
-function compose(pose, expr) {
-  const key = pose + "|" + (expr || "") + "|" + lookKey();
+function compose(pose, expr, extraWear) {
+  const key = pose + "|" + (expr || "") + "|" + lookKey() + "|" + (extraWear || []).join("+");
   let c = cache.get(key);
   if (c) return c;
   const doc = getPose(pose).cloneNode(true);
@@ -125,11 +142,20 @@ function compose(pose, expr) {
     });
   }
   const grounded = !EDGE_POSES.has(pose) && !/perch/i.test(pose);
-  for (const id of s.wear || []) {
-    const part = rig.querySelector("#" + id);
+  // Energy saver wears the nightcap (v1 art); a sequence frame can add its own pieces. A hat replaces the topper.
+  let wear = (s.wear || []).concat(extraWear || []);
+  if (live.saver) wear = wear.filter(id => !/^head-/.test(id)).concat("head-nightcap");
+  if (wear.some(id => /^head-nightcap$/.test(id)) && topper) topper.replaceChildren();
+  for (const id of wear) {
+    const part = rig.querySelector("#" + id) || getExtra(id);
     if (!part || (GROUND_WEAR.test(id) && !grounded)) continue;
     const n = part.cloneNode(true); n.removeAttribute("opacity");
-    if (id === "pack-cape-back") root.insertBefore(n, root.firstChild);
+    if (id.startsWith("prop-")) {
+      // Held props (satchel sizes) go with the hands.
+      let held = root.querySelector("#props-held");
+      if (!held) { held = doc.ownerDocument.createElementNS(NS, "g"); held.id = "props-held"; root.appendChild(held); }
+      held.appendChild(n);
+    } else if (id === "pack-cape-back") root.insertBefore(n, root.firstChild);
     else if (FACE_WEAR.test(id)) { if (face) face.insertBefore(n, face.querySelector("#mouth")); }
     else if (acc) acc.appendChild(n);
   }
@@ -163,7 +189,28 @@ const imp = n => document.importNode(n, true);
 // ---------- who decides the frame ----------
 const STATE_POSE = { "10-think": "sitThink", "11-notice": "notice", "12-stand": "stand",
                      "01-peek": "peek", "02-doze": "doze", "03-pile": "pile", "04-hold": "hold", "05-clock": "clock",
-                     "06-hurry": "hurry", "07-tap": "tap", "08-bow": "bow", "09-hide": "hide" };
+                     "06-hurry": "hurry", "07-tap": "tap", "08-bow": "tumbleGone", "09-hide": "hide" };
+// What Hush holds up says what kind of thing is waiting (v1 art). The app names the variant with the state.
+const DOOR = st => ({ prop: "door", state: st, anchor: [24, 140] });
+const VARIANT = {
+  "11-notice:needs": { pose: "raiseHand", expr: "" },
+  "11-notice:careful": { pose: "holdCardBoth", expr: "worried" },
+  "04-hold:error": { pose: "shrugLaptop", expr: "" },
+  "05-clock:meeting": { pose: "checkWatch", expr: "" },
+  "07-tap:door": { pose: "holdDoor", expr: "", edge: DOOR("open") },
+  "07-tap:late": { pose: "beckon2", expr: "", edge: DOOR("ajar") },
+};
+// The way in to a state or variant, played once when it starts.
+const ENTRANCE = {
+  "11-notice:needs": () => SEQ.agentNeeds,
+  "11-notice:careful": () => SEQ.careful,
+  "04-hold:error": () => SEQ.agentError,
+  "05-clock:meeting": () => SEQ.meetingSoon.slice(0, 5),
+  "06-hurry:mail": () => SEQ.mailUrgent,
+  "07-tap:door": () => SEQ.meetingNow.slice(1, 3),
+  "07-tap:late": () => [].concat(SEQ.late, SEQ.late, SEQ.late, SEQ.late),
+  "08-bow:": () => SEQ.dismiss,
+};
 const isEdgeState = () => s.state === "01-peek" || (s.state === "09-hide" && s.duck);
 
 function frame() {
@@ -178,10 +225,12 @@ function frame() {
   if (s.state === "09-hide" && s.duck) return { pose: "peek", expr: "", duck: true };
   if (s.state === "12-stand" && live.modes.has("groove")) return { pose: "bob", expr: "happy" };
   if (s.state === "12-stand" && live.modes.has("droopy")) return { pose: "droopy", expr: "droopy" };
-  return { pose: STATE_POSE[s.state] || "peek", expr: "" };
+  return VARIANT[s.state + ":" + s.variant] || { pose: STATE_POSE[s.state] || "peek", expr: "" };
 }
 
 function faceOverride(f) {
+  // Chewing: the chew poses draw their own full cheeks and mouth.
+  if (live.chewing && live.seq) return f.expr || "";
   // Copied something: the puffed face stays on through every frame until the paste (design guide §6).
   if (live.full && !live.lifted && !(live.lock && live.lock.until > now())) return "puff";
   if (live.seq && f.expr) return f.expr;
@@ -191,7 +240,7 @@ function faceOverride(f) {
   if (live.handNap) return "sleepy";
   if (live.asking) return "happy";
   if (live.hovered) return /doze|perchDoze/.test(f.pose) ? "surprised" : "happy";
-  if (live.near && /peek|stand|hold|clock|pile|perch$|perch2/.test(f.pose)) return "alert";
+  if (live.near && /^(peek|stand|hold|clock|pile|perch|perch2)$/.test(f.pose)) return "alert";
   return f.expr || "";
 }
 
@@ -200,15 +249,20 @@ function refresh(opts) {
   opts = opts || {};
   const f = frame();
   const expr = faceOverride(f);
-  const c = compose(f.pose, expr);
+  const c = compose(f.pose, expr, f.wear);
   const edge = f.risen || f.duck || c.edge || EDGE_POSES.has(f.pose);
-  const key = f.pose + "|" + expr + "|" + lookKey() + "|" + (f.risen ? "r" : f.duck ? "d" : "") + "|" + (f.box || "");
+  const dx = f.dx || 0;
+  const key = f.pose + "|" + expr + "|" + lookKey() + "|" + (f.risen ? "r" : f.duck ? "d" : "") + "|" + (f.box || "") + "|" +
+    (f.wear || []).join("+") + "|" + dx + "|" + (f.edge ? f.edge.prop + "-" + f.edge.state : "") + "|" + JSON.stringify(live.labels);
   if (key !== shown.key) {
     const nextPose = f.pose + (f.risen ? "-risen" : "");
     // Pose changes blend over 0.18 s (design guide §3); walk and perch cycles, drags and Reduce Motion swap.
     if (shown.pose && shown.pose !== nextPose && !reduced && !live.mode && !live.lifted) crossFade();
-    character.setAttribute("transform", c.charT);
+    character.setAttribute("transform", (dx ? `translate(${dx} 0) ` : "") + c.charT);
     $("pose-root").replaceWith(imp(c.root));
+    for (const id of ["slot-fx-back", "slot-props", "slot-hands"]) dx ? $(id).setAttribute("transform", `translate(${dx} 0)`) : $(id).removeAttribute("transform");
+    drawEdge(f.edge);
+    drawPoseLabel(f.pose, c.charT);
     rimSlot.replaceChildren(imp(c.rim));
     $("slot-fx-back").replaceChildren(...(c.fxBack ? [...c.fxBack.childNodes].map(imp) : []));
     const showHands = c.hands && !f.risen;
@@ -236,6 +290,68 @@ function refresh(opts) {
   } else {
     applyOverlays();
   }
+}
+
+// ---------- edge props and words (v1 art) ----------
+// Edge files put (0, 0) where they touch the screen edge; the blind's anchor is Hush's own spot.
+function drawEdge(e) {
+  const slot = $("slot-edge");
+  slot.replaceChildren();
+  const name = e && e.prop + "-" + e.state, src = name && D.edge && D.edge[name];
+  if (!src) return;
+  const [ax, ay] = e.anchor || [80, 112];
+  const g = document.createElementNS(NS, "g");
+  g.setAttribute("transform", `translate(${ax} ${ay})`);
+  for (const n of parse(src).children) if (!/^(title|desc|defs)$/.test(n.tagName) && n.id !== "anchor") g.appendChild(imp(n));
+  recolor(g);
+  const rim = makeRim(g); rim.id = "edge-rim";
+  const spot = EDGE_LABEL[e.prop + "-" + e.state] || EDGE_LABEL[e.prop];
+  if (spot && live.labels[spot.key]) g.appendChild(label(spot.r, live.labels[spot.key], spot.size));
+  // While Hush clips the sign on, the blind sits between its face and its arms.
+  const arms = e.z && /between/.test(e.z) && $("pose-root").querySelector("#arms");
+  if (arms) { arms.before(g); return; }
+  slot.append(rim, g);
+}
+const EDGE_LABEL = { "blind-down": { key: "sign", r: [-10, -32, 38, 22], size: 8 }, flag: { key: "flag", r: [5, -67, 38, 12], size: 8 },
+                     "flag-bundle": { key: "more", r: [11, -14, 22, 10], size: 7 }, bin: { key: "bin", r: [-8, -21, 16, 9], size: 7 } };
+// Canvas rects from the art notes; drawn inside the pose so they lean and hop with it.
+const POSE_LABEL = {
+  hangSign: { key: "sign", r: () => [70, 47, 38, 22], size: 8 },
+  plantFlag: { key: "flag", r: () => [111, 73, 38, 12], size: 8 },
+  holdCardBoth: { key: "card", r: () => ({ blob: [58, 103, 44, 26], bean: [58, 92, 44, 26], square: [58, 107, 44, 26] })[s.body], size: 6, rot: -3 },
+};
+function drawPoseLabel(pose, charT) {
+  const spot = POSE_LABEL[pose], text = spot && live.labels[spot.key];
+  if (!text) return;
+  const [tx, ty] = (charT.match(/-?[\d.]+/g) || [20, 2]).map(Number);
+  const [x, y, w, h] = spot.r();
+  const t = label([x - tx, y - ty, w, h], text, spot.size, spot.rot);
+  ($("pose-root").querySelector("#props-held") || $("pose-root")).appendChild(t);
+}
+// Words the app supplies, in the system font, wrapped into the rect (the art never bakes text in).
+function label([x, y, w, h], text, size, rot) {
+  const per = Math.max(3, Math.floor(w / (size * .56))), max = Math.max(1, Math.floor(h / (size * 1.12)));
+  const lines = [];
+  for (const word of String(text).split(/\s+/)) {
+    const last = lines[lines.length - 1];
+    if (last !== undefined && (last + " " + word).length <= per) lines[lines.length - 1] = last + " " + word;
+    else lines.push(word.length > per ? word.slice(0, per - 1) + "…" : word);
+  }
+  if (lines.length > max) { lines.length = max; lines[max - 1] = lines[max - 1].replace(/.?$/, "…"); }
+  // One <text> per line (no tspans): the README recorder rasterises snapshots with Core SVG, which ignores tspan x/y.
+  const t = document.createElementNS(NS, "g");
+  const cx = x + w / 2, top = y + h / 2 - (lines.length - 1) * size * 1.1 / 2 + size * .35;
+  if (rot) t.setAttribute("transform", `rotate(${rot} ${cx} ${y + h / 2})`);
+  lines.forEach((l, i) => {
+    const line = document.createElementNS(NS, "text");
+    line.setAttribute("x", cx); line.setAttribute("y", (top + i * size * 1.1).toFixed(1));
+    line.setAttribute("font-family", "-apple-system, system-ui, Helvetica, sans-serif");
+    line.setAttribute("font-size", size); line.setAttribute("font-weight", "600");
+    line.setAttribute("fill", INK); line.setAttribute("text-anchor", "middle");
+    line.textContent = l;
+    t.appendChild(line);
+  });
+  return t;
 }
 
 function crossFade() {

@@ -74,12 +74,12 @@ Ignored too long, with Moods on (off by default): taps a foot (10 min) → cross
 | Click 4+ times fast | Dizzy spin, then grumpy |
 | Press and hold | A pat: leans into your hand, blissful |
 | Drag and drop | Startled grab, swings with your motion, lands with squash and dust; drop point = new home |
-| Flick away / right-click | Shoo: bows and backs off (3 shoos of one sender lowers that sender) |
+| Flick away / right-click | Shoo: tumbles backwards out of sight with a puff of dust (3 shoos of one sender lowers that sender) |
 | Double-click / ⌘⇧H | Command window sequence: rises, listens, thinks |
 | Type | Ducks after ~2 s, back ~8 s after you stop |
 | Join a call | Disappears; things queue until you're done |
 | ⌥⇧⌘H | Puts away what it's showing; with nothing showing, pauses for an hour; paused, comes back |
-| Menu bar ▸ Pause | 15 minutes, 1 hour or until tomorrow. Things queue and show when it ends |
+| Menu bar ▸ Pause | 15 minutes, 1 hour or until tomorrow: Hush pulls down a little blind with a "Do not disturb" sign, then goes; the menu bar shows a paused glyph. Things queue and show when it ends; the blind rolls up and it stretches |
 
 ### Antics (only when it's quiet)
 
@@ -92,7 +92,7 @@ Ignored too long, with Moods on (off by default): taps a foot (10 min) → cross
 | Rest the cursor on it 20 s | Falls asleep under your hand |
 | Drag a window past it | Flinches |
 | Music playing | Bobs along |
-| Charger in / battery under 20 % | Perks up / droopy and yawny |
+| Charger in / battery under 20 % | Perks up / droopy and yawny; energy saver (Low Power Mode or under 20 %): one big yawn, then a nightcap until it ends |
 | First unlock of the day, or back from a long break | Morning yawn and stretch |
 | Late at night | Yawns more |
 | Friday after 18:00 | A little dance, once |
@@ -108,7 +108,7 @@ Between moments: blinking, breathing, glancing around, small stretches, dozing a
 
 All cards are floating panels that **never cover Hush**: placed above it (14 pt gap, 16 pt headroom, room for its
 36 pt hover rise) and re-placed when it moves. They don't steal keyboard focus unless you type in them.
-Material background, 16 pt continuous corners, SF Symbols, system fonts, custom pill buttons (macOS's own prominent
+Material background (Liquid Glass on macOS 26 and later, ADR-030), 16 pt continuous corners, SF Symbols, system fonts, custom pill buttons (macOS's own prominent
 buttons render grey in these non-activating panels).
 
 ### 3.1 Envelope card ✅ (320 pt)
@@ -254,7 +254,21 @@ shows the same ledger.
 the only trace is a muted line in the menu bar panel ("New find: a little bird"). Found pieces stay wearable; unfound
 ones show as silhouettes with a vague hint.
 
-### 3.15 Pause and the hush key ✅ (ADR-022)
+### 3.15 What Hush holds up ✅ (ADR-030)
+Held states show what kind of thing is waiting, still poses after a short entrance: an agent needs you (knocks, then
+raises a hand), a risky request (worried, a card that says "Look carefully"), a run that stopped (shrugs over a
+smoking laptop), a meeting in 5 minutes (checks a pocket watch), a meeting now (holds a little door open, taps a foot
+now and then; ajar with warm light when you're late; one finger up when you snooze). Mail digest: walks in with a
+satchel sized by how much there is, tosses what could wait into a bin. Rule suggestions: glasses on, reading.
+
+### 3.16 The flag rail ✅ (ADR-030)
+Agent sessions waiting behind the one Hush holds stand as flags on the bottom edge, left of Hush, newest nearest,
+with the project name: finished (check), needs you (raised hand), look carefully (striped ribbon), stopped (smoke).
+At most 5, then a "+N more" bundle. Click a flag to open its card. A finished run that has to wait gets planted
+there by Hush itself; three finished runs in 15 minutes get a small cheer. Click-through except the flags; hidden
+with Hush; left out of screen shares.
+
+### 3.17 Pause and the hush key ✅ (ADR-022)
 Menu bar ▸ Pause: 15 minutes, 1 hour or until tomorrow; things queue and show when it ends. ⌥⇧⌘H puts away what Hush
 is showing, pauses it with nothing showing, and brings it back when paused. Energy saver in Low Power Mode or under
 20 % battery: calm, no idle fidgets, alerts still arrive.
@@ -294,7 +308,6 @@ Plan: [`docs/lanes-plan.md`](lanes-plan.md).
 
 - Mail: an Apple Mail extension that feeds the judging, rules and digest already built (ADR-027).
 - Quick answers and Summarise on Apple's on-device model; the other Claude features behind one opt-in switch.
-- The flag rail for finished agent runs, once its art lands (ADR-024).
 - More agents, once they can be tested.
 - A signed, notarised download. Until then, Hush is built from source.
 - Every wardrobe piece stays free and in this repo.

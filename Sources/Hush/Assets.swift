@@ -51,6 +51,16 @@ enum Assets {
             }
             rigs[body] = r
         }
+        // Swag the rig doesn't carry (v1 art): the nightcap and the three satchel sizes, keyed by their layer id.
+        var extras: [String: [String: String]] = [:]
+        for body in CharacterLook.bodies {
+            var e: [String: String] = [:]
+            for (id, file) in [("head-nightcap", "head/\(body)-nightcap"), ("prop-satchel-s", "carry/\(body)-satchel-s"),
+                               ("prop-satchel-m", "carry/\(body)-satchel-m"), ("prop-satchel-l", "carry/\(body)-satchel-l")] {
+                e[id] = try? String(contentsOf: character.appendingPathComponent("swag/\(file).svg"), encoding: .utf8)
+            }
+            extras[body] = e
+        }
         let animations = character.appendingPathComponent("animations")
         let payload: [String: Any] = [
             "poses": poses,
@@ -59,8 +69,19 @@ enum Assets {
             "commandFrames": try svgs(in: animations.appendingPathComponent("01-command-window")),
             "timing": try JSONSerialization.jsonObject(with: Data(contentsOf: animations.appendingPathComponent("timing.json"))),
             "palettes": try JSONSerialization.jsonObject(with: Data(contentsOf: character.appendingPathComponent("palettes.json"))),
+            "extras": extras,
+            // Edge props (blind, door, flag, bin), each with (0, 0) where it touches the screen edge.
+            "edge": (try? svgs(in: character.appendingPathComponent("edge"))) ?? [:],
         ]
         return String(decoding: try JSONSerialization.data(withJSONObject: payload), as: UTF8.self)
     }
 
+
+    /// A palette's accent colour (`#RRGGBB`), for art drawn outside the renderer (the flag rail).
+    static func accent(of palette: String) -> String? {
+        let url = root.appendingPathComponent("character/palettes.json")
+        guard let data = try? Data(contentsOf: url),
+              let all = try? JSONSerialization.jsonObject(with: data) as? [String: [String: String]] else { return nil }
+        return all[palette]?["accent"]
+    }
 }

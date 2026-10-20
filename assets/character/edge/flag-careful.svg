@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="-12 -104 66 108" width="132" height="216">
+<title>Hush edge — flag, careful</title>
+<desc>Anchor (0,0) = bottom of the stick, on the bottom screen edge. Units match the 160 x 146 character canvas.</desc>
+<g id="edge-flag-careful" stroke="#2D2A35" stroke-linecap="round" stroke-linejoin="round">
+<line x1="0" y1="0" x2="0" y2="-72" stroke-width="5.6"/><line x1="0" y1="0" x2="0" y2="-72" stroke="#FFFDF7" stroke-width="2.4"/>
+<path d="M1.6 -70 H50 L44 -61 L50 -52 H1.6 Z" fill="#FFFDF7" stroke-width="2.2"/>
+<circle cx="0" cy="-75" r="3.6" fill="#E8876A" stroke-width="2"/>
+<path d="M-1 -48 L-9 -36 L-5 -36.5 L-4 -32 L1.5 -45 Z M1 -48 L8 -37 L4.4 -37.6 L3 -33.4 L-1 -45 Z" fill="#E8876A" stroke-width="1.8"/>
+<rect x="-6" y="-50" width="12" height="7" rx="1.6" fill="#FFFDF7" stroke-width="2"/>
+<path d="M-4.6 -43.8 L-0.6 -49.4 M-0.4 -43.6 L3.6 -49.2 M3.8 -43.8 L5.4 -46" fill="none" stroke="#E8876A" stroke-width="2.2" stroke-linecap="butt"/>
+</g>
+<circle id="anchor" cx="0" cy="0" r="0.01" fill="none"/>
+</svg>
