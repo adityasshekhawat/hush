@@ -18,24 +18,12 @@ this file wins on behaviour and [`design-guide.md`](design-guide.md) wins on loo
 4. **Delight never interrupts.** Play happens only when you're idle and nothing real is waiting, and never counts
    toward the cap.
 5. **Scrutable and local.** Every decision is logged on your Mac. Nothing is sent anywhere on its own: only things
-   you ask for leave the Mac, and the table below says exactly which.
+   you ask for leave the Mac, and the README says exactly which.
 6. **A doorway, not a destination.** One question, one answer card (plus up to 3 follow-ups), then act in your app
    or continue in ChatGPT/Claude.
 7. **Light on the Mac.** Measured, not promised: see [`docs/performance.md`](performance.md).
 
 What leaves the Mac, and when: see the [README](../README.md#what-leaves-your-mac).
-
---- | --- | --- |
-| Press Return in Ask Hush (quick or code question) | Your question and the name of the app you were in. For a code question, Claude Code reads files in that repo, which you allowed first | Anthropic, through **your own** Claude Code login and usage |
-| Press Return when Hush isn't sure where a question should go (Smart routing, on by default, Settings ▸ Ask Hush) | Your question, your allowed repos' names, how many sessions are running, the app you're in | Anthropic, through your Claude Code login |
-| Click **Summarise** on a "While you were away" card | A short excerpt of that one session | Anthropic, through your Claude Code login |
-| Run a browser task (beta, off by default) | The task, and what Claude does in your browser | Anthropic, through Claude Code and the Claude browser extension |
-| Hand a question off ("open in ChatGPT / Claude / Perplexity") | The question, in the link that opens (from "hand it to Hush", only the instruction: you paste the text yourself) | The assistant you picked |
-
-**Stays on the Mac:** your calendar (read through macOS); the Claude Code and Codex hooks, which send Hush only the
-event, session id, folder, host app and terminal device; mail judging and its gist, and "hand it to Hush", which use
-Apple's on-device model when Apple Intelligence is on; transcripts for the digest (only if you turn it on); the
-clipboard, which Hush reads only when you click it to rework what you copied.
 
 Planned (ADR-021): quick answers and Summarise move to Apple's on-device model, and the remaining Claude features
 sit behind one switch that's off until you turn it on.
@@ -141,6 +129,7 @@ One text field above Hush with a live **route chip** showing Hush's plan as you 
 | ‹/› "ask about *repo*" | Repo | Read-only Claude Code run in an allowed repo; the card streams progress |
 | ↗ "open in ChatGPT / Claude / Perplexity" | Hand-off | Opens that assistant with the question pre-filled |
 | 🧭 "plan it for your browser" | Browser task (beta, opt-in) | A plan card first; after **Run it**, it works in your browser (see 3.8) |
+| ▸_ "check your sessions" | Sessions | "What's Claude doing?" answered on the Mac from hooks and transcripts, no model call. "Let me know when it finishes" watches one; "stop watching" stops |
 
 Tab or the chip's menu overrides the route. Routing runs in code (word rules, the app you're in, recent repo
 activity), not in a model.
@@ -234,6 +223,42 @@ tools run, which addresses open; everything is logged on the Mac.
 Needs the Claude extension (claude.ai/chrome) signed in with the same account as Claude Code. Claude Code connects
 it to Chrome, Arc, Brave and Edge itself; for Comet, Hush adds the missing connection file when you press Run it.
 
+### 3.9 Meeting card ✅ (ADR-025)
+5 minutes before: a gentle envelope with the title, who's coming and one line about what the meeting is for, written
+on this Mac from the notes. A minute before, Hush hurries up with a clock and waits. With a call link, one click on
+Hush joins; **1 more min** snoozes; your mic turning on puts it away. Up to 5 minutes after the start it reads
+"running late".
+
+### 3.10 Hand it to Hush ✅ (ADR-019)
+After a copy, Hush's cheeks are full. Click it: a small card offers **Simpler** · **Shorter** · **Bullets**. Hush chews
+(on this Mac, Apple's on-device model), then hands the result back on the clipboard; ⌘V blows the cheeks out.
+**Original** puts your text back. Asks once before reading what you copied; code is left alone.
+
+### 3.11 What Hush saw ✅ (ADR-026)
+Menu bar ▸ What I saw: every item Hush looked at in the last 7 days, grouped by day, with what it did and why
+("Held back · can wait", "Shown · your rule"). Filter: All · Shown · Held back. Footer: "Stays on this Mac · kept for
+7 days", **Forget…** empties it. Logs titles, category, outcome and reasons; never snippets, notes or model inputs.
+
+### 3.12 What I've learned ✅ (420 pt)
+Every rule as a first-person sentence you can edit in place ("I tap the glass when boss@acme.com writes"); edits are
+parsed back in code. Forget leaves a 6 s Undo. **+ Add a rule**, and **Tell Hush what matters**: type it your way and
+Apple's on-device model proposes rules, each with its own **Add**. Rules also come from **Not this kind again** on a
+card and from shoos (3 shoos of one sender lowers it).
+
+### 3.13 Held-back cards ✅
+After 18:30, a tuck-in card: "You got 4 things from me today. I held back 63." Fridays: the week. The menu bar panel
+shows the same ledger.
+
+### 3.14 Rare finds ✅
+14 pieces Hush wears on its own, very rarely: at most one a day, never while you're busy or something waits. Silent;
+the only trace is a muted line in the menu bar panel ("New find: a little bird"). Found pieces stay wearable; unfound
+ones show as silhouettes with a vague hint.
+
+### 3.15 Pause and the hush key ✅ (ADR-022)
+Menu bar ▸ Pause: 15 minutes, 1 hour or until tomorrow; things queue and show when it ends. ⌥⇧⌘H puts away what Hush
+is showing, pauses it with nothing showing, and brings it back when paused. Energy saver in Low Power Mode or under
+20 % battery: calm, no idle fidgets, alerts still arrive.
+
 ---
 
 ## 4. What Hush pays attention to
@@ -254,8 +279,10 @@ it to Chrome, Arc, Brave and Edge itself; for Comet, Hush adds the missing conne
 | --- | --- | --- |
 | Quick answers | Haiku | Ask Hush quick lane |
 | Code questions | Sonnet | Ask Hush repo lane (read-only tools) |
+| Smart routing | Haiku | Where an unclear question goes (on by default; Settings ▸ Ask Hush) |
 | Digest summaries | Haiku | Summarise button |
 | Browser tasks | Sonnet | Plan + run (hidden from the Models menu for now) |
+| Hand it to Hush, meeting context line, rule suggestions | Apple's on-device model | On this Mac only, free |
 | Mail triage + gist | Apple's on-device model | Whether a mail is worth showing, and its one-line gist. On this Mac only, free; rules when Apple Intelligence is off (Settings ▸ Connections) |
 
 Aliases always point at the newest model of each tier, so upgrades arrive for free. The Claude lanes run on your
@@ -265,9 +292,10 @@ Plan: [`docs/lanes-plan.md`](lanes-plan.md).
 
 ## 6. Coming next ⏳
 
-- The v1 plan ([`docs/decisions.md`](decisions.md) ADR-021): agent watcher with a flag rail and one-click jump
-  to the right terminal, meetings with one-click join, first run, the "What Hush saw" journal, then mail.
+- Mail: an Apple Mail extension that feeds the judging, rules and digest already built (ADR-027).
 - Quick answers and Summarise on Apple's on-device model; the other Claude features behind one opt-in switch.
+- The flag rail for finished agent runs, once its art lands (ADR-024).
+- More agents, once they can be tested.
 - A signed, notarised download. Until then, Hush is built from source.
 - Every wardrobe piece stays free and in this repo.
 

@@ -22,6 +22,7 @@
 <p align="center">
   <a href="#install"><b>Install</b></a> &nbsp;·&nbsp;
   <a href="#what-hush-does"><b>What it does</b></a> &nbsp;·&nbsp;
+  <a href="#and-a-few-more-things"><b>More</b></a> &nbsp;·&nbsp;
   <a href="#things-to-try"><b>Things to try</b></a> &nbsp;·&nbsp;
   <a href="#what-leaves-your-mac"><b>Privacy</b></a> &nbsp;·&nbsp;
   <a href="#contributing"><b>Contribute</b></a> &nbsp;·&nbsp;
@@ -104,6 +105,31 @@ models you already use, so it gets more capable as they do. It is not another ch
   </tr>
 </table>
 
+### And a few more things
+
+- **What I saw.** Menu bar ▸ *What I saw* lists every item Hush looked at this week, what it did and why, in plain
+  words. It stays on your Mac for 7 days, and Forget empties it.
+- **Tell Hush what matters.** In *What I've learned*, type it your way ("tap the glass when boss@acme.com writes").
+  Apple's on-device model proposes rules and you add the ones you want. Every rule reads as a sentence you can edit,
+  and rules run in code. Flicking Hush away, or *Not this kind again* on a card, teaches it too.
+- **What are my agents doing?** Ask Hush "what's Claude doing?" and it answers from your sessions on this Mac, with no
+  model call. "Let me know when it finishes" keeps an eye on one for you.
+- **While you were away.** Come back after 10 minutes or more and Hush holds a quiet envelope listing what each Claude
+  Code session did: files changed, commands, commits. Open jumps to it, Summarise sums it up. Off until you turn it on.
+- **Answers go where you work.** A formula pastes into Excel, a command goes to Terminal, iTerm or Warp, notes save to
+  Notion or Obsidian, code questions continue in Cursor. Nothing is pasted or run for you: it copies and tells you
+  where.
+- **Follow-ups and history.** Up to 3 follow-ups on an answer, then carry on in your assistant. History stays on
+  your Mac until you forget it.
+- **Browser tasks (beta, off by default).** Ask for something done in your browser. You see the plan first, press
+  *Run it*, and it asks before anything that sends, buys, deletes or posts.
+- **The held-back count.** The menu bar shows today's and this week's count: "4 shown · 63 held back". After 18:30 a
+  tuck-in card says the same, and on Fridays you get the week.
+- **Rare finds.** Now and then Hush turns up wearing something you've never seen, at most once a day and never while
+  you're busy. Found pieces are yours to wear.
+- **Kind to your battery.** In Low Power Mode or on low battery, Hush moves less, and alerts still arrive. Paused, locked or in a call, it
+  runs nothing.
+
 <details>
 <summary><b>See it in the app</b></summary>
 
@@ -180,7 +206,7 @@ connection is optional, and you can skip setup at any time. If Hush quits, open 
 | Claude Code transcripts | Opt-in, read on your Mac for the "While you were away" digest |
 | Your focus | Microphone in use, full screen, typing, away |
 | Copy, paste, screenshots, power, audio | Only for play. No permissions needed |
-| Mail | Not yet. The judging is built and measured, but the Apple Mail extension that feeds it isn't done, so mail is only simulated for now |
+| Mail | Not yet. The judging is built and measured, but the Apple Mail extension that feeds it isn't done, so mail is only simulated for now (Settings ▸ Developer). When it lands: your VIPs and rules ("always tap the glass for mail about outage") come out right away, Apple's on-device model brings forward what looks like it needs you, gently, by sender and subject, and the rest waits for a digest at a natural break, like coming back from lunch |
 
 ## What leaves your Mac
 
