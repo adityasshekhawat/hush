@@ -11,7 +11,7 @@ import { Caption, Edge, Key, Logo, Win } from "./lib/ui";
 // Mac (scripts/app-icons.swift), shown as the apps Hush works with.
 
 type K = { W: number; H: number; u: number; floor: number; cx: number; hs: number; tall: boolean; wide: boolean; px: number };
-type HushState = Look & { dy?: number; opacity?: number; floorY?: number; scaleX?: number };
+type HushState = Look & { dx?: number; dy?: number; rot?: number; opacity?: number; floorY?: number };
 type Scene = { id: string; dur: number; bg: string; floor: string; light?: boolean;
                caps: { at: [number, number]; lines: [string, string?] }[];
                draw: (t: number, k: K) => { node: React.ReactNode; hush: HushState } };
@@ -62,7 +62,7 @@ const agents: Scene = {
     const lines = ["> claude", "Reading the repo", "Editing src/app.ts", "Editing src/api.ts", "Running npm test", "  42 passing"];
     const winW = Math.min(560 * k.u, k.W / 2 - 210 * k.u), winH = 300 * k.u;
     const winY = k.floor - winH - 40 * k.u;
-    const cardW = Math.min(360 * k.u, k.W / 2 - 200 * k.u);
+    const cardW = Math.min(400 * k.u, k.W - 120 * k.u);
     const held = Math.min(UPDATES.length, Math.max(0, Math.floor((t - 60) / 13)));
     const flagScale = k.hs / 146;
     return {
@@ -77,21 +77,22 @@ const agents: Scene = {
             const at = 60 + i * 13;
             if (t < at) return null;
             const p = pop(t, at, 30, 14);
+            // Each lands on the stack above Hush, then gets tucked away up into the count.
             const gone = ease(t, at + 30, at + 44);
-            const x = k.W - cardW - 40 * k.u + gone * 80 * k.u, y = k.floor - k.hs - 300 * k.u + i * 6 * k.u - gone * 140 * k.u;
+            const x = k.cx - cardW / 2, y = k.floor - k.hs - 190 * k.u - i * 8 * k.u - gone * (k.floor - k.hs - 190 * k.u - (k.tall ? 360 : 230) * k.u);
             return <Card key={i} title={title} line={line} width={cardW} app={title.startsWith("Claude") ? "claude" : undefined}
                          style={{ left: x, top: y + (1 - p) * -120 * k.u, opacity: (1 - gone) * p, transform: `scale(${1 - gone * 0.6}) rotate(${(i % 3 - 1) * 2}deg)`, zIndex: 10 + i }} />;
           })}
           {t >= 60 && t < 175 && (
-            <div style={{ position: "absolute", right: 48 * k.u, top: k.floor - k.hs - 120 * k.u, textAlign: "right", fontFamily: DISPLAY, color: C.lilacInk,
-                          transform: `scale(${pop(t, 60)})`, transformOrigin: "100% 50%" }}>
-              <div style={{ fontWeight: 800, fontSize: 110 * k.u, lineHeight: 0.85, letterSpacing: "-0.05em" }}>{held}</div>
-              <div style={{ fontWeight: 700, fontSize: 30 * k.u }}>held back</div>
+            <div style={{ position: "absolute", left: 0, width: k.W, top: (k.tall ? 360 : 235) * k.u, textAlign: "center", fontFamily: DISPLAY, color: C.lilacInk,
+                          transform: `scale(${pop(t, 60)})`, opacity: 1 - ease(t, 165, 175) }}>
+              <span style={{ fontWeight: 800, fontSize: 96 * k.u, letterSpacing: "-0.05em" }}>{held}</span>
+              <span style={{ fontWeight: 700, fontSize: 34 * k.u, marginLeft: 14 * k.u }}>held back</span>
             </div>
           )}
           {t >= 172 && (
             <Card title="Claude needs you in api" line="Wants to run rm -rf build · look carefully" tone="careful" app="claude" width={Math.min(440 * k.u, k.W - 120 * k.u)}
-                  style={{ left: k.cx - Math.min(440 * k.u, k.W - 120 * k.u) / 2 + (k.wide ? 260 * k.u : 0), top: k.floor - k.hs - 190 * k.u - (1 - pop(t, 172, 30, 11)) * 200 * k.u, zIndex: 50 }} />
+                  style={{ left: k.cx - Math.min(440 * k.u, k.W - 120 * k.u) / 2, top: k.floor - k.hs - 190 * k.u - (1 - pop(t, 172, 30, 11)) * 200 * k.u, zIndex: 50 }} />
           )}
           {["web", "site", "docs"].map((name, j) => {
             const p = pop(t, 250 + j * 10, 30, 9);
@@ -111,7 +112,7 @@ const meeting: Scene = {
   caps: [{ at: [10, 135], lines: ["It gets you to meetings.", "A heads-up 5 minutes before, then it holds the door"] },
          { at: [148, 262], lines: ["One click joins.", "Then it gets out of the way"] }],
   draw: (t, k) => {
-    const cardW = Math.min(380 * k.u, k.W / 2 - 160 * k.u);
+    const cardW = Math.min(420 * k.u, k.W - 120 * k.u);
     const scale = k.hs / 146;
     const joinedAt = 205;
     return {
@@ -119,14 +120,14 @@ const meeting: Scene = {
         <>
           {t < 150 && (
             <Card title="Design review" line="In 5 minutes · Priya, Sam and 3 others" app="calendar" source="Calendar" width={cardW}
-                  style={{ left: k.W - cardW - 50 * k.u, top: k.floor - k.hs - 170 * k.u, opacity: pop(t, 20) * (1 - ease(t, 135, 150)),
+                  style={{ left: k.cx - cardW / 2, top: k.floor - k.hs - 150 * k.u, opacity: pop(t, 20) * (1 - ease(t, 135, 150)),
                            transform: `translateY(${(1 - pop(t, 20)) * -80 * k.u}px)` }} />
           )}
           {t >= 130 && t < joinedAt + 10 && <Edge name={t > 190 ? "door-ajar" : "door-open"} x={k.cx - 150 * k.u} y={k.floor} scale={scale * 1.15}
                                                    style={{ opacity: pop(t, 130) * (1 - ease(t, joinedAt, joinedAt + 10)) }} />}
           {t >= 150 && t < joinedAt + 12 && (
             <Card title="Design review · starting now" line="Join with one click" app="zoom" source="Calendar · Zoom link" width={cardW}
-                  style={{ left: k.W - cardW - 50 * k.u, top: k.floor - k.hs - 170 * k.u, opacity: pop(t, 150) * (1 - ease(t, joinedAt, joinedAt + 12)) }}>
+                  style={{ left: k.cx - cardW / 2, top: k.floor - k.hs - 190 * k.u, opacity: pop(t, 150) * (1 - ease(t, joinedAt, joinedAt + 12)) }}>
               <div style={{ marginTop: 10 * k.u, display: "inline-flex", alignItems: "center", gap: 8 * k.u, padding: `${6 * k.u}px ${14 * k.u}px`, borderRadius: 16 * k.u,
                             background: t > 192 && t < 198 ? C.lilacInk : C.ink, color: C.cream, fontFamily: MAC, fontWeight: 600, fontSize: 14 * k.u }}>
                 <Logo app="zoom" size={18 * k.u} /> Join
@@ -293,42 +294,76 @@ const focus: Scene = {
   },
 };
 
+/** The pointer: an arrow, a closed hand while dragging, an open hand for a pat. */
+const Pointer: React.FC<{ x: number; y: number; mode: "arrow" | "grab" | "pat"; u: number }> = ({ x, y, mode, u }) => mode === "arrow" ? (
+  <svg width={34 * u} height={48 * u} viewBox="0 0 17 24" style={{ position: "absolute", left: x, top: y, zIndex: 400, overflow: "visible" }}>
+    <path d="M1 1 L1 19 L5.5 14.8 L8.6 22 L11.6 20.7 L8.6 13.6 L14.6 13.6 Z" fill="#111" stroke="#fff" strokeWidth={1.4} strokeLinejoin="round" />
+  </svg>
+) : (
+  <div style={{ position: "absolute", left: x - 26 * u, top: y - 30 * u, fontSize: 54 * u, zIndex: 400, filter: "drop-shadow(0 2px 2px rgba(0,0,0,.25))" }}>
+    {mode === "grab" ? "✊" : "🖐️"}
+  </div>
+);
+
 const play: Scene = {
-  id: "play", dur: 240, bg: "#F9E8E6", floor: C.oat,
-  caps: [{ at: [8, 150], lines: ["And plays when you're idle.", "It perches on your windows, bobs to your music"] },
-         { at: [160, 232], lines: ["Pat it. It leans in.", "Play never interrupts you"] }],
+  id: "play", dur: 420, bg: "#F9E8E6", floor: C.oat,
+  caps: [{ at: [8, 140], lines: ["Drag it anywhere.", "Drop it on a window and it perches there"] },
+         { at: [150, 292], lines: ["Fling it around,", "and it gets dizzy"] },
+         { at: [302, 412], lines: ["It plays when you're idle.", "Bobs to your music, leans into a pat. Play never interrupts you"] }],
   draw: (t, k) => {
-    const winW = Math.min(560 * k.u, k.W - 120 * k.u), winH = 260 * k.u;
-    const winTop = k.floor - winH - 30 * k.u;
+    const winW = Math.min(500 * k.u, k.W * 0.44), winH = 230 * k.u;
+    const winX = k.wide ? k.cx - 120 * k.u - winW : k.cx - winW / 2;
+    const winTop = k.floor - (k.tall ? 560 : 390) * k.u;
+    const perchDx = winX + winW / 2 - k.cx;
+    const head = k.hs * 0.86;                  // from Hush's feet to where the hand holds it
+    const c = (v: number) => ({ extrapolateLeft: "clamp" as const, extrapolateRight: "clamp" as const, easing: Easing.inOut(Easing.sin) });
+    // Where Hush is (offset from the middle, and its feet), frame by frame.
+    let dx = 0, feet = k.floor, pose = "stand", expr = "auto", rot = 0, ptr: "arrow" | "grab" | "pat" | null = null;
+    if (t < 14) { expr = "alert"; ptr = "arrow"; }
+    else if (t < 22) { pose = "grab"; expr = "surprised"; feet = k.floor - ease(t, 14, 22) * 40 * k.u; ptr = "grab"; }
+    else if (t < 70) {
+      const q = ease(t, 22, 70);
+      dx = q * perchDx; feet = interpolate(q, [0, 0.5, 1], [k.floor - 40 * k.u, winTop - 160 * k.u, winTop - 30 * k.u]);
+      pose = "swing"; expr = "squint"; rot = Math.sin(q * Math.PI) * (perchDx < 0 ? 14 : -14); ptr = "grab";
+    } else if (t < 76) { dx = perchDx; feet = winTop; pose = "land"; expr = "squint"; }
+    else if (t < 140) { dx = perchDx; feet = winTop; pose = alt(t, 14, "perch", "perch2"); expr = "happy"; ptr = t > 128 ? "arrow" : null; }
+    else if (t < 156) { dx = perchDx; feet = winTop - ease(t, 146, 156) * 30 * k.u; pose = "grab"; expr = "surprised"; ptr = "grab"; }
+    else if (t < 228) {
+      // a fast zigzag across the screen
+      const q = (t - 156) / 72;
+      const span = Math.min(k.W * 0.34, 520 * k.u);
+      dx = interpolate(q, [0, 1], [perchDx, 0]) + Math.sin(q * Math.PI * 5) * span * (1 - q * 0.6);
+      feet = interpolate(q, [0, 1], [winTop - 30 * k.u, k.floor - 60 * k.u]) - Math.abs(Math.sin(q * Math.PI * 4)) * 160 * k.u;
+      pose = "swing"; expr = "squint"; rot = Math.cos(q * Math.PI * 5) * 26; ptr = "grab";
+    } else if (t < 238) { feet = k.floor; pose = "land"; expr = "squint"; }
+    else if (t < 276) { pose = "dizzy"; expr = "dizzy"; rot = Math.sin((t - 238) / 3) * 8; }
+    else if (t < 290) { pose = "shake"; expr = "squint"; }
+    else if (t < 310) { pose = "stand"; expr = "apologetic"; }
+    else if (t < 362) { pose = "bob"; expr = "happy"; }
+    else { pose = "pat"; expr = "blissful"; ptr = "pat"; }
+    const px = k.cx + dx, py = feet - head;
+    const arrowAt = t < 14 ? { x: interpolate(t, [0, 14], [k.cx + 360 * k.u, px], c(0)), y: interpolate(t, [0, 14], [py - 120 * k.u, py], c(0)) }
+      : t >= 128 && t < 140 ? { x: interpolate(t, [128, 140], [px + 220 * k.u, px], c(0)), y: interpolate(t, [128, 140], [py + 80 * k.u, py], c(0)) } : { x: px, y: py };
     return {
       node: (
         <>
-          <Win x={k.cx - winW / 2} y={winTop} w={winW} h={winH} app="safari" title="Safari" u={k.u}
-               style={{ opacity: 1 - ease(t, 100, 112) }}>
+          <Win x={winX} y={winTop} w={winW} h={winH} app="safari" title="Safari" u={k.u}>
             <div style={{ padding: 20 * k.u }}>
               {[0.8, 0.6, 0.7, 0.5].map((w, i) => <div key={i} style={{ height: 14 * k.u, width: `${w * 100}%`, borderRadius: 7 * k.u, background: "#EEEBF2", marginBottom: 16 * k.u }} />)}
             </div>
           </Win>
-          {t >= 118 && t < 170 && (
-            <div style={{ position: "absolute", left: k.cx + 130 * k.u, top: k.floor - k.hs - 40 * k.u, display: "flex", alignItems: "center", gap: 12 * k.u }}>
-              <Logo app="music" size={70 * k.u} style={{ transform: `scale(${pop(t, 118)})` }} />
+          {t >= 310 && t < 362 && (
+            <div style={{ position: "absolute", left: k.cx + 140 * k.u, top: k.floor - k.hs - 30 * k.u, display: "flex", alignItems: "center", gap: 12 * k.u }}>
+              <Logo app="music" size={70 * k.u} style={{ transform: `scale(${pop(t, 310)})` }} />
               {[0, 1, 2].map((i) => <span key={i} style={{ fontSize: 44 * k.u, color: C.lilacInk, transform: `translateY(${Math.sin((t + i * 8) / 5) * 10 * k.u}px)` }}>♪</span>)}
             </div>
           )}
-          {t >= 170 && (
-            <div style={{ position: "absolute", left: k.cx + 30 * k.u, top: k.floor - k.hs * 0.95 + Math.sin(t / 4) * 4 * k.u, fontSize: 64 * k.u }}>👋</div>
-          )}
+          {ptr === "arrow" && <Pointer x={arrowAt.x} y={arrowAt.y} mode="arrow" u={k.u} />}
+          {ptr === "grab" && <Pointer x={px} y={py} mode="grab" u={k.u} />}
+          {ptr === "pat" && <Pointer x={k.cx + 10 * k.u} y={k.floor - k.hs * 0.95 + Math.sin(t / 3) * 6 * k.u} mode="pat" u={k.u} />}
         </>
       ),
-      hush: (() => {
-        const perchY = winTop;
-        if (t < 18) return { pose: "crouch", floorY: k.floor };
-        if (t < 30) return { pose: "cheer", floorY: interpolate(t, [18, 30], [k.floor, perchY - 40 * k.u]) };
-        if (t < 100) return { pose: alt(t, 14, "perch", "perch2"), floorY: perchY };
-        if (t < 116) return { pose: "hop", floorY: interpolate(t, [100, 116], [perchY, k.floor], { easing: Easing.in(Easing.quad) }) };
-        if (t < 170) return { pose: "bob", expr: "happy", dy: Math.abs(Math.sin(t / 4)) * -10 * k.u };
-        return { pose: "pat", expr: "blissful" };
-      })(),
+      hush: { pose, expr, dx, floorY: feet, rot, dy: pose === "bob" ? Math.abs(Math.sin(t / 4)) * -10 * k.u : 0 },
     };
   },
 };
@@ -337,14 +372,14 @@ const mail: Scene = {
   id: "mail", dur: 160, bg: "#FAF2D9", floor: C.oat,
   caps: [{ at: [8, 152], lines: ["Mail is next.", "A digest at natural breaks, never a ping per mail"] }],
   draw: (t, k) => {
-    const cardW = Math.min(400 * k.u, k.W / 2 - 160 * k.u);
+    const cardW = Math.min(420 * k.u, k.W - 120 * k.u);
     return {
       node: (
         <>
           {t >= 60 && <Edge name="bin-full" label="12" x={k.cx - 200 * k.u} y={k.floor} scale={(k.hs / 146) * 1.2} style={{ transform: `scale(${pop(t, 60)})`, transformOrigin: "50% 100%" }} />}
           {t >= 95 && (
             <Card title="14 mails while you were busy" line="2 might need you · 12 could wait" app="mail" source="Mail · held back" width={cardW}
-                  style={{ left: k.W - cardW - 50 * k.u, top: k.floor - k.hs - 170 * k.u, transform: `scale(${pop(t, 95)})` }}>
+                  style={{ left: k.cx - cardW / 2, top: k.floor - k.hs - 190 * k.u, transform: `scale(${pop(t, 95)})` }}>
               <span style={{ display: "inline-block", marginTop: 10 * k.u, padding: `${4 * k.u}px ${10 * k.u}px`, borderRadius: 10 * k.u, background: C.coral,
                              color: C.ink, fontFamily: BODY, fontWeight: 800, fontSize: 12 * k.u, letterSpacing: ".08em" }}>COMING SOON</span>
             </Card>
@@ -361,7 +396,7 @@ const evening: Scene = {
   caps: [{ at: [8, 110], lines: ["At the end of the day,", "it tells you what it spared you"] },
          { at: [118, 204], lines: ["You got 4 things from me today.", "I held back 63."] }],
   draw: (t, k) => {
-    const cardW = Math.min(340 * k.u, k.W / 2 - 150 * k.u);
+    const cardW = Math.min(380 * k.u, k.W - 120 * k.u);
     return {
       node: (
         <>
@@ -370,7 +405,7 @@ const evening: Scene = {
                                   borderRadius: 2 * k.u, background: C.cream, opacity: 0.3 + 0.5 * Math.abs(Math.sin((t + i * 13) / 17)) }} />
           ))}
           {t >= 30 && (
-            <div style={{ position: "absolute", left: k.W - cardW - 50 * k.u, top: k.floor - k.hs - 150 * k.u, width: cardW, padding: 18 * k.u, borderRadius: 16 * k.u,
+            <div style={{ position: "absolute", left: k.cx - cardW / 2, top: k.floor - k.hs - 190 * k.u, width: cardW, padding: 18 * k.u, borderRadius: 16 * k.u,
                           background: C.paper, fontFamily: MAC, boxSizing: "border-box", transform: `scale(${pop(t, 30)})`, boxShadow: `0 ${12 * k.u}px ${32 * k.u}px rgba(0,0,0,.35)` }}>
               <div style={{ fontSize: 14 * k.u, color: "#8B8594" }}>☾ Tonight</div>
               <div style={{ display: "flex", alignItems: "baseline", gap: 10 * k.u, margin: `${8 * k.u}px 0` }}>
@@ -492,8 +527,8 @@ export const Day: React.FC = () => {
             </div>
           ))}
         </div>
-        <Hush x={k.cx} floor={hushState.floorY ?? k.floor} size={k.hs} {...hushState}
-              style={{ opacity: hushState.opacity ?? 1, transform: `translateY(${hushState.dy ?? 0}px)`, zIndex: 200 }} />
+        <Hush x={k.cx + (hushState.dx ?? 0)} floor={hushState.floorY ?? k.floor} size={k.hs} {...hushState}
+              style={{ opacity: hushState.opacity ?? 1, transform: `translateY(${hushState.dy ?? 0}px) rotate(${hushState.rot ?? 0}deg)`, zIndex: 200 }} />
         {!walking && SCENES[i].caps.map((c, j) => (
           <Caption key={`${i}-${j}`} lines={c.lines} from={starts[i] + c.at[0]} to={starts[i] + c.at[1]} u={u} top={capTop} light={light} />
         ))}
