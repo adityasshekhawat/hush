@@ -1,5 +1,5 @@
 import React from "react";
-import { AbsoluteFill, Easing, interpolate, random, spring, useCurrentFrame, useVideoConfig } from "remotion";
+import { AbsoluteFill, Easing, interpolate, interpolateColors, random, spring, useCurrentFrame, useVideoConfig } from "remotion";
 import { BODY, C, DISPLAY, Fonts, MAC } from "./lib/brand";
 import { Card } from "./lib/Card";
 import { Hush, Look } from "./lib/Hush";
@@ -452,7 +452,8 @@ const Crowd: React.FC<{ k: K; p: number; waving: boolean; t: number }> = ({ k, p
     const cols = Math.ceil(k.W / spacing) + 3;
     for (let c = -Math.floor(cols / 2); c <= Math.floor(cols / 2); c++) {
       const i = r * 100 + c + 50, hero = r === heroR && c === 0;
-      const x = k.cx + c * spacing + (r % 2 ? spacing / 2 : 0) * (hero ? 0 : 1);
+      // Rows alternate by half a step, except the hero's own, so it stands evenly between its neighbours.
+      const x = k.cx + c * spacing + ((r - heroR) % 2 ? spacing / 2 : 0);
       const look: Look = hero ? { palette: "lilac", shape: "blob" } : {
         shape: pickOf(["blob", "bean", "square"], `b${i}`), palette: pickOf(PAL, `p${i}`),
         topper: random(`tp${i}`) < 0.6 ? "leaf" : pickOf(["antenna", "ears", "none"], `tq${i}`),
@@ -504,9 +505,10 @@ export const Day: React.FC = () => {
   const inDrone = frame < DRONE + 12, inOutro = frame >= END_SCENES - 6;
 
   // Background: one long gradient through every scene's colour, so the walk between them is a blend.
-  const band = (j: number, a: number) => `${((j + a) / SCENES.length) * 100}%`;
-  const stops = SCENES.map((s, j) => `${s.bg} ${band(j, 0.12)}, ${s.bg} ${band(j, 0.88)}`).join(", ");
-  const floors = SCENES.map((s, j) => `${s.floor} ${band(j, 0.12)}, ${s.floor} ${band(j, 0.88)}`).join(", ");
+  // The colour follows the camera: solid while a scene plays, blending into the next only while Hush walks there.
+  const next = SCENES[Math.min(i + 1, SCENES.length - 1)];
+  const bgNow = interpolateColors(w, [0, 1], [SCENES[i].bg, next.bg]);
+  const floorNow = interpolateColors(w, [0, 1], [SCENES[i].floor, next.floor]);
   const light = SCENES[i].light && !walking;
 
   const droneP = ease(frame, 120, DRONE);
@@ -519,8 +521,8 @@ export const Day: React.FC = () => {
       <Fonts />
       {/* the desktop Hush walks along */}
       <AbsoluteFill style={{ opacity: worldIn * worldOut }}>
-        <div style={{ position: "absolute", left: -camX, top: 0, width: W * SCENES.length, height: H, background: `linear-gradient(90deg, ${stops})` }}>
-          <div style={{ position: "absolute", left: 0, top: k.floor, width: "100%", height: H - k.floor, background: `linear-gradient(90deg, ${floors})` }} />
+        <div style={{ position: "absolute", left: -camX, top: 0, width: W * SCENES.length, height: H, background: bgNow }}>
+          <div style={{ position: "absolute", left: 0, top: k.floor, width: "100%", height: H - k.floor, background: floorNow }} />
           {SCENES.map((s, j) => Math.abs(j - (i + w)) < 1.2 && (
             <div key={s.id} style={{ position: "absolute", left: j * W, top: 0, width: W, height: H }}>
               {s.draw(j === i ? Math.min(t, s.dur) : j < i ? s.dur : 0, k).node}
