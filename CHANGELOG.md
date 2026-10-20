@@ -5,6 +5,9 @@ Hush is pre-alpha and built from source. Notable changes, newest first. Decision
 
 ## Unreleased
 
+- **A day with Hush:** a 96-second animated film on the website, made with Remotion from Hush's own art (a drone shot over
+  a crowd of Hushes, then one Hush through its day). The recorded tour stays one click below it.
+
 - **A tour video on the website:** under 3 minutes, recorded from the app itself (Hush draws every frame, so no real
   window, tab or desktop is in it). Agent sessions, meetings and mail are simulated; Hand it to Hush and Ask Hush ran
   for real. The landing page deploys from `site/` again.
