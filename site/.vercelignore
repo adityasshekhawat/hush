@@ -1,0 +1,5 @@
+# Never upload credentials or local config (vercel link writes a token to .env.local).
+.env*
+.vercel
+.gitignore
+.vercelignore
