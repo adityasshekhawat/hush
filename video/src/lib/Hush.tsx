@@ -21,8 +21,11 @@ export const Hush: React.FC<Look & { x: number; floor: number; size: number; sty
 }) => {
   const markup = window.Hush.svg({ palette: "lilac", ...look });
   const w = (size * 160) / 146;
-  // Standing poses touch the floor at y = 138 of the 146-unit canvas.
-  const top = floor - (size * 138) / 146;
+  // Standing poses touch the floor at y = 138 of the 146-unit canvas; edge poses (peek, hide, the blind) at 112;
+  // perches sit on the window's top edge at 116.
+  const edge = /^(peek|hide|dive|pullBlind|hangSign|tumble|tumbleGone)$/.test(look.pose ?? "");
+  const perch = /^(perch|perch2|perchDoze)$/.test(look.pose ?? "");
+  const top = floor - (size * (edge ? 112 : perch ? 116 : 138)) / 146;
   return (
     <div style={{ position: "absolute", left: x - w / 2, top, width: w, height: size, lineHeight: 0, transformOrigin: "50% 95%", ...style }}
          dangerouslySetInnerHTML={{ __html: markup.replace("<svg", '<svg width="100%" height="100%" style="overflow:visible"') }} />
