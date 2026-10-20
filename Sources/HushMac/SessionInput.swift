@@ -15,6 +15,7 @@ public enum SessionInput {
     @MainActor
     @discardableResult
     public static func focus(bundleID: String?, tty: String?) -> Bool {
+        DiagnosticsLog.write("session focus: open \(bundleID ?? "no app") \(tty ?? "no tty")")
         if let src = TerminalScript.focusSource(bundleID: bundleID, tty: tty) {
             var error: NSDictionary?
             let out = NSAppleScript(source: src)?.executeAndReturnError(&error)
@@ -24,8 +25,25 @@ public enum SessionInput {
             }
             DiagnosticsLog.write("session focus: \(error.map { "script failed (\($0[NSAppleScript.errorNumber] as? Int ?? 0))" } ?? "tab not found"); app instead")
         }
-        guard let id = bundleID, let app = NSRunningApplication.runningApplications(withBundleIdentifier: id).first else { return false }
-        app.activate()
+        return bringForward(bundleID)
+    }
+
+    /// Bring an app to the front from Hush, which is never the active app (its cards don't take focus). Since macOS
+    /// 14, `NSRunningApplication.activate()` from a background app is ignored, so ask Launch Services to open it with
+    /// activation, which it honours for an action you just clicked.
+    @MainActor
+    @discardableResult
+    public static func bringForward(_ bundleID: String?) -> Bool {
+        guard let id = bundleID, let url = NSWorkspace.shared.urlForApplication(withBundleIdentifier: id) else {
+            DiagnosticsLog.write("session focus: no app to bring forward")
+            return false
+        }
+        let config = NSWorkspace.OpenConfiguration()
+        config.activates = true
+        NSWorkspace.shared.openApplication(at: url, configuration: config) { app, error in
+            let line = error.map { "session focus: couldn't bring \(id) forward (\($0.localizedDescription))" } ?? "session focus: \(id) forward"
+            Task { @MainActor in DiagnosticsLog.write(line) }
+        }
         return true
     }
 
@@ -50,7 +68,7 @@ public enum SessionInput {
         PlaySensors.ownCopyChangeCount = NSPasteboard.general.changeCount
         let name = bundleID.flatMap { NSWorkspace.shared.urlForApplication(withBundleIdentifier: $0) }
             .map { FileManager.default.displayName(atPath: $0.path).replacingOccurrences(of: ".app", with: "") } ?? "the terminal"
-        if let id = bundleID, let app = NSRunningApplication.runningApplications(withBundleIdentifier: id).first { app.activate() }
+        bringForward(bundleID)
         DiagnosticsLog.write("session input: copied for \(name)")
         return .copied(app: name)
     }

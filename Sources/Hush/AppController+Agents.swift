@@ -7,6 +7,8 @@ import SwiftUI
 extension AppController {
     func agentEvent(_ e: AgentSessionEvent) {
         if let app = e.app { sessionApps[e.sessionID] = app }
+        // Kept after the session ends, so Open on its card still finds the tab (the tracker forgets it on SessionEnd).
+        if let tty = e.tty { sessionTTYs[e.sessionID] = tty }
         let front = NSWorkspace.shared.frontmostApplication?.bundleIdentifier
         // Scrutable: which agent said what (not every tool call; those are frequent).
         if e.kind != .tool {

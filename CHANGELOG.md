@@ -5,6 +5,10 @@ Hush is pre-alpha and built from source. Notable changes, newest first. Decision
 
 ## Unreleased
 
+- **Open works again:** clicking Open on a card when a Claude session finishes or needs you brings that session forward,
+  in Terminal or iTerm on its exact tab, or in the app it runs in (including the Claude app). It also works after the
+  session has ended.
+
 - **Fixes:** times on cards follow your Mac's clock format (an evening meeting no longer reads as morning); model-written
   lines never contain dashes; the mail digest card no longer repeats its title; the Hand it to Hush card fits all three
   verbs. The README shows each feature recorded from the app.

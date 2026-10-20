@@ -13,6 +13,7 @@ final class DigestController: ObservableObject {
         var submit: (InboxItem) -> Void
         /// Bundle id of the app a session runs in, if Hush has seen it through the hooks.
         var hostApp: (String) -> String?
+        var hostTTY: (String) -> String? = { _ in nil }
         var react: (Reaction) -> Void
     }
 
@@ -118,10 +119,8 @@ final class DigestController: ObservableObject {
 
     func open(_ d: SessionDigest) {
         let id = host.hostApp(d.sessionID) ?? "com.apple.Terminal"
-        if let app = NSRunningApplication.runningApplications(withBundleIdentifier: id).first { app.activate() }
-        else if let url = NSWorkspace.shared.urlForApplication(withBundleIdentifier: id) {
-            NSWorkspace.shared.openApplication(at: url, configuration: NSWorkspace.OpenConfiguration())
-        }
+        // The exact tab when Hush knows it, otherwise the app, in a way macOS allows from a background app.
+        SessionInput.focus(bundleID: id, tty: host.hostTTY(d.sessionID))
     }
 
     /// The only network step: a short, capped excerpt of one session to the summarise lane's model (Haiku by default) for a 2–3 sentence summary.

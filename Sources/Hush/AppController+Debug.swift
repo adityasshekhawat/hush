@@ -166,6 +166,10 @@ extension AppController {
                 let n = (try? await engine.forgetDemoData()) ?? 0
                 DiagnosticsLog.write("debug: removed \(n) simulated item(s) from the log")
             }
+        case ("focus", let spec):
+            // focus:<bundle id>|<tty>: what "Open" on an agent card does.
+            let parts = spec.split(separator: "|", maxSplits: 1).map(String.init)
+            SessionInput.focus(bundleID: parts.first, tty: parts.count > 1 ? parts[1] : nil)
         case ("bubbles", _):
             // Put away any speech bubble (between recordings).
             bubble.hide()

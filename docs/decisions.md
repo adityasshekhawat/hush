@@ -510,3 +510,13 @@ It can't be finished or verified unattended. Until then the Developer menu's sim
 - Found while reviewing frames and fixed: card times were 12-hour without AM/PM (21:07 showed "09:07"; now the
   locale's short time), model text could contain an em dash (cleaned to a comma), the digest card repeated its title,
   and the Hand it to Hush card clipped "Bullets".
+
+## ADR-029 · Open brings the session forward through Launch Services (2026-10-20)
+- **Problem:** Open on an agent card did nothing. Hush is never the active app (its cards don't take focus), and since
+  macOS 14 `NSRunningApplication.activate()` from a background app is ignored. The tracker also dropped a session's tty
+  at SessionEnd, so a "finished" card had nowhere to go.
+- **Decision:** `SessionInput.focus` tries the exact Terminal/iTerm tab by tty first (AppleScript, may ask for
+  Automation once), then `SessionInput.bringForward`, which opens the host app through `NSWorkspace.openApplication`
+  with `activates = true`. `AppController.sessionTTYs` keeps the tty after a session ends, for the envelope and digest.
+  Every attempt is logged (`session focus:`). Debug hook `focus:<bundle>|<tty>`.
+- **Verified:** from Finder, Open brought the Claude app forward, and Terminal forward on tab `/dev/ttys000`.

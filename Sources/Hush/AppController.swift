@@ -73,6 +73,8 @@ final class AppController {
     var digest: DigestController!
     /// Which app each Claude Code session ran in (from the hooks), for the digest's Open button.
     var sessionApps: [String: String] = [:]
+    /// Which terminal device each session ran on, kept after it ends (Open on its card).
+    var sessionTTYs: [String: String] = [:]
     /// The app you were in when you opened the command box (context for the answer).
     var lastCommandApp: String?
     var hotKey: GlobalHotKey?
@@ -216,10 +218,7 @@ final class AppController {
             asked: { [weak self] in self?.rare?.asked() },
             liveSessions: { [weak self] in self?.agentSessions.sessions ?? [:] },
             transcriptsAllowed: { [weak self] in self?.digest?.enabled ?? false },
-            openApp: { id in
-                guard let id, let app = NSRunningApplication.runningApplications(withBundleIdentifier: id).first else { return }
-                app.activate()
-            },
+            openApp: { id in SessionInput.bringForward(id) },
             summarise: { [weak self] d in self?.digest?.summarise(d) },
             watched: { [weak self] in self?.agentSessions.watched ?? [] },
             setWatch: { [weak self] id, on in
@@ -243,6 +242,7 @@ final class AppController {
             anchor: { [weak self] in self?.cardAvoidRect() ?? .zero },
             submit: { [weak self] item in self?.submit(item, preset: .gentle) },
             hostApp: { [weak self] id in self?.sessionApps[id] },
+            hostTTY: { [weak self] id in self?.sessionTTYs[id] },
             react: { [weak self] r in self?.renderer.react(r) }))
         digest.onSummary = { [weak self] id, text in
             guard let m = self?.ask.card.model else { return }

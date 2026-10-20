@@ -117,7 +117,8 @@ extension AppController {
                     self?.ask.reopen()
                 } else if a.item.kind == .agent, let id = a.item.sourceApp {
                     // The exact Terminal or iTerm tab when Hush knows it, otherwise the app (ADR-024).
-                    let tty = AgentSessionTracker.sessionID(ofItem: a.item.id).flatMap { self?.agentSessions.sessions[$0]?.tty }
+                    let sid = AgentSessionTracker.sessionID(ofItem: a.item.id)
+                    let tty = sid.flatMap { self?.agentSessions.sessions[$0]?.tty ?? self?.sessionTTYs[$0] }
                     SessionInput.focus(bundleID: id, tty: tty)
                 } else if let url = a.item.openURL { NSWorkspace.shared.open(url) }
                 else if a.item.kind == .meeting { NSWorkspace.shared.open(URL(fileURLWithPath: "/System/Applications/Calendar.app")) }
