@@ -3,7 +3,9 @@
 Hush is pre-alpha and built from source. Notable changes, newest first. Decisions behind them are in
 [`docs/decisions.md`](docs/decisions.md).
 
-## Unreleased
+## 0.1.0 (2026-10-21)
+
+The first public version. Pre-alpha, built from source.
 
 - **Builds on the macOS 26 SDKs again** (Command Line Tools 26.x failed on a renamed Apple Intelligence option), and
   CI now builds and tests on Xcode 16 and Xcode 26. **Updating** is in the README and on the website: `git pull`, then
