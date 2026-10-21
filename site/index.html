@@ -301,6 +301,7 @@
       <details><summary>What does it read?</summary><p>Your calendar, whether you're typing or on a call, and your Claude Code and Codex sessions, all on your Mac. The agent hooks send Hush only the event, session id, folder, host app and terminal device. <a data-link="privacy">What leaves your Mac</a></p></details>
       <details><summary>Does it cost anything?</summary><p>Hush is free and open source. Ask Hush runs on your own Claude Code login, so answers count toward your Claude usage. History on your Mac shows what each one cost.</p></details>
       <details><summary>Will it show up when I share my screen?</summary><p>Not by default. Hush's windows are left out of screen shares, recordings and screenshots. It starts that way, and a switch in the menu bar panel lets you show it when you want it in a screenshot.</p></details>
+      <details><summary>Does this website track me?</summary><p>It counts visits with Vercel Web Analytics: which page, where you came from, your country, browser and device type. No cookies, nothing that identifies you, and nothing is shared with advertisers. Hush the app has no analytics at all.</p></details>
       <details><summary>Will it do things without asking?</summary><p>No. Nothing is pasted, sent or run in another app on its own. Browser tasks are a beta you turn on, and they're told to ask before sending, buying or deleting.</p></details>
       <details><summary>How do I install it?</summary><p>There's no signed download yet, so you build it from source: clone the repo and run <code>./scripts/bundle.sh</code>. You need macOS 15 or later and Xcode or the Command Line Tools.</p></details>
       <details><summary>How do I get updates?</summary><p>Hush can tell you: choose Check for updates… in its menu bar panel, or say yes when it asks to check once a day. Click Update and Terminal pulls and rebuilds it in front of you. Or by hand: in the folder you cloned, run <code>git pull</code>, then <code>./scripts/bundle.sh</code> again. It rebuilds Hush and swaps it in place, and your Hush, wardrobe, rules and history stay as they were. If an update changes the agent hooks, Hush tells you, and you update them in Settings ▸ Connections. The <a data-link="changelog">changelog</a> lists what's new.</p></details>
@@ -319,6 +320,9 @@
 
 
 </div>
+<!-- Visit counts: Vercel Web Analytics, no cookies, anonymous (see the FAQ). -->
+<script>window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };</script>
+<script defer src="/_vercel/insights/script.js"></script>
 <script src="hush-data.js"></script>
 <script src="hush.js"></script>
 <script src="app.js"></script>
