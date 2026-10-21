@@ -39,6 +39,7 @@ final class CardWindow {
         hosting = NSHostingView(rootView: AnyView(root))
         hosting.frame = NSRect(x: 0, y: 0, width: width + 2 * Self.margin, height: 200)
         p.contentView = hosting
+        ArrowCursor.keep(in: hosting)
     }
 
     var window: NSPanel { panel }

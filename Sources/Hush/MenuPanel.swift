@@ -520,6 +520,7 @@ final class MenuPanel {
         let host = NSHostingView(rootView: view)
         host.sizingOptions = [.intrinsicContentSize]
         p.contentView = host
+        ArrowCursor.keep(in: host)
         return p
     }
 }
