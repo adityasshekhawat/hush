@@ -292,6 +292,8 @@
       <a class="btn out" href="#try" style="color: #F7F3EC">Try it here first</a>
     </div>
     <div class="inst dark"><span aria-hidden="true">$</span><code data-install></code><button type="button" data-copy-install>Copy</button></div>
+    <div class="upd">Already have it? Update with</div>
+    <div class="inst dark"><span aria-hidden="true">$</span><code data-install="update"></code><button type="button" data-copy-install>Copy</button></div>
     <div style="font-size: 14.5px; color: #A9A1B4">Free and open source · macOS 15 or later · built from source for now · Ask Hush uses your Claude Code login</div>
     <div class="verse" hidden>Hushverse is coming: a small world where Hushies visit each other.</div>
     <div class="faq">
@@ -301,6 +303,7 @@
       <details><summary>Will it show up when I share my screen?</summary><p>Not by default. Hush's windows are left out of screen shares, recordings and screenshots. It's a setting, and it starts on.</p></details>
       <details><summary>Will it do things without asking?</summary><p>No. Nothing is pasted, sent or run in another app on its own. Browser tasks are a beta you turn on, and they're told to ask before sending, buying or deleting.</p></details>
       <details><summary>How do I install it?</summary><p>There's no signed download yet, so you build it from source: clone the repo and run <code>./scripts/bundle.sh</code>. You need macOS 15 or later and Xcode or the Command Line Tools.</p></details>
+      <details><summary>How do I get updates?</summary><p>In the folder you cloned, run <code>git pull</code>, then <code>./scripts/bundle.sh</code> again. It rebuilds Hush and swaps it in place, and your Hush, wardrobe, rules and history stay as they were. If an update changes the agent hooks, Hush tells you, and you update them in Settings ▸ Connections. The <a data-link="changelog">changelog</a> lists what's new.</p></details>
     </div>
   </div>
   <footer>

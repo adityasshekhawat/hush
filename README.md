@@ -182,6 +182,18 @@ cd hush
 On first launch Hush says hi, lets you make it yours, and walks you through Calendar and your Claude Code sessions. Every
 connection is optional, and you can skip setup at any time. If Hush quits, open it from Spotlight or run `open -a Hush`.
 
+**Updating.** In the folder you cloned, pull and build again:
+
+```sh
+cd hush
+git pull --ff-only
+./scripts/bundle.sh        # rebuilds, quits the old Hush, swaps it in place, reopens it
+```
+
+Your Hush, wardrobe, rules and history stay as they were. If an update changes the agent hooks, Hush says so, and you
+update them in Settings ▸ Connections. [CHANGELOG.md](CHANGELOG.md) lists what's new. Watch ▸ Custom ▸ Releases on
+GitHub to hear about new versions.
+
 ## Things to try
 
 | You | Hush |

@@ -14,6 +14,7 @@
     privacy: REPO + "#what-leaves-your-mac",
     waitlistURL: "",
     install: "git clone " + REPO + ".git && cd hush && ./scripts/bundle.sh",
+    update: "cd hush && git pull --ff-only && ./scripts/bundle.sh",
   };
 
   const $ = (id) => document.getElementById(id);
@@ -38,7 +39,7 @@
     a.setAttribute("href", CONFIG[a.dataset.link] || "#");
     a.rel = "noopener";
   });
-  document.querySelectorAll("[data-install]").forEach((c) => { c.textContent = CONFIG.install; });
+  document.querySelectorAll("[data-install]").forEach((c) => { c.textContent = CONFIG[c.dataset.install || "install"]; });
 
   // ---------- page state ----------
   const SEL_KEYS = ["shape", "palette", "topper", "head", "face", "neck", "carry"];
@@ -715,7 +716,7 @@
     later("copyLink", 2000, () => { $("copy-link").textContent = "Copy link"; });
   });
   document.querySelectorAll("[data-copy-install]").forEach((b) => b.addEventListener("click", async () => {
-    const ok = await copyText(CONFIG.install);
+    const ok = await copyText(b.parentElement.querySelector("code").textContent);
     b.textContent = ok ? "Copied" : "Select it";
     if (ok) puffNow();
     setTimeout(() => { b.textContent = "Copy"; }, 2000);

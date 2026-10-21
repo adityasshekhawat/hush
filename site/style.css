@@ -108,6 +108,7 @@ input, textarea { font-family: var(--body); }
 .inst button:active { transform: scale(.95, .9); }
 .inst.dark { align-self: center; background: rgba(255,255,255,.08); color: var(--cream); }
 .inst.dark button { background: var(--cream); color: var(--ink); }
+.upd { margin-top: -4px; font-size: 14.5px; color: #A9A1B4; }
 
 /* 2 flood */
 .flood { position: relative; background: var(--ink); height: calc(var(--vh) * 3.2); }

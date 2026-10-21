@@ -5,6 +5,9 @@ Hush is pre-alpha and built from source. Notable changes, newest first. Decision
 
 ## Unreleased
 
+- **Builds on the macOS 26 SDKs again** (Command Line Tools 26.x failed on a renamed Apple Intelligence option), and
+  CI now builds and tests on Xcode 16 and Xcode 26. **Updating** is in the README and on the website: `git pull`, then
+  `./scripts/bundle.sh`.
 - **A day with Hush:** a 96-second animated film on the website, made with Remotion from Hush's own art (a drone shot over
   a crowd of Hushes, then one Hush through its day). The recorded tour stays one click below it.
 
