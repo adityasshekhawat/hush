@@ -16,8 +16,13 @@ concurrency:
 
 jobs:
   test:
-    # Xcode 16 here: the oldest toolchain the README promises (Swift 6.1+). Newer SDK features are guarded.
-    runs-on: macos-15
+    # Two toolchains: macos-15 has Xcode 16 (the oldest the README promises, Swift 6.1+, no on-device model), macos-26
+    # has Xcode 26 (the macOS 26 SDK, whose Apple APIs differ from the 27 SDK the maintainer builds with).
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [macos-15, macos-26]
+    runs-on: ${{ matrix.os }}
     timeout-minutes: 30
     steps:
       # Pinned to a commit (Scorecard: Pinned-Dependencies); Dependabot keeps it current.
