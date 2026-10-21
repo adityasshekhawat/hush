@@ -54,6 +54,9 @@ else
   iconutil -c icns "$ICONSET" -o "$APP/Contents/Resources/Hush.icns"
 fi
 
+# The helper first: Apple silicon's linker signs every binary, Intel's doesn't, and an unsigned helper inside fails
+# the check below.
+codesign --force --sign - --timestamp=none "$APP/Contents/MacOS/hushctl"
 codesign --force --sign - --timestamp=none "$APP"
 codesign --verify --strict "$APP"
 echo "Built $APP"
