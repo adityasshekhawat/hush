@@ -90,7 +90,7 @@ public actor OnDeviceTriage: AttentionClassifier, GistWriter {
             let line = try await Self.withTimeout(Self.timeout) {
                 let session = LanguageModelSession(instructions: MeetingContext.instructions)
                 return try await session.respond(to: MeetingContext.prompt(title: title, notes: notes),
-                                                 options: GenerationOptions(samplingMode: .greedy)).content
+                                                 options: .greedy).content
             }
             return line.flatMap(MailTriage.cleanGist)
         } catch {
@@ -119,7 +119,7 @@ public actor OnDeviceTriage: AttentionClassifier, GistWriter {
                 // refused "hide the newsletters from shop.com").
                 let r = try await LanguageModelSession(model: SystemLanguageModel(guardrails: .permissiveContentTransformations),
                                                        instructions: RuleSuggestions.instructions)
-                    .respond(to: input, schema: schema, options: GenerationOptions(samplingMode: .greedy))
+                    .respond(to: input, schema: schema, options: .greedy)
                 return try r.content.value([String].self, forProperty: "rules")
             }
             Self.log("rules: suggested \(out?.count ?? 0) sentence(s)")
@@ -176,7 +176,7 @@ public actor OnDeviceTriage: AttentionClassifier, GistWriter {
         ])
         let schema = try GenerationSchema(root: root, dependencies: [])
         let response = try await session.respond(to: MailTriage.prompt(for: item, snippet: snippet), schema: schema,
-                                                 options: GenerationOptions(samplingMode: .greedy))
+                                                 options: .greedy)
         let content = response.content
         let level = try content.value(String.self, forProperty: F.level)
         let sure = (try? content.value(Bool.self, forProperty: F.sure)) ?? false

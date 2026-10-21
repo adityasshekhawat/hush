@@ -72,7 +72,7 @@ public actor OnDeviceRewriter {
         ])
         let schema = try GenerationSchema(root: root, dependencies: [])
         let response = try await session.respond(to: Pouch.prompt(text, verb: verb), schema: schema,
-                                                 options: GenerationOptions(samplingMode: .greedy))
+                                                 options: .greedy)
         return try response.content.value(String.self, forProperty: Pouch.resultField)
     }
     #endif
