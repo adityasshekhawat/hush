@@ -631,3 +631,19 @@ Art from `docs/v1-art-brief.md`, delivered as new files only (notes: `docs/v1-ar
 - **Decision:** 45 seconds (the maintainer's call), still only when the run finishes while the session's app isn't in
   front. "Finished" stays gentle: an envelope, never an interrupt; caps, focus and quiet hours still apply.
   "Let me know when it finishes" still announces any length.
+
+## ADR-036 · Hush says when a new version is out; you update with one click, in Terminal (2026-10-22)
+
+- **Need:** people who built Hush from source had no way to hear about new versions.
+- **Decision:** Hush asks GitHub's API for the latest release (`Updates`, HushCore; `UpdateController`) and compares
+  version numbers. Drafts and pre-releases don't count; only github.com pages open from the panel.
+- **Only with a yes:** "What leaves your Mac" promises every request starts with something you do. So the check runs
+  when you choose "Check for updates…" (··· menu), or once a day (at most every 20 hours) after you say yes to "Tell
+  you about updates?", asked once in the panel; Settings ▸ General has the switch. The request is an ephemeral
+  GET with `User-Agent: Hush/<version>`: no cookies, nothing about you. GitHub sees the IP address, as with any request.
+- **Updating stays visible:** Update writes `update.command` in Hush's Application Support folder and opens it in
+  Terminal: `cd <your clone> && git pull --ff-only && ./scripts/bundle.sh`. `bundle.sh` records the clone's path in the
+  app's Info.plist (`HushSourceFolder`). Without it, the button copies the command. Nothing installs on its own;
+  silent pull-and-build would run new code without asking, which building from source is meant to avoid.
+- **Releases:** `./scripts/release.sh X.Y.Z` bumps the version, dates the changelog, tags and publishes the release.
+  Automatic installs (Sparkle) wait for signed, notarized downloads.

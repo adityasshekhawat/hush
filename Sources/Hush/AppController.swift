@@ -97,6 +97,8 @@ final class AppController {
     var wasInCall = false
     /// "What Hush saw" (ADR-026).
     let journal = JournalWindowController()
+    /// New versions: asked for only with your yes (ADR-036).
+    let updates = UpdateController()
     var energyObserver: Any?
     /// Low Power Mode or low battery (ADR-022).
     var energySaver = false
@@ -331,6 +333,7 @@ final class AppController {
         if CalendarSource.access == .granted { calendar.start() }
         Task { await triage.prewarm() }
         watchEnergy()
+        updates.start()
 
         updateAppearance()
         DistributedNotificationCenter.default().addObserver(

@@ -190,6 +190,10 @@ git pull --ff-only
 ./scripts/bundle.sh        # rebuilds, quits the old Hush, swaps it in place, reopens it
 ```
 
+Or let Hush tell you: choose **Check for updates…** in the menu bar panel's ··· menu, or say yes when it asks to
+check once a day. When a new version is out, the panel shows it with an **Update** button, which opens Terminal in
+the folder you built Hush from and runs those two commands, so you see each step. Nothing updates on its own.
+
 Your Hush, wardrobe, rules and history stay as they were. If an update changes the agent hooks, Hush says so, and you
 update them in Settings ▸ Connections. [CHANGELOG.md](CHANGELOG.md) lists what's new. Watch ▸ Custom ▸ Releases on
 GitHub to hear about new versions.
@@ -236,6 +240,7 @@ something you do:
 | Click **Summarise** on a "While you were away" card | A short excerpt of that one session | Anthropic, through your Claude Code login |
 | Run a browser task (beta, off by default) | The task, and what Claude does in your browser | Anthropic, through Claude Code and the Claude browser extension |
 | Hand a question off ("open in ChatGPT / Claude / Perplexity") | The question, in the link that opens | The assistant you picked |
+| Choose **Check for updates…**, or say yes to checking once a day (asked once; Settings ▸ General) | A request for Hush's latest release, with Hush's version. Nothing about you | GitHub |
 
 **Stays on the Mac:** your calendar; the agent hooks' events (over a private socket only Hush can read, kept in memory,
 never written down); Hand it to Hush and mail judging, which use Apple's on-device model; transcripts for the digest

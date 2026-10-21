@@ -35,6 +35,8 @@ mkdir -p "$APP/Contents/MacOS" "$APP/Contents/Resources/assets"
 cp "$BIN" "$APP/Contents/MacOS/Hush"
 cp "$BINDIR/hushctl" "$APP/Contents/MacOS/hushctl"
 cp Sources/Hush/Info.plist "$APP/Contents/Info.plist"
+# Where this copy was built from, so "Update" in the menu bar panel can pull and rebuild it here (ADR-036).
+/usr/libexec/PlistBuddy -c "Add :HushSourceFolder string \"$PWD\"" "$APP/Contents/Info.plist"
 cp -R assets/character assets/renderer assets/brand assets/ui "$APP/Contents/Resources/assets/"
 
 # App icon (design guide, logo/app-icon: lilac is primary). With Xcode: the layered Icon Composer icon

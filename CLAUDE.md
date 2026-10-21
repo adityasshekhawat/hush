@@ -32,6 +32,7 @@ Floor anchors: edge poses y=112, perches y=116, others y=138. Sequences come fro
 ## Commands
 - `./scripts/swift.sh test` (core; plain `swift test` also works with Xcode) · `./scripts/bundle.sh` builds, installs to `/Applications/Hush.app`, relaunches it
   (`--no-install` to only build). `./scripts/swift.sh run hush-eval` runs `evals/asks.json` against a real model (costs money); `--lane mail` / `--lane pouch` run `evals/mail.json` / `evals/pouch.json` on the on-device model (free). Hush repoints its Claude Code hooks to wherever it runs from, on launch.
+- Release: `./scripts/release.sh X.Y.Z` (version, changelog date, tag, GitHub release); installed copies compare against it (ADR-036)
 - Logs (renderer errors, paste, agent, hooks): `~/Library/Application Support/Hush/diagnostics.log`
 - README media: `swift scripts/render-media.swift` renders `docs/media` GIFs/PNGs from the pack (after new art); `./scripts/record-media.sh` records the feature GIFs from the running app (debug hooks; leaves no trace, ADR-028);
   `./scripts/record-video.sh` records the website's tour video the same way (`site/media/hush-demo.mp4`, ADR-031);

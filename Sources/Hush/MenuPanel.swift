@@ -29,6 +29,7 @@ struct MenuPanelActions {
     var pause: (PauseLength) -> Void
     var resume: () -> Void
     var close: () -> Void
+    var resized: () -> Void
     var quit: () -> Void
 }
 
@@ -36,6 +37,7 @@ struct MenuPanelView: View {
     @ObservedObject var model: MenuPanelModel
     @ObservedObject var settings: SettingsModel
     @ObservedObject var digest: DigestController
+    @ObservedObject var updates: UpdateController
     let actions: MenuPanelActions
 
     private var app: AppController { settings.app }
@@ -52,12 +54,14 @@ struct MenuPanelView: View {
             }
             waitingRows
             if let step = settings.setupLeft.first, app.waiting.isEmpty, !paused { setupRow(step).padding(.bottom, 8) }
+            updateRow
             todayTile
             places.padding(.horizontal, 6).padding(.top, 2)
             Rectangle().fill(HushColor.hairline).frame(height: 1).padding(.horizontal, 12).padding(.vertical, 6)
             footer
         }
         .padding(.top, 6).padding(.bottom, 8)
+        .background(GeometryReader { g in Color.clear.onChange(of: g.size) { actions.resized() } })
         .task(id: header.expression + app.look.rendererJSON) {
             model.avatar = await app.renderer.portrait(pose: "peek", expression: header.expression)
         }
@@ -181,18 +185,49 @@ struct MenuPanelView: View {
         case .claudeCode: ("terminal", "Watch Claude Code", "So I can tell you when it needs you", "Connect")
         case .askHotkey: ("command", "Try ⌘⇧H", "Ask me anything, from any app", "Try it")
         }
-        return HStack(spacing: 11) {
-            PanelTile(symbol: symbol, tone: .lilac)
-            VStack(alignment: .leading, spacing: 1) {
-                Text(title).font(.system(size: 13.5, weight: .semibold)).lineLimit(1)
-                Text(line).font(.system(size: 12)).foregroundStyle(.secondary).lineLimit(1)
-            }
-            Spacer(minLength: 4)
+        return NudgeRow(symbol: symbol, title: title, line: line) {
             Button(button) { actions.close(); settings.doSetup(step) }.buttonStyle(HushPill(kind: .primary))
         }
-        .padding(.horizontal, 10).padding(.vertical, 9)
-        .background(HushColor.quietFill, in: RoundedRectangle(cornerRadius: 11, style: .continuous))
-        .padding(.horizontal, 6)
+    }
+
+    // MARK: new versions (ADR-036)
+
+    @ViewBuilder private var updateRow: some View {
+        switch updates.status {
+        case .available(let r):
+            NudgeRow(symbol: "arrow.down.circle", title: "Hush \(r.version) is out", line: "You have \(updates.current) · What's new",
+                     onText: { actions.close(); NSWorkspace.shared.open(r.page) }) {
+                if updates.sourceFolder != nil {
+                    Button("Update") { actions.close(); updates.update() }.buttonStyle(HushPill(kind: .primary))
+                        .help("Opens Terminal in the folder you built Hush from and runs git pull, then ./scripts/bundle.sh")
+                } else {
+                    CopyCommandButton { updates.update() }
+                }
+            }
+            .padding(.bottom, 8)
+        case .checking:
+            NudgeRow(symbol: "arrow.down.circle", title: "Checking for a new version…", line: "Asking GitHub") {
+                ProgressView().controlSize(.small)
+            }
+            .padding(.bottom, 8)
+        case .upToDate:
+            NudgeRow(symbol: "checkmark.circle", title: "You have the latest Hush", line: "Version \(updates.current)") { EmptyView() }
+                .padding(.bottom, 8)
+        case .failed:
+            NudgeRow(symbol: "exclamationmark.circle", title: "Couldn't reach GitHub", line: "Try again in a while") { EmptyView() }
+                .padding(.bottom, 8)
+        case .idle:
+            if updates.consent == nil, app.waiting.isEmpty, settings.setupLeft.isEmpty, !paused {
+                NudgeRow(symbol: "arrow.down.circle", title: "Tell you about updates?",
+                         line: "I'd check GitHub once a day. Nothing about you is sent") {
+                    HStack(spacing: 4) {
+                        Button("No") { updates.consent = false }.buttonStyle(HushPill(kind: .quiet))
+                        Button("Yes") { updates.consent = true }.buttonStyle(HushPill(kind: .primary))
+                    }
+                }
+                .padding(.bottom, 8)
+            }
+        }
     }
 
     // MARK: today
@@ -311,6 +346,7 @@ struct MenuPanelView: View {
                 settings.hiddenFromCapture.wrappedValue.toggle()
             },
             MenuItem(title: "Open Hush's settings…", key: ",") { actions.settings(.general) },
+            MenuItem(title: "Check for updates…") { Task { await updates.check(manual: true) } },
             .separator,
             MenuItem(title: "Replay the intro") { actions.close(); settings.replayIntro() },
         ]
@@ -325,6 +361,47 @@ struct MenuPanelView: View {
         }
         items += [.separator, MenuItem(title: "Quit Hush", key: "q", action: actions.quit)]
         return items
+    }
+}
+
+/// A one-line ask with its action on the right: setup steps, new versions. Tapping the words can do something else.
+private struct NudgeRow<Trailing: View>: View {
+    let symbol: String
+    let title: String
+    let line: String
+    var onText: (() -> Void)? = nil
+    @ViewBuilder var trailing: Trailing
+
+    var body: some View {
+        HStack(spacing: 11) {
+            PanelTile(symbol: symbol, tone: .lilac)
+            let words = VStack(alignment: .leading, spacing: 1) {
+                Text(title).font(.system(size: 13.5, weight: .semibold)).lineLimit(2)
+                Text(line).font(.system(size: 12)).foregroundStyle(.secondary).lineLimit(2)
+            }
+            .fixedSize(horizontal: false, vertical: true)
+            if let onText {
+                Button(action: onText) { words.contentShape(Rectangle()) }.buttonStyle(.plain)
+            } else {
+                words
+            }
+            Spacer(minLength: 4)
+            trailing
+        }
+        .padding(.horizontal, 10).padding(.vertical, 9)
+        .background(HushColor.quietFill, in: RoundedRectangle(cornerRadius: 11, style: .continuous))
+        .padding(.horizontal, 6)
+    }
+}
+
+/// Without a known clone: copy the update command, and say so.
+private struct CopyCommandButton: View {
+    let copy: () -> Void
+    @State private var copied = false
+    var body: some View {
+        Button(copied ? "Copied" : "Copy command") { copy(); copied = true }
+            .buttonStyle(HushPill(kind: .primary))
+            .help("git pull --ff-only && ./scripts/bundle.sh, to run in the folder you cloned Hush into")
     }
 }
 
@@ -467,6 +544,7 @@ final class MenuPanel {
     }
 
     func close() {
+        settings.app.updates.settle()
         panel?.orderOut(nil)
         monitors.forEach { NSEvent.removeMonitor($0) }
         monitors = []
@@ -500,7 +578,7 @@ final class MenuPanel {
         p.collectionBehavior = [.canJoinAllSpaces, .fullScreenAuxiliary, .ignoresCycle]
         p.hidesOnDeactivate = false
         let a = actions ?? .init(openWaiting: { _ in }, moreWaiting: {}, journal: {}, sessions: {}, away: {}, history: {},
-                                 settings: { _ in }, pause: { _ in }, resume: {}, close: {}, quit: {})
+                                 settings: { _ in }, pause: { _ in }, resume: {}, close: {}, resized: {}, quit: {})
         let wrapped = MenuPanelActions(
             openWaiting: { [weak self] id in self?.close(); a.openWaiting(id) },
             moreWaiting: { [weak self] in self?.close(); a.moreWaiting() },
@@ -512,8 +590,10 @@ final class MenuPanel {
             pause: { [weak self] l in self?.close(); a.pause(l) },
             resume: { [weak self] in self?.close(); a.resume() },
             close: { [weak self] in self?.close() },
+            resized: { [weak self] in self?.fit() },
             quit: a.quit)
-        let view = MenuPanelView(model: model, settings: settings, digest: settings.app.digest, actions: wrapped)
+        let view = MenuPanelView(model: model, settings: settings, digest: settings.app.digest, updates: settings.app.updates,
+                                 actions: wrapped)
             .frame(width: 320, alignment: .leading)
             .fixedSize(horizontal: false, vertical: true)
             .hushSurface(radius: 14, shadow: false)

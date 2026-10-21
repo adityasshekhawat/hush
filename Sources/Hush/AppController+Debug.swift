@@ -258,6 +258,8 @@ extension AppController {
             if !ask.allowedRepos.contains(path) { ask.allowedRepos = ask.allowedRepos + [path] }
             ask.pickedRepo = path
         case ("hooks", "install"): HookInstaller.install()
+        case ("updates", "check"): Task { await updates.check(manual: true) }
+        case ("updates", "run"): updates.update()
         case ("move", "perch"): wanderer.debugPerch()
         case ("move", "leave"): wanderer.leavePerch()
         case ("move", "drop-on-front"):

@@ -69,6 +69,9 @@ jobs:
           codesign --verify --strict "$APP"
           lipo -archs "$APP/Contents/MacOS/Hush"
           test -x "$APP/Contents/MacOS/hushctl"
+          # "Update" in the panel finds the clone through this (ADR-036).
+          [ "$(/usr/libexec/PlistBuddy -c 'Print :HushSourceFolder' "$APP/Contents/Info.plist")" = "$HOME/My Projects/hush" ] \
+            || { echo "::error::the app doesn't know where it was built from"; exit 1; }
           sleep 20
           pgrep -x Hush || { echo "::error::Hush isn't running 20 s after install"; exit 1; }
           test -S "$HOME/Library/Application Support/Hush/agent.sock" || { echo "::error::no agent socket"; exit 1; }

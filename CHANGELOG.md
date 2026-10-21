@@ -5,6 +5,10 @@ Hush is pre-alpha and built from source. Notable changes, newest first. Decision
 
 ## Unreleased
 
+- **Hush tells you when there's a new version:** choose Check for updates… in the menu bar panel's ··· menu, or say
+  yes once to a daily check (Settings ▸ General). A new version shows in the panel with Update, which opens Terminal
+  in the folder you built Hush from and runs `git pull --ff-only && ./scripts/bundle.sh`. Releases come from
+  `./scripts/release.sh`.
 - **Hush tells you about shorter runs:** a Claude Code or Codex run that finishes while you're in another app now gets
   an envelope from 45 seconds, not 2 minutes. Most answers take 1 to 2 minutes, so they used to finish in silence.
 - **A new menu bar panel:** it answers "does anything need me?" first, with your own Hush's face in the header, then

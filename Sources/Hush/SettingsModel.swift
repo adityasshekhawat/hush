@@ -58,6 +58,7 @@ final class SettingsModel: ObservableObject {
     }
     var openAtLogin: Binding<Bool> { binding({ LoginItem.isOn }, { LoginItem.set($0) }) }
     var hideInFullScreen: Binding<Bool> { binding({ self.app.hidesInFullScreen }, { self.app.hidesInFullScreen = $0 }) }
+    var checkUpdates: Binding<Bool> { binding({ self.app.updates.consent == true }, { self.app.updates.consent = $0 }) }
     var hiddenFromCapture: Binding<Bool> { binding({ self.app.hiddenFromCapture }, { self.app.hiddenFromCapture = $0 }) }
     var showCount: Binding<Bool> {
         binding({ self.app.defaults.bool(forKey: "menuBarCount") }, { self.app.defaults.set($0, forKey: "menuBarCount") })

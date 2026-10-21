@@ -114,6 +114,11 @@ struct SettingsView: View {
             Toggle("Hide from screen shares and screenshots", isOn: model.hiddenFromCapture)
             Toggle("Show a count in the menu bar", isOn: model.showCount)
         }
+        Section {
+            Toggle("Check for new versions once a day", isOn: model.checkUpdates)
+        } footer: {
+            Text("Asks GitHub for Hush's latest release; nothing about you is sent. You have \(model.app.updates.current). \"Check for updates…\" in the menu bar panel's ··· menu works either way.")
+        }
     }
 
     @ViewBuilder private var character: some View {

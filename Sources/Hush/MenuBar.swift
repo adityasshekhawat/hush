@@ -44,7 +44,7 @@ final class MenuBar: NSObject {
             settings: { [weak self] s in self?.settingsWindow.show(s) },
             pause: { [weak app] l in app?.pause(l) },
             resume: { [weak app] in app?.resume() },
-            close: {},
+            close: {}, resized: {},
             quit: { NSApp.terminate(nil) })
         app.onWaitingChange = { [weak self] n in self?.setHolding(count: n) }
         app.onRefresh = { [weak self] in self.map { $0.setHolding(count: $0.waitingCount) } }
