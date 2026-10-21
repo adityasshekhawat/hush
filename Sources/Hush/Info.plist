@@ -2,33 +2,33 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>CFBundleDisplayName</key>
+	<string>Hush</string>
+	<key>CFBundleExecutable</key>
+	<string>Hush</string>
+	<key>CFBundleIconFile</key>
+	<string>Hush</string>
 	<key>CFBundleIdentifier</key>
 	<string>dev.hush.Hush</string>
 	<key>CFBundleName</key>
 	<string>Hush</string>
-	<key>CFBundleDisplayName</key>
-	<string>Hush</string>
-	<key>CFBundleIconFile</key>
-	<string>Hush</string>
-	<key>CFBundleExecutable</key>
-	<string>Hush</string>
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
-	<string>0.1.0</string>
+	<string>0.2.0</string>
 	<key>CFBundleVersion</key>
-	<string>1</string>
+	<string>2</string>
 	<key>LSMinimumSystemVersion</key>
 	<string>15.0</string>
 	<key>LSUIElement</key>
 	<true/>
-	<key>NSHighResolutionCapable</key>
-	<true/>
-	<key>NSCalendarsFullAccessUsageDescription</key>
-	<string>Hush reads your upcoming events so it can remind you before meetings. Event details never leave this Mac.</string>
 	<key>NSAppleEventsUsageDescription</key>
 	<string>Hush types the messages you send to a Claude Code session into its Terminal or iTerm tab. It only does this when you press Send.</string>
+	<key>NSCalendarsFullAccessUsageDescription</key>
+	<string>Hush reads your upcoming events so it can remind you before meetings. Event details never leave this Mac.</string>
 	<key>NSCalendarsUsageDescription</key>
 	<string>Hush reads your upcoming events so it can remind you before meetings. Event details never leave this Mac.</string>
+	<key>NSHighResolutionCapable</key>
+	<true/>
 </dict>
 </plist>

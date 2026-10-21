@@ -3,7 +3,7 @@
 Hush is pre-alpha and built from source. Notable changes, newest first. Decisions behind them are in
 [`docs/decisions.md`](docs/decisions.md).
 
-## Unreleased
+## 0.2.0 (2026-10-22)
 
 - **Hush tells you when there's a new version:** choose Check for updates… in the menu bar panel's ··· menu, or say
   yes once to a daily check (Settings ▸ General). A new version shows in the panel with Update, which opens Terminal
