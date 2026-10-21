@@ -21,6 +21,18 @@ import Testing
         #expect(out.first?.sourceApp == term)
     }
 
+    /// 45 s is enough (ADR-035): a 50-second answer while you're in the browser is worth an envelope, 40 s isn't.
+    @Test func runsOf45SecondsOrMoreCount() {
+        var t = AgentSessionTracker()
+        _ = t.handle(ev(.prompt, 0), frontmostApp: "com.google.Chrome")
+        #expect(t.handle(ev(.stop, 50), frontmostApp: "com.google.Chrome").first?.snippet == "Ran for 50 s")
+        _ = t.handle(ev(.prompt, 100), frontmostApp: "com.google.Chrome")
+        #expect(t.handle(ev(.stop, 140), frontmostApp: "com.google.Chrome").isEmpty)
+        // Still nothing when you're looking at it, however long it ran.
+        _ = t.handle(ev(.prompt, 200), frontmostApp: term)
+        #expect(t.handle(ev(.stop, 500), frontmostApp: term).isEmpty)
+    }
+
     @Test func codexSessionsSayCodex() {
         var t = AgentSessionTracker()
         let codex = { (k: AgentSessionEvent.Kind, at: TimeInterval) in

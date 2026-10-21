@@ -69,8 +69,9 @@ public struct AgentSessionTracker: Sendable {
         public var tty: String?
     }
 
-    /// A run must last this long before its "done" earns an envelope (quick runs you're watching don't).
-    public var minRunForEnvelope: TimeInterval = 2 * 60
+    /// A run must last this long before its "done" earns an envelope, and only when it finishes while you're in
+    /// another app (ADR-035). Shorter ones are back-and-forth you're still part of.
+    public var minRunForEnvelope: TimeInterval = 45
     /// Working this long while you're elsewhere → Hush shows it's thinking.
     public var thinkingAfter: TimeInterval = 20
     /// No events for this long while "working" → assume it died (killed terminal, crash).
@@ -203,6 +204,7 @@ public struct AgentSessionTracker: Sendable {
 
     static func duration(_ t: TimeInterval) -> String {
         let m = Int(t / 60)
+        if m < 1 { return "\(Int(t)) s" }
         return m < 60 ? "\(max(1, m)) min" : "\(m / 60) h \(m % 60) min"
     }
 }

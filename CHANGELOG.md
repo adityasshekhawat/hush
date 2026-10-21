@@ -5,6 +5,8 @@ Hush is pre-alpha and built from source. Notable changes, newest first. Decision
 
 ## Unreleased
 
+- **Hush tells you about shorter runs:** a Claude Code or Codex run that finishes while you're in another app now gets
+  an envelope from 45 seconds, not 2 minutes. Most answers take 1 to 2 minutes, so they used to finish in silence.
 - **A new menu bar panel:** it answers "does anything need me?" first, with your own Hush's face in the header, then
   what waits with its one action (Open, Join), today's held-back count, and three places: Agents, While you were away
   and Ask Hush. Pause is one button with a menu, and an eye button shows or hides Hush in screenshots with one click.

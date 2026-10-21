@@ -53,7 +53,7 @@ models you already use, so it gets more capable as they do. It is not another ch
       <h3>Knows when your agents need you</h3>
       Hush watches your Claude Code and Codex sessions through hooks you approve. It looks thoughtful while they work,
       raises its hand when one waits on you and says what it wants ("Claude wants to run npm test"), and holds an
-      envelope when a long run finishes. Risky requests, like deleting files or force-pushing, get a worried "Look
+      envelope when a run of 45 seconds or more finishes while you're in another app. Risky requests, like deleting files or force-pushing, get a worried "Look
       carefully" card, judged by rules, not a model. Other sessions waiting stand as little flags beside it. Open
       takes you to the exact Terminal or iTerm tab. <sub>Codex support follows Codex's documented hooks (0.160 or
       later) and hasn't been tried with a live Codex session yet.</sub>

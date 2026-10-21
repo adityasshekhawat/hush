@@ -603,7 +603,7 @@ Art from `docs/v1-art-brief.md`, delivered as new files only (notes: `docs/v1-ar
   ("wants to edit app.ts", "wants to change 2 files (…)"), and deletions, secrets and production paths read "Look
   carefully", like Claude Code's file tools. Tested in `CodexRequests`.
 - **Known differences, not yet handled:** Codex's `Stop` fires at the end of every turn and at `/goal` continuation
-  points (openai/codex#52950), so a long goal run can show "finished" before it's done; runs under 2 minutes are
+  points (openai/codex#52950), so a long goal run can show "finished" before it's done; runs under 45 seconds are
   already ignored. `SessionEnd` exists from Codex 0.160.
 - **Truthful:** the README and features say Codex hasn't been tried with a live session yet, until it has.
 
@@ -622,3 +622,12 @@ Art from `docs/v1-art-brief.md`, delivered as new files only (notes: `docs/v1-ar
 - **The avatar** is this Hush (body, colour, eyes, topper, wearables) peeking, from `hush.portrait(pose, expr)`: the
   live renderer dresses the pose once and returns SVG, which AppKit draws. No second web view, nothing animating while
   the panel is open.
+
+## ADR-035 · A finished run counts from 45 seconds (2026-10-22)
+
+- **Found:** a run needed 2 minutes before its "finished" earned an envelope. That rule came before Hush checked
+  whether you're looking at the session; with that check in place it mostly hid answers of 1 to 2 minutes that
+  finished while you were in another app (a day's log: 6 s to 107 s, none announced).
+- **Decision:** 45 seconds (the maintainer's call), still only when the run finishes while the session's app isn't in
+  front. "Finished" stays gentle: an envelope, never an interrupt; caps, focus and quiet hours still apply.
+  "Let me know when it finishes" still announces any length.
