@@ -35,20 +35,16 @@ final class MenuBar: NSObject {
         item.button?.target = self
         item.button?.action = #selector(clicked)
         panel.actions = MenuPanelActions(
-            showHeld: { [weak app] in
-                app?.showHeldBack(.day, list: true)
-            },
-            openCard: { [weak app] in app?.showCard() },
-            digest: { [weak app] in
-                guard let app else { return }
-                if app.digest.enabled { app.digest.showNow() } else { app.digest.toggleWithConsent() }
-            },
-            history: { [weak app] in app?.ask.showHistory() },
+            openWaiting: { [weak app] id in app?.openWaiting(id: id) },
+            moreWaiting: { [weak app] in app?.showCard() },
             journal: { [weak app] in app?.journal.show(); app?.renderer.react(.sequence("journal")) },
             sessions: { [weak app] in app?.ask.showSessions() },
+            away: { [weak app] in app?.digest.show() },
+            history: { [weak app] in app?.ask.showHistory() },
             settings: { [weak self] s in self?.settingsWindow.show(s) },
             pause: { [weak app] l in app?.pause(l) },
             resume: { [weak app] in app?.resume() },
+            close: {},
             quit: { NSApp.terminate(nil) })
         app.onWaitingChange = { [weak self] n in self?.setHolding(count: n) }
         app.onRefresh = { [weak self] in self.map { $0.setHolding(count: $0.waitingCount) } }

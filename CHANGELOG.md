@@ -5,6 +5,14 @@ Hush is pre-alpha and built from source. Notable changes, newest first. Decision
 
 ## Unreleased
 
+- **A new menu bar panel:** it answers "does anything need me?" first, with your own Hush's face in the header, then
+  what waits with its one action (Open, Join), today's held-back count, and three places: Agents, While you were away
+  and Ask Hush. Pause is one button with a menu, and an eye button shows or hides Hush in screenshots with one click.
+  Connections and Ask Hush costs moved to Settings. Fixes "Pau se" and "Watchi ng" wrapping in the old panel.
+- **Installs on Intel Macs:** `bundle.sh` failed its signature check there, because Intel's linker doesn't sign the
+  `hushctl` helper. Found by the new install test, which installs Hush the README's way on six fresh Macs (Apple
+  silicon and Intel, macOS 15 and 26, Xcode and Command Line Tools only) on every change and weekly. `bundle.sh` also
+  says in plain words when macOS is too old or the Command Line Tools are missing.
 - **Show me in screenshots:** a switch in the menu bar panel, so you can let Hush into a screenshot or a share and
   hide it again with one click (the same setting as Settings ▸ General).
 

@@ -312,11 +312,24 @@ Centre the card horizontally on Hush, then clamp it 12 pt inside the visible scr
 
 ### 5.10 Menu bar panel and Settings (Guide 09)
 
-- MenuBarExtra in `.window` style, 320 pt wide.
-- **Panel modes:** quiet, holding (item list), Claude working, and ⌥-held (developer items).
-- **Header:** "Hush", the status word and the held-back row.
-- **Quick buttons:** While you were away, History, and "Setup: 2 left".
-- **Connections:** Calendar, Claude Code (watching), and Mail ("waiting on MailKit").
+Panel v2 (Guide 09b, ADR-034): one glance, one action. `MenuPanel.swift`; the words are `MenuPanelText` (tested).
+
+- Our own non-activating panel under the status item (not MenuBarExtra), 320 pt, Liquid Glass on macOS 26,
+  material before. Padding 6 top, 8 bottom.
+- **Header:** this Hush peeking (40 pt, `hush.portrait`, drawn once per look and expression, no live renderer), a plain
+  sentence ("All quiet", "2 things need you", "Paused until 16:15", "Almost set up") with a second line, a coral or
+  grey 8 pt dot when something waits or Hush is paused, and the ··· menu.
+- **What waits:** up to 3 rows, each with its one action (Open, Join); more than 3 shows 2 and "and N more".
+  While paused, "Resume now" sits under the header instead. Setup shows one nudge at a time (the next missing step).
+- **Today:** the lilac tile, "63 held back today · 4 shown to you · Open journal" (opens What I saw), or "Nothing
+  held back yet today". Dimmed while paused.
+- **Places:** Agents (sessions; "Update my hooks" or "Not watching yet" go to Settings ▸ Connections), While you
+  were away (only after coming back to an unopened digest), Ask Hush (History; the count this month).
+- **Footer, never moves:** Pause (native menu: 15 minutes, 1 hour, until tomorrow morning; "Change pause" while
+  paused), the eye button (show me in screenshots and shares, one click), Settings.
+- **··· menu:** Show me in screenshots, Open Hush's settings…, Replay the intro, developer items (hold ⌥ while
+  opening), Quit Hush.
+- Connections and Ask Hush cost live in Settings (Connections; Ask Hush ▸ this month).
 - **Settings window** with these sections: General, Character, Home spot, Perch and moods, Ask Hush (models per lane), Browser tasks, Connections, Setup, Developer.
 - **Glyph:** template image from `logo/menu-bar/`. Use the outline when idle and the filled version when something waits. An optional count caps at "9+".
 

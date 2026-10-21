@@ -112,10 +112,8 @@ function recolor(root) {
   if (s.dark) root.querySelectorAll("[id^='fx-']").forEach(n => { if ((n.getAttribute("stroke") || "").toUpperCase() === INK) n.setAttribute("stroke", PAPER); });
 }
 
-function compose(pose, expr, extraWear) {
-  const key = pose + "|" + (expr || "") + "|" + lookKey() + "|" + (extraWear || []).join("+");
-  let c = cache.get(key);
-  if (c) return c;
+// A pose in the current look (body, palette, eyes, topper, wearables), as a fresh document.
+function dressed(pose, expr, extraWear) {
   const doc = getPose(pose).cloneNode(true);
   // The real desktop provides these.
   doc.querySelectorAll("#screen-edge, #prop-cursor, #prop-window").forEach(n => n.remove());
@@ -165,6 +163,15 @@ function compose(pose, expr, extraWear) {
     if (p) { const g = doc.ownerDocument.createElementNS(NS, "g"); g.setAttribute("class", "anim"); while (p.firstChild) g.appendChild(p.firstChild); p.appendChild(g); }
   });
   recolor(doc);
+  return doc;
+}
+
+function compose(pose, expr, extraWear) {
+  const key = pose + "|" + (expr || "") + "|" + lookKey() + "|" + (extraWear || []).join("+");
+  let c = cache.get(key);
+  if (c) return c;
+  const doc = dressed(pose, expr, extraWear);
+  const root = doc.querySelector("#pose-root");
   const hands = doc.querySelector("#hands-on-edge");
   const handsHas = hands && hands.children.length;
   const base = pose;

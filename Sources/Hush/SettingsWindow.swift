@@ -169,6 +169,15 @@ struct SettingsView: View {
 
     @ViewBuilder private var ask: some View {
         Section {
+            HStack {
+                Text("This month: \(model.monthUsage.questions) \(model.monthUsage.questions == 1 ? "question" : "questions") · $"
+                     + String(format: "%.2f", model.monthUsage.cost))
+                Spacer()
+                Button("History…") { model.app.ask.showHistory() }.buttonStyle(.borderless)
+            }
+            .task { await model.loadUsage() }
+        } footer: { Text("Answers run on your Claude Code login and count toward your Claude usage. History shows each one's model, time and cost.") }
+        Section {
             Picker("Open long questions in", selection: model.handoff) {
                 ForEach(AskLane.Provider.allCases, id: \.self) { Text($0.displayName).tag($0) }
             }

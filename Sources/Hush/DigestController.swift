@@ -23,6 +23,8 @@ final class DigestController: ObservableObject {
     /// Also tell the Ask Hush card when a summary arrives or fails (session id, summary or nil).
     var onSummary: ((String, String?) -> Void)?
     @Published var summarising: Set<String> = []
+    /// A digest from coming back that you haven't opened yet: the menu bar panel shows a row for it until you do.
+    @Published var unseen = false
 
     private let host: Host
     private let defaults = UserDefaults.standard
@@ -89,6 +91,7 @@ final class DigestController: ObservableObject {
         digests = found
         summaries = [:]
         DiagnosticsLog.write("digest: \(found.count) sessions in \(Int(w.duration / 60)) min")
+        if offer { unseen = !found.isEmpty }
         guard offer, !found.isEmpty else { return }
         let files = Set(found.flatMap { s in s.filesChanged.map { s.cwd + "/" + $0 } }).count
         host.submit(InboxItem(
@@ -101,6 +104,7 @@ final class DigestController: ObservableObject {
     // MARK: card
 
     func show() {
+        unseen = false
         let c = card ?? CardWindow(width: DigestView.width, maxHeight: 560) { [unowned self] in DigestView(controller: self) }
         card = c
         c.show(avoiding: host.anchor())

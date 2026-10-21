@@ -81,6 +81,8 @@ protocol CharacterRenderer: AnyObject {
     /// Cursor position in the view's top-left-origin coordinates.
     func pointer(at p: CGPoint)
     func react(_ r: Reaction)
+    /// This Hush in a pose and expression, as a still picture (the menu bar panel's avatar). nil before it's ready.
+    func portrait(pose: String, expression: String) async -> NSImage?
 }
 
 @MainActor
@@ -173,6 +175,16 @@ final class WebCharacterRenderer: NSObject, CharacterRenderer, WKScriptMessageHa
         case .handOver: js("hush.handOver()")
         case .sorry: js("hush.sorry()")
         }
+    }
+
+    func portrait(pose: String, expression: String) async -> NSImage? {
+        guard ready, let svg = try? await webView.evaluateJavaScript("hush.portrait(\(Self.jsString(pose)), \(Self.jsString(expression)))") as? String
+        else { return nil }
+        return NSImage(data: Data(svg.utf8))
+    }
+
+    private static func jsString(_ s: String) -> String {
+        (try? String(data: JSONSerialization.data(withJSONObject: [s]), encoding: .utf8)).map { String($0.dropFirst().dropLast()) } ?? "\"\""
     }
 
     /// README recordings: the character right now as standalone SVG, and where it is in the web view (top-left

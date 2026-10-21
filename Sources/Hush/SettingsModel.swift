@@ -13,6 +13,15 @@ final class SettingsModel: ObservableObject {
     /// Re-read everything (call when a view appears or after a change made elsewhere).
     func reload() { objectWillChange.send() }
 
+    /// Ask Hush this month, for Settings ▸ Ask Hush (the panel shows only the count).
+    @Published var monthUsage: (questions: Int, cost: Double) = (0, 0)
+    func loadUsage() async {
+        let tasks = ((try? await app.engine.agentTasks(limit: 500)) ?? []).filter {
+            $0.repo != "action" && Calendar.current.isDate($0.startedAt, equalTo: Date(), toGranularity: .month)
+        }
+        monthUsage = (tasks.count, tasks.map(\.costUSD).reduce(0, +))
+    }
+
     private func set(_ change: () -> Void) {
         change()
         objectWillChange.send()

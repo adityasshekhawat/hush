@@ -327,6 +327,13 @@ window.hush = {
   // README recordings (MediaRecorder): the character as it is right now, as standalone SVG. Each visible part gets its
   // live on-screen transform (every CSS and Web Animations transform, via getScreenCTM) and opacity baked in, and the
   // wrappers' own transforms are dropped, so hops and squashes survive outside the browser.
+  // The menu bar panel's avatar: this Hush peeking over an edge, cropped to head and hands, as standalone SVG.
+  portrait(pose, expr) {
+    const doc = dressed(pose, expr);
+    doc.setAttribute("viewBox", "36 33 88 82");
+    doc.setAttribute("width", "88"); doc.setAttribute("height", "82");
+    return new XMLSerializer().serializeToString(doc);
+  },
   snapshot() {
     if (el.classList.contains("hidden")) return JSON.stringify({ hidden: true });
     const clone = svg.cloneNode(true);

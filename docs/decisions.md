@@ -606,3 +606,19 @@ Art from `docs/v1-art-brief.md`, delivered as new files only (notes: `docs/v1-ar
   points (openai/codex#52950), so a long goal run can show "finished" before it's done; runs under 2 minutes are
   already ignored. `SessionEnd` exists from Codex 0.160.
 - **Truthful:** the README and features say Codex hasn't been tried with a live session yet, until it has.
+
+## ADR-034 · Menu bar panel v2: one glance, one action (2026-10-22)
+
+- **Found:** the panel had grown into a status page: "0 held back · 0 shown · 0 rules learned", four overlapping
+  buttons, a Pause row that wrapped to "Pau se", and set-once connections ("Watchi ng", Update, Remove).
+- **Decision:** Claude Design's panel v2 (Guide 09b). A header sentence answers "does anything need me?", then what
+  waits with one action each, the held-back number (or one friendly sentence), three places (Agents, While you were
+  away, Ask Hush), and a footer that never moves. Connections move to Settings ▸ Connections, cost to Settings ▸
+  Ask Hush. The words live in `MenuPanelText` (HushCore, tested).
+- **Changed from the design:** the screenshot switch stays one click (an eye button in the footer, and in ···);
+  Settings opens on General, not Connections; While you were away appears only for an unopened digest (the digest is
+  opt-in); Agents covers Codex and its hook updates; developer items live in ··· (hold ⌥); the rare-find line stays as
+  the quiet state's second line; our own panel window rather than MenuBarExtra.
+- **The avatar** is this Hush (body, colour, eyes, topper, wearables) peeking, from `hush.portrait(pose, expr)`: the
+  live renderer dresses the pose once and returns SVG, which AppKit draws. No second web view, nothing animating while
+  the panel is open.

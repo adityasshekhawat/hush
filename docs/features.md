@@ -140,7 +140,7 @@ context. Backspace on an empty box or × asks something new. Up to 3 turns; afte
 
 ### 3.3 Answer card ✅ (420 pt)
 Header (lane, status, Stop) · body shaped to the answer · action row (max 3) · a quiet footer (no model, time or cost:
-those live in History and the menu bar panel's "this month" line),
+those live in History and Settings ▸ Ask Hush),
 a receipt line after an action, and **Follow up** (quiet text button, bottom right).
 
 **Shapes:** formula (monospace, copyable) · command (terminal block) · fact (big short answer) · steps (numbered) ·
@@ -195,7 +195,7 @@ default, caps at "9+"). The menu:
 - **Character:** Body, Palette, Eyes, Topper, Accessory
 - **Home spot** · **Interrupts per day** (1 / 3 / 5 / 8) · **Quiet hours** 22:00–07:00
 - **Toggles:** Perch on windows when idle · Moods · Hide in full-screen apps · Hide from screen shares and
-  screenshots (on by default; also a switch in the menu bar panel, "Show me in screenshots and shares") · Show count in menu bar · Open at login
+  screenshots (on by default; also the eye button in the menu bar panel's footer, and its ··· menu) · Show count in menu bar · Open at login
 - **Agent:** Open long questions in (ChatGPT / Claude / Perplexity) · Models (per lane: Haiku / Sonnet / Opus) ·
   allowed repos · digest on/off · history
 - **Agent ▸ Browser tasks (beta)** on/off · **Run browser tasks in** (Automatic, or a browser that has the Claude
@@ -251,7 +251,7 @@ shows the same ledger.
 
 ### 3.14 Rare finds ✅
 14 pieces Hush wears on its own, very rarely: at most one a day, never while you're busy or something waits. Silent;
-the only trace is a muted line in the menu bar panel ("New find: a little bird"). Found pieces stay wearable; unfound
+the only trace is a muted line under "All quiet" in the menu bar panel ("New find: a little bird"). Found pieces stay wearable; unfound
 ones show as silhouettes with a vague hint.
 
 ### 3.15 What Hush holds up ✅ (ADR-030)

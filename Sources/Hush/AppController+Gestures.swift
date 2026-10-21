@@ -102,6 +102,35 @@ extension AppController {
         })
     }
 
+    /// Does what the card's main button says for the item Hush is holding, then lets it go.
+    func openActive() {
+        guard let a = active else { return }
+        if a.item.id.hasPrefix("digest:") {
+            resolveActive(.opened)
+            digest.show()
+            return
+        }
+        if a.item.id.hasPrefix("ask:") || a.item.id.hasPrefix("browser:") {
+            ask.reopen()
+        } else if a.item.kind == .agent, let id = a.item.sourceApp {
+            // The exact Terminal or iTerm tab when Hush knows it, otherwise the app (ADR-024).
+            let sid = AgentSessionTracker.sessionID(ofItem: a.item.id)
+            let tty = sid.flatMap { agentSessions.sessions[$0]?.tty ?? sessionTTYs[$0] }
+            SessionInput.focus(bundleID: id, tty: tty)
+        } else if let url = a.item.openURL { NSWorkspace.shared.open(url) }
+        else if a.item.kind == .meeting { NSWorkspace.shared.open(URL(fileURLWithPath: "/System/Applications/Calendar.app")) }
+        else if a.item.kind == .mail { NSWorkspace.shared.open(URL(fileURLWithPath: "/System/Applications/Mail.app")) }
+        resolveActive(.opened)
+    }
+
+    /// The menu bar panel's Open/Join on any waiting item: it goes to the front of the queue, then opens.
+    func openWaiting(id: String) {
+        guard let i = waiting.firstIndex(where: { $0.id == id }) else { return }
+        if i > 0 { waiting.insert(waiting.remove(at: i), at: 0) }
+        if envelope.isOpen { envelope.close() }
+        openActive()
+    }
+
     func showCard() {
         guard let a = active else { return }
         // A digest envelope opens the digest itself; the generic card would only add a step.
@@ -113,17 +142,7 @@ extension AppController {
         envelope.actions = EnvelopeActions(
             open: { [weak self] in
                 self?.envelope.close()
-                if a.item.id.hasPrefix("ask:") || a.item.id.hasPrefix("browser:") {
-                    self?.ask.reopen()
-                } else if a.item.kind == .agent, let id = a.item.sourceApp {
-                    // The exact Terminal or iTerm tab when Hush knows it, otherwise the app (ADR-024).
-                    let sid = AgentSessionTracker.sessionID(ofItem: a.item.id)
-                    let tty = sid.flatMap { self?.agentSessions.sessions[$0]?.tty ?? self?.sessionTTYs[$0] }
-                    SessionInput.focus(bundleID: id, tty: tty)
-                } else if let url = a.item.openURL { NSWorkspace.shared.open(url) }
-                else if a.item.kind == .meeting { NSWorkspace.shared.open(URL(fileURLWithPath: "/System/Applications/Calendar.app")) }
-                else if a.item.kind == .mail { NSWorkspace.shared.open(URL(fileURLWithPath: "/System/Applications/Mail.app")) }
-                self?.resolveActive(.opened)
+                self?.openActive()
             },
             copy: a.item.id.hasPrefix("ask:") ? { [weak self] in self?.ask.card.copy(); self?.envelope.close() } : nil,
             notThisKind: { [weak self] in
