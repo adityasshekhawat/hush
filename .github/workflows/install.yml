@@ -1,0 +1,116 @@
+name: Install
+
+# Installs Hush the way the README says, on fresh Macs: clone, ./scripts/bundle.sh, then checks that it launches and
+# stays up, that agent events reach it, and that updating (pull, bundle.sh again) swaps it in place and keeps settings.
+# Weekly too, because runner images (Xcode, Command Line Tools, SDKs) change under us; that's how a friend's build broke.
+on:
+  push:
+    branches: [main]
+    paths: ["Sources/**", "scripts/**", "assets/**", "Package.swift", ".github/workflows/install.yml"]
+  schedule:
+    - cron: "17 6 * * 1"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: install-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  install:
+    name: ${{ matrix.os }} · ${{ matrix.tools }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          # Apple silicon, macOS 15: Xcode 16.4, and Command Line Tools 16.4 (Swift 6.1, the oldest the README promises).
+          - { os: macos-15, tools: xcode }
+          - { os: macos-15, tools: clt }
+          # Apple silicon, macOS 26: Xcode 26, and Command Line Tools 27 (macOS 26 and 27 SDKs, scripts/sdk.sh picks).
+          - { os: macos-26, tools: xcode }
+          - { os: macos-26, tools: clt }
+          # Intel: Xcode 16.4 on macOS 15, Command Line Tools 26.6 on macOS 26.
+          - { os: macos-15-intel, tools: xcode }
+          - { os: macos-26-intel, tools: clt }
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 45
+    steps:
+      - name: Use the Command Line Tools only
+        if: matrix.tools == 'clt'
+        run: sudo xcode-select -s /Library/Developer/CommandLineTools
+
+      - name: Toolchain
+        run: |
+          sw_vers
+          uname -m
+          xcode-select -p
+          swift --version
+
+      # Like a user: a plain clone from the public URL (no checkout action), into a folder with a space in its name.
+      - name: Clone
+        run: |
+          mkdir -p "$HOME/My Projects" && cd "$HOME/My Projects"
+          git clone --quiet "https://github.com/${{ github.repository }}.git"
+          cd hush && git checkout --quiet "${{ github.sha }}"
+
+      - name: Install (./scripts/bundle.sh)
+        working-directory: /Users/runner/My Projects/hush
+        run: |
+          start=$(date +%s)
+          ./scripts/bundle.sh
+          echo "Installed in $(( $(date +%s) - start ))s"
+
+      - name: It's installed, signed and running
+        run: |
+          set -eu
+          APP=/Applications/Hush.app
+          codesign --verify --strict "$APP"
+          lipo -archs "$APP/Contents/MacOS/Hush"
+          test -x "$APP/Contents/MacOS/hushctl"
+          sleep 20
+          pgrep -x Hush || { echo "::error::Hush isn't running 20 s after install"; exit 1; }
+          test -S "$HOME/Library/Application Support/Hush/agent.sock" || { echo "::error::no agent socket"; exit 1; }
+
+      - name: Agent events reach it
+        run: |
+          set -eu
+          ctl=/Applications/Hush.app/Contents/MacOS/hushctl
+          echo '{"hook_event_name":"SessionStart","session_id":"ci-install-test-1","cwd":"/tmp"}' | "$ctl" hook
+          echo '{"hook_event_name":"PermissionRequest","session_id":"ci-install-test-1","cwd":"/tmp","tool_name":"Bash","tool_input":{"command":"ls"}}' | "$ctl" hook
+          echo '{"hook_event_name":"Stop","session_id":"ci-install-test-1","cwd":"/tmp"}' | "$ctl" hook --agent codex
+          sleep 5
+          pgrep -x Hush || { echo "::error::Hush quit after agent events"; exit 1; }
+          if grep -q "agent: couldn't open the socket" "$HOME/Library/Application Support/Hush/diagnostics.log" 2>/dev/null; then
+            echo "::error::agent socket failed"; exit 1
+          fi
+
+      - name: Update (bundle.sh again) keeps settings
+        working-directory: /Users/runner/My Projects/hush
+        run: |
+          set -eu
+          defaults write dev.hush.Hush HushInstallTestMarker -string kept
+          before=$(pgrep -x Hush)
+          # A user runs `git pull --ff-only` first; here the clone is already at the commit under test.
+          ./scripts/bundle.sh
+          sleep 15
+          after=$(pgrep -x Hush) || { echo "::error::Hush isn't running after the update"; exit 1; }
+          [ "$before" != "$after" ] || { echo "::error::the old Hush wasn't replaced"; exit 1; }
+          [ "$(defaults read dev.hush.Hush HushInstallTestMarker)" = kept ] || { echo "::error::settings lost"; exit 1; }
+
+      - name: No crashes
+        if: always()
+        run: |
+          if ls "$HOME/Library/Logs/DiagnosticReports" 2>/dev/null | grep -i -E '^(Hush|hushctl)'; then
+            echo "::error::crash report found"; exit 1
+          fi
+
+      - name: What Hush logged
+        if: failure()
+        run: |
+          cat "$HOME/Library/Application Support/Hush/diagnostics.log" 2>/dev/null || echo "(no diagnostics.log)"
+          for f in "$HOME"/Library/Logs/DiagnosticReports/Hush* "$HOME"/Library/Logs/DiagnosticReports/hushctl*; do
+            [ -f "$f" ] && { echo "== $f"; head -80 "$f"; }
+          done
+          log show --last 10m --style compact --predicate 'process == "Hush"' 2>/dev/null | tail -150 || true

@@ -6,6 +6,14 @@
 set -eu
 
 cd "$(dirname "$0")/.."
+
+# Say what's missing in plain words, before a long build fails on it.
+if [ "$(sw_vers -productVersion | cut -d. -f1)" -lt 15 ]; then
+  echo "Hush needs macOS 15 or later; this Mac has $(sw_vers -productVersion)." >&2; exit 1
+fi
+if ! xcode-select -p >/dev/null 2>&1; then
+  echo "Hush is built with Swift. Install the Command Line Tools first:  xcode-select --install" >&2; exit 1
+fi
 . scripts/sdk.sh
 INSTALL=1
 CONFIG=release
