@@ -65,6 +65,7 @@ struct MenuPanelView: View {
             }
             quickButtons
             pauseRow
+            captureRow
             Divider()
             VStack(spacing: 6) {
                 ForEach(settings.connections) { c in ConnectionRow(model: settings, c: c) }
@@ -153,6 +154,16 @@ struct MenuPanelView: View {
             }
         }
         .help("⌥⇧⌘H puts away what I'm showing, or pauses me for an hour")
+    }
+
+    /// The same switch as Settings ▸ General, one click away: on before a demo or a screenshot of Hush, off again after.
+    private var captureRow: some View {
+        Toggle(isOn: Binding(get: { !settings.hiddenFromCapture.wrappedValue }, set: { settings.hiddenFromCapture.wrappedValue = !$0 })) {
+            Label("Show me in screenshots and shares", systemImage: settings.hiddenFromCapture.wrappedValue ? "eye.slash" : "eye")
+                .font(HushFont.footer).foregroundStyle(.secondary)
+        }
+        .toggleStyle(.switch).controlSize(.mini)
+        .help("Off, Hush's windows are left out of screenshots, recordings and screen shares")
     }
 
     private var developer: some View {

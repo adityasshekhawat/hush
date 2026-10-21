@@ -195,7 +195,7 @@ default, caps at "9+"). The menu:
 - **Character:** Body, Palette, Eyes, Topper, Accessory
 - **Home spot** · **Interrupts per day** (1 / 3 / 5 / 8) · **Quiet hours** 22:00–07:00
 - **Toggles:** Perch on windows when idle · Moods · Hide in full-screen apps · Hide from screen shares and
-  screenshots (on by default) · Show count in menu bar · Open at login
+  screenshots (on by default; also a switch in the menu bar panel, "Show me in screenshots and shares") · Show count in menu bar · Open at login
 - **Agent:** Open long questions in (ChatGPT / Claude / Perplexity) · Models (per lane: Haiku / Sonnet / Opus) ·
   allowed repos · digest on/off · history
 - **Agent ▸ Browser tasks (beta)** on/off · **Run browser tasks in** (Automatic, or a browser that has the Claude

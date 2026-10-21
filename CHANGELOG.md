@@ -3,6 +3,11 @@
 Hush is pre-alpha and built from source. Notable changes, newest first. Decisions behind them are in
 [`docs/decisions.md`](docs/decisions.md).
 
+## Unreleased
+
+- **Show me in screenshots:** a switch in the menu bar panel, so you can let Hush into a screenshot or a share and
+  hide it again with one click (the same setting as Settings ▸ General).
+
 ## 0.1.0 (2026-10-21)
 
 The first public version. Pre-alpha, built from source.
